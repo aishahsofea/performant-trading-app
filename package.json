@@ -4,7 +4,8 @@
   "private": true,
   "packageManager": "pnpm@10.0.0",
   "scripts": {
-    "dev": "turbo dev"
+    "dev": "turbo dev",
+    "lighthouse:website": "pnpm run lhci --workspace=apps/dashboard"
   },
   "devDependencies": {
     "turbo": "^2.5.5"

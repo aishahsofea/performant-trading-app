@@ -48,3 +48,6 @@ web-bundles
 
 # turbo
 .turbo
+
+# lighthouse
+**/.lighthouseci
