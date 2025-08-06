@@ -14,7 +14,7 @@ export const usePerformanceMetrics = (config: PerformanceConfig) => {
         collectorRef.current.destroy();
       }
     };
-  }, []);
+  }, [config]);
 
   useReportWebVitals((metric: WebVitalsMetric) => {
     if (collectorRef.current) {

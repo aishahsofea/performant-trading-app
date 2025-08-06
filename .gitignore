@@ -52,3 +52,5 @@ web-bundles
 
 # lighthouse
 **/.lighthouseci
+performance-report.json
+**.report.html
