@@ -12,8 +12,9 @@
     "lighthouse:collect": "lhci collect",
     "lighthouse:assert": "lhci assert",
     "lighthouse:report": "lighthouse http://localhost:3000/ --output=json --output-path=./performance-report.json",
-    "lighthouse:report-budget": "lighthouse http://localhost:3000/ --budget-path=./performance-budget.json",
-    "analyze-bundle": "cross-env ANALYZE=true next build"
+    "lighthouse:report-budget": "lighthouse http://localhost:3000/ --budget-path=./scripts/performance-budget.json",
+    "analyze-bundle": "cross-env ANALYZE=true next build",
+    "performance:check-budgets": "ts-node src/scripts/performanceBudgetCheck.js"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^15.4.5",
