@@ -1,0 +1,31 @@
+{
+  "name": "@repo/performance-tools",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Performance monitoring and visualization tools for the trading platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts,.tsx",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.6.1",
+    "@react-three/fiber": "^9.3.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "@types/three": "^0.170.0",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  }
+}
