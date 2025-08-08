@@ -54,3 +54,6 @@ web-bundles
 **/.lighthouseci
 performance-report.json
 **.report.html
+
+# performance history
+**/.performance-history
