@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useContext } from "react";
+import React, { createContext, ReactNode, useContext } from "react";
 import { PerformanceConfig } from "@/types";
 import { usePerformanceMetrics } from "@/hooks/usePerformanceMetrics";
 
@@ -24,7 +24,7 @@ type PerformanceProviderProps = {
 export const PerformanceProvider = ({
   children,
   config = {},
-}: PerformanceProviderProps) => {
+}: PerformanceProviderProps): React.JSX.Element => {
   const performance = usePerformanceMetrics(config);
   return (
     <PerformanceContext.Provider value={performance}>

@@ -1,6 +1,6 @@
 // 3D Solar System Components
-export { SolarSystem } from "./components/solar-system/solarSystem";
-export { Planet } from "./components/solar-system/planet";
+export { SolarSystem } from "./components/solar-system/SolarSystem";
+export { Planet } from "./components/solar-system/Planet";
 
 // Demo Component
 export { BundleSizeDemo } from "./components/bundleSizeDemo";

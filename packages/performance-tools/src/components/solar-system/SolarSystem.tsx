@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars, PerspectiveCamera } from "@react-three/drei";
-import { Planet } from "./planet";
+import { Planet } from "./Planet";
 import type {
   SolarSystemData,
   PlanetData,

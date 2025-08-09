@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
     "lint": "eslint src --ext .ts,.tsx",
     "type-check": "tsc --noEmit"
   },
@@ -16,12 +17,12 @@
     "@react-three/fiber": "^9.3.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "three": "^0.170.0"
+    "three": "^0.179.1"
   },
   "devDependencies": {
     "@types/react": "19.0.0",
     "@types/react-dom": "19.0.0",
-    "@types/three": "^0.170.0",
+    "@types/three": "^0.179.0",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
