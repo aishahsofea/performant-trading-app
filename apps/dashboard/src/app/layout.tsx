@@ -38,7 +38,7 @@ export default function RootLayout({
             enableCustomMetrics: true,
           }}
         >
-          <div className="min-h-screen container mx-auto px-4 py-8">
+          <div className="min-h-screen container mx-auto max-w-full">
             {children}
           </div>
         </PerformanceProvider>

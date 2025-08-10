@@ -8,8 +8,8 @@ import type {
   SolarSystemData,
   PlanetData,
   SolarSystemConfig,
-} from "../../types/solarSystem";
-import { formatFileSize } from "../../utils/bundleParser";
+} from "../types/solarSystem";
+import { formatFileSize } from "../utils/bunderParser";
 
 type SolarSystemProps = {
   data: SolarSystemData;
@@ -37,7 +37,7 @@ export const SolarSystem = ({
   return (
     <div
       className={`w-full h-full relative ${className}`}
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ height: "100vh" }}
     >
       <Canvas
         className="w-full h-full"

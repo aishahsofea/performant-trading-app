@@ -1,7 +1,11 @@
-import { Vector3 } from 'three';
+import { Vector3 } from "three";
 
-export type BundleType = 'main' | 'chunk' | 'vendor' | 'css' | 'asset';
-export type PerformanceRating = 'excellent' | 'good' | 'needs-improvement' | 'poor';
+export type BundleType = "main" | "chunk" | "vendor" | "css" | "asset";
+export type PerformanceRating =
+  | "excellent"
+  | "good"
+  | "needs-improvement"
+  | "poor";
 
 export type AssetInfo = {
   size: number;

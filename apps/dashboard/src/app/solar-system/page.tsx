@@ -1,19 +1,32 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SolarSystem } from "@repo/performance-tools";
-import { createDemoSolarSystemData } from "@repo/performance-tools";
-import type {
-  SolarSystemData,
+import {
+  createDemoSolarSystemData,
   SolarSystemConfig,
-} from "@repo/performance-tools";
+  SolarSystemData,
+  PlanetData,
+} from "@repo/performance-lib";
+import dynamic from "next/dynamic";
+
+const DynamicSolarSystem = dynamic(
+  () =>
+    import("@repo/performance-lib").then((mod) => ({
+      default: mod.SolarSystem,
+    })),
+  {
+    ssr: false,
+  }
+);
 
 export default function SolarSystemPage() {
   const [solarSystemData, setSolarSystemData] =
     useState<SolarSystemData | null>(null);
   const [config, setConfig] = useState<SolarSystemConfig | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Load demo data
     const { solarSystemData: demoData, config: demoConfig } =
       createDemoSolarSystemData();
@@ -21,7 +34,7 @@ export default function SolarSystemPage() {
     setConfig(demoConfig);
   }, []);
 
-  if (!solarSystemData || !config) {
+  if (!mounted || !solarSystemData || !config) {
     return (
       <div className="flex items-center justify-center h-screen">
         Loading Solar System...
@@ -31,10 +44,12 @@ export default function SolarSystemPage() {
 
   return (
     <div className="w-full h-screen">
-      <SolarSystem
+      <DynamicSolarSystem
         data={solarSystemData}
         config={config}
-        onPlanetSelect={(planet) => console.log("Selected planet:", planet)}
+        onPlanetSelect={(planet: PlanetData) =>
+          console.log("Selected planet:", planet)
+        }
       />
     </div>
   );

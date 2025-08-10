@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { Sphere, Text, Html } from '@react-three/drei';
-import { Mesh } from 'three';
-import type { PlanetData } from '../../types/solarSystem';
-import { formatFileSize } from '../../utils/bundleParser';
+import { useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+import { Sphere, Html } from "@react-three/drei";
+import { Mesh } from "three";
+import type { PlanetData } from "../types/solarSystem";
+import { formatFileSize } from "../utils/bunderParser";
 
 type PlanetProps = {
   data: PlanetData;
@@ -15,30 +15,30 @@ type PlanetProps = {
   onHover?: (data: PlanetData | null) => void;
 };
 
-export const Planet = ({ 
-  data, 
-  showTooltips, 
-  enableAnimation, 
-  onClick, 
-  onHover 
+export const Planet = ({
+  data,
+  showTooltips,
+  enableAnimation,
+  onClick,
+  onHover,
 }: PlanetProps) => {
   const meshRef = useRef<Mesh>(null);
   const [isHovered, setIsHovered] = useState(false);
-  
+
   // Calculate initial angle from the original position
   const initialAngle = Math.atan2(data.position.z, data.position.x);
-  
+
   // Animation: orbit around center maintaining initial offset
   useFrame((state) => {
     if (!meshRef.current || !enableAnimation) return;
-    
+
     const time = state.clock.elapsedTime;
-    const currentAngle = initialAngle + (time * data.orbitSpeed);
+    const currentAngle = initialAngle + time * data.orbitSpeed;
     const x = Math.cos(currentAngle) * data.orbitRadius;
     const z = Math.sin(currentAngle) * data.orbitRadius;
-    
+
     meshRef.current.position.set(x, 0, z);
-    
+
     // Add gentle rotation
     meshRef.current.rotation.y = time * 0.5;
   });
@@ -66,7 +66,11 @@ export const Planet = ({
       <Sphere
         ref={meshRef}
         args={[planetScale, 32, 32]}
-        position={enableAnimation ? undefined : [data.position.x, data.position.y, data.position.z]}
+        position={
+          enableAnimation
+            ? undefined
+            : [data.position.x, data.position.y, data.position.z]
+        }
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         onClick={handleClick}
@@ -83,24 +87,27 @@ export const Planet = ({
       </Sphere>
 
       {/* Planet name label */}
-      <Text
+      <Html
         position={[
           data.position.x,
           data.position.y + data.size + 0.5,
-          data.position.z
+          data.position.z,
         ]}
-        fontSize={0.3}
-        color="white"
-        anchorX="center"
-        anchorY="middle"
+        center
       >
-        {data.name}
-      </Text>
+        <div className="text-white text-xs font-medium pointer-events-none">
+          {data.name}
+        </div>
+      </Html>
 
       {/* Hover tooltip */}
       {isHovered && showTooltips && (
         <Html
-          position={[data.position.x, data.position.y + data.size + 1, data.position.z]}
+          position={[
+            data.position.x,
+            data.position.y + data.size + 1,
+            data.position.z,
+          ]}
           center
         >
           <div className="bg-black/80 text-white p-3 rounded-lg shadow-lg text-sm max-w-xs">
@@ -118,7 +125,9 @@ export const Planet = ({
       {/* Orbit path visualization */}
       {enableAnimation && (
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-          <ringGeometry args={[data.orbitRadius - 0.05, data.orbitRadius + 0.05, 64]} />
+          <ringGeometry
+            args={[data.orbitRadius - 0.05, data.orbitRadius + 0.05, 64]}
+          />
           <meshBasicMaterial
             color={data.color}
             transparent
