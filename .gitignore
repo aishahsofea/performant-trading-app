@@ -57,3 +57,6 @@ performance-report.json
 
 # performance history
 **/.performance-history
+
+# metrics data
+**/data/metrics.json

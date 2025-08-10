@@ -23,7 +23,7 @@ export const MetricCard = ({
 
   return (
     <div className="bg-gray-950 p-6 rounded-lg shadow-sm border hover:shadow-md transition-all duration-200">
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-start justify-between mb-3">
         <div className="flex items-center">
           <span className="text-2xl mr-3">{icon}</span>
           <div>
