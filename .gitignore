@@ -60,3 +60,6 @@ performance-report.json
 
 # metrics data
 **/data/metrics.json
+
+# playwright
+.last-run.json
