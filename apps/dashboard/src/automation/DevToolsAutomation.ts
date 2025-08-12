@@ -29,10 +29,16 @@ import {
 } from './EnvironmentConfig';
 import { TimelineCapture } from './TimelineCapture';
 import { NetworkAnalysis } from './NetworkAnalysis';
+import { MemoryProfiler } from './MemoryProfiler';
+import { CPUProfiler } from './CPUProfiler';
 import {
   TimelineData,
   NetworkAnalysis as NetworkAnalysisType,
-  TimelineProcessingOptions
+  TimelineProcessingOptions,
+  MemoryData,
+  CPUProfileData,
+  MemoryProfilingOptions,
+  CPUProfilingOptions
 } from './types';
 
 export type RecordingOptions = {
@@ -53,17 +59,6 @@ export type DevToolsMetrics = {
   timestamp: string;
 }
 
-export type MemoryData = {
-  snapshots: MemorySnapshot[];
-  heapUsage: HeapUsageMetric[];
-  gcEvents: GCEvent[];
-}
-
-export type CPUProfileData = {
-  profile: any; // CDP CPU profile format
-  duration: number;
-  sampleCount: number;
-}
 
 export type EnvironmentData = {
   userAgent: string;
@@ -96,8 +91,11 @@ export class DevToolsAutomation {
   private timelineCapture: TimelineCapture | null = null;
   private networkAnalysis: NetworkAnalysis | null = null;
   
-  // Legacy data collectors (for CPU/Memory profiling - Phase 3)
-  private memorySnapshots: any[] = [];
+  // Phase 3: Profiling data collectors
+  private memoryProfiler: MemoryProfiler | null = null;
+  private cpuProfiler: CPUProfiler | null = null;
+  
+  // Legacy data collectors
   private screenshots: string[] = [];
 
   /**
@@ -196,7 +194,6 @@ export class DevToolsAutomation {
     this.recordingStartTime = Date.now();
     
     // Reset legacy data collectors
-    this.memorySnapshots = [];
     this.screenshots = [];
 
     try {
@@ -220,16 +217,32 @@ export class DevToolsAutomation {
         this.log('info', 'Network analysis started');
       }
 
-      // Legacy CPU/Memory profiling (Phase 3 will improve these)
+      // Phase 3: Advanced Memory/CPU profiling
       if (options.memory) {
-        await this.cdpSession.send('HeapProfiler.enable');
-        this.log('info', 'Memory profiling enabled');
+        const memoryOptions: Partial<MemoryProfilingOptions> = {
+          captureHeapSnapshots: true,
+          monitorGCEvents: true,
+          trackAllocationSampling: true,
+          usageMonitoringInterval: 1000,
+          snapshotTriggers: ['start', 'end']
+        };
+        
+        this.memoryProfiler = new MemoryProfiler(this.cdpSession, memoryOptions);
+        await this.memoryProfiler.startProfiling();
+        this.log('info', 'Advanced memory profiling started');
       }
 
       if (options.cpu) {
-        await this.cdpSession.send('Profiler.enable');
-        await this.cdpSession.send('Profiler.start');
-        this.log('info', 'CPU profiling started');
+        const cpuOptions: Partial<CPUProfilingOptions> = {
+          samplingInterval: 1000, // 1ms
+          includeInlining: true,
+          trackExecutionContexts: true,
+          analyzeHotSpots: true
+        };
+        
+        this.cpuProfiler = new CPUProfiler(this.cdpSession, cpuOptions);
+        await this.cpuProfiler.startProfiling();
+        this.log('info', 'Advanced CPU profiling started');
       }
       
       this.log('info', 'Performance recording started successfully');
@@ -239,6 +252,8 @@ export class DevToolsAutomation {
       // Cleanup any partially initialized collectors
       this.timelineCapture = null;
       this.networkAnalysis = null;
+      this.memoryProfiler = null;
+      this.cpuProfiler = null;
       this.log('error', 'Failed to start recording:', error);
       throw error;
     }
@@ -279,20 +294,17 @@ export class DevToolsAutomation {
         this.log('info', 'Network data collected and analyzed');
       }
 
-      // Legacy CPU/Memory profiling (Phase 3 will improve these)
-      if (this.currentRecordingOptions.cpu) {
-        const cpuProfile = await this.cdpSession.send('Profiler.stop');
-        metrics.cpu = {
-          profile: cpuProfile.profile,
-          duration: recordingDuration,
-          sampleCount: cpuProfile.profile.samples?.length || 0
-        };
-        this.log('info', 'CPU profiling stopped');
+      // Phase 3: Advanced profiling data collection
+      if (this.currentRecordingOptions.cpu && this.cpuProfiler) {
+        metrics.cpu = await this.cpuProfiler.stopProfiling();
+        this.cpuProfiler = null;
+        this.log('info', 'Advanced CPU profiling stopped and analyzed');
       }
 
-      if (this.currentRecordingOptions.memory) {
-        metrics.memory = await this.collectMemoryData();
-        this.log('info', 'Memory data collected');
+      if (this.currentRecordingOptions.memory && this.memoryProfiler) {
+        metrics.memory = await this.memoryProfiler.stopProfiling();
+        this.memoryProfiler = null;
+        this.log('info', 'Advanced memory profiling stopped and analyzed');
       }
 
       this.isRecording = false;
@@ -306,6 +318,8 @@ export class DevToolsAutomation {
       // Cleanup collectors on error
       this.timelineCapture = null;
       this.networkAnalysis = null;
+      this.memoryProfiler = null;
+      this.cpuProfiler = null;
       throw error;
     }
   };
@@ -362,6 +376,8 @@ export class DevToolsAutomation {
         // Cleanup collectors
         this.timelineCapture = null;
         this.networkAnalysis = null;
+        this.memoryProfiler = null;
+        this.cpuProfiler = null;
       }
 
       // Close CDP session
@@ -490,14 +506,6 @@ export class DevToolsAutomation {
   };
 
 
-  private collectMemoryData = async (): Promise<MemoryData> => {
-    // Phase 3 implementation
-    return {
-      snapshots: this.memorySnapshots,
-      heapUsage: [],
-      gcEvents: []
-    };
-  };
 
   /**
    * Private logging utility

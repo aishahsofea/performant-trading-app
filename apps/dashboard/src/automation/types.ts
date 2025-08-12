@@ -575,3 +575,206 @@ export type EventFilter = (event: PerformanceTimelineEvent) => boolean;
  * Timeline event processor function
  */
 export type EventProcessor = (events: PerformanceTimelineEvent[]) => any;
+
+// =============================================================================
+// Memory Profiling Types
+// =============================================================================
+
+/**
+ * Enhanced Memory Data with comprehensive analysis
+ */
+export type MemoryData = {
+  snapshots: MemorySnapshot[];
+  heapUsage: HeapUsageMetric[];
+  gcEvents: GCEvent[];
+  allocationSamples: AllocationSample[];
+  analysis: MemoryAnalysis;
+  metadata: {
+    profilingDuration: number;
+    startTime: number;
+    endTime: number;
+    options: MemoryProfilingOptions;
+  };
+}
+
+/**
+ * Heap Snapshot Data
+ */
+export type MemorySnapshot = {
+  id: string;
+  label: string;
+  timestamp: number;
+  data: any; // Raw CDP heap snapshot data
+  metadata: {
+    nodeCount: number;
+    edgeCount: number;
+    totalSize: number;
+  };
+}
+
+/**
+ * Heap Usage Metric
+ */
+export type HeapUsageMetric = {
+  timestamp: number;
+  source: string; // 'start', 'interval', 'end', etc.
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+  memoryPressure: number; // 0-1 ratio of used/total
+}
+
+/**
+ * Garbage Collection Event
+ */
+export type GCEvent = {
+  timestamp: number;
+  type: string; // 'scavenge', 'mark-sweep', etc.
+  duration: number; // milliseconds
+  freedBytes: number;
+  totalHeapSize: number;
+  usedHeapSize: number;
+  cause: string;
+}
+
+/**
+ * Allocation Sample from sampling profiler
+ */
+export type AllocationSample = {
+  timestamp: number;
+  size: number;
+  nodeId: number;
+  ordinal: number;
+  stackTrace: string[];
+}
+
+/**
+ * Memory Profiling Options
+ */
+export type MemoryProfilingOptions = {
+  captureHeapSnapshots: boolean;
+  monitorGCEvents: boolean;
+  trackAllocationSampling: boolean;
+  usageMonitoringInterval: number; // milliseconds
+  maxSnapshots: number;
+  snapshotTriggers: ('start' | 'end' | 'interval' | 'manual')[];
+  gcEventDetails: boolean;
+  allocationSamplingInterval: number; // bytes
+}
+
+/**
+ * Memory Analysis Results
+ */
+export type MemoryAnalysis = {
+  totalGCTime: number;
+  avgMemoryUsage: number;
+  maxMemoryUsage: number;
+  memoryGrowthRate: number; // bytes per second
+  memoryGrowthTrend: 'increasing' | 'decreasing' | 'stable';
+  gcFrequency: number; // events per second
+  gcEfficiency: number; // bytes freed per millisecond
+  potentialLeaks: ObjectRetention[];
+  recommendations: string[];
+}
+
+/**
+ * Object Retention Analysis
+ */
+export type ObjectRetention = {
+  objectType: string;
+  retainedSize: number;
+  instanceCount: number;
+  suspicionLevel: 'low' | 'medium' | 'high';
+}
+
+// =============================================================================
+// CPU Profiling Types
+// =============================================================================
+
+/**
+ * CPU Profile Data
+ */
+export type CPUProfileData = {
+  profile: any; // CDP CPU profile format
+  duration: number;
+  sampleCount: number;
+  analysis: CPUAnalysis;
+  metadata: {
+    profilingDuration: number;
+    startTime: number;
+    endTime: number;
+    options: CPUProfilingOptions;
+  };
+}
+
+/**
+ * CPU Profiling Options
+ */
+export type CPUProfilingOptions = {
+  samplingInterval: number; // microseconds
+  includeInlining: boolean;
+  trackExecutionContexts: boolean;
+  analyzeHotSpots: boolean;
+  generateFlameGraph: boolean;
+}
+
+/**
+ * CPU Analysis Results
+ */
+export type CPUAnalysis = {
+  totalSamples: number;
+  totalTime: number; // microseconds
+  idleTime: number;
+  activeTime: number;
+  hotSpots: HotSpot[];
+  functionBreakdown: FunctionMetric[];
+  executionPath: ExecutionPath;
+  recommendations: string[];
+}
+
+/**
+ * Hot Spot Analysis
+ */
+export type HotSpot = {
+  functionName: string;
+  url: string;
+  line: number;
+  column: number;
+  selfTime: number; // microseconds
+  totalTime: number; // microseconds
+  hitCount: number;
+  percentage: number; // of total execution time
+}
+
+/**
+ * Function-level Performance Metrics
+ */
+export type FunctionMetric = {
+  functionName: string;
+  url: string;
+  callCount: number;
+  selfTime: number;
+  totalTime: number;
+  averageTime: number;
+  children: FunctionMetric[];
+}
+
+/**
+ * Execution Path Analysis
+ */
+export type ExecutionPath = {
+  criticalPath: CallFrame[];
+  longestPath: CallFrame[];
+  mostFrequentPath: CallFrame[];
+}
+
+/**
+ * Call Frame Information
+ */
+export type CallFrame = {
+  functionName: string;
+  url: string;
+  lineNumber: number;
+  columnNumber: number;
+  scriptId: string;
+}
