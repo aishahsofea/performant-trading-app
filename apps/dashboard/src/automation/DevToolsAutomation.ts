@@ -27,6 +27,13 @@ import {
   createDevToolsConfig,
   getNetworkThrottling 
 } from './EnvironmentConfig';
+import { TimelineCapture } from './TimelineCapture';
+import { NetworkAnalysis } from './NetworkAnalysis';
+import {
+  TimelineData,
+  NetworkAnalysis as NetworkAnalysisType,
+  TimelineProcessingOptions
+} from './types';
 
 export type RecordingOptions = {
   timeline?: boolean;    // Capture performance timeline
@@ -38,25 +45,12 @@ export type RecordingOptions = {
 
 export type DevToolsMetrics = {
   timeline?: TimelineData;
-  network?: NetworkData;
+  network?: NetworkAnalysisType;
   memory?: MemoryData;
   cpu?: CPUProfileData;
   environment: EnvironmentData;
   duration: number;
   timestamp: string;
-}
-
-export type TimelineData = {
-  events: PerformanceTimelineEvent[];
-  metrics: PerformanceMetrics;
-  screenshots?: string[]; // Base64 encoded screenshots
-}
-
-export type NetworkData = {
-  requests: NetworkRequest[];
-  totalTransferSize: number;
-  totalResourceSize: number;
-  requestCount: number;
 }
 
 export type MemoryData = {
@@ -84,9 +78,6 @@ export type EnvironmentData = {
 }
 
 // Supporting types (these will be expanded in future phases)
-export type PerformanceTimelineEvent = any;
-export type PerformanceMetrics = any;
-export type NetworkRequest = any;
 export type MemorySnapshot = any;
 export type HeapUsageMetric = any;
 export type GCEvent = any;
@@ -101,9 +92,11 @@ export class DevToolsAutomation {
   private recordingStartTime: number = 0;
   private currentRecordingOptions: RecordingOptions = {};
   
-  // Data collectors (will be expanded in Phase 2 & 3)
-  private timelineEvents: any[] = [];
-  private networkRequests: any[] = [];
+  // Phase 2: Advanced data collectors
+  private timelineCapture: TimelineCapture | null = null;
+  private networkAnalysis: NetworkAnalysis | null = null;
+  
+  // Legacy data collectors (for CPU/Memory profiling - Phase 3)
   private memorySnapshots: any[] = [];
   private screenshots: string[] = [];
 
@@ -202,25 +195,32 @@ export class DevToolsAutomation {
     this.isRecording = true;
     this.recordingStartTime = Date.now();
     
-    // Reset data collectors
-    this.timelineEvents = [];
-    this.networkRequests = [];
+    // Reset legacy data collectors
     this.memorySnapshots = [];
     this.screenshots = [];
 
     try {
-      // Enable CDP domains based on recording options
+      // Initialize Phase 2 collectors based on options
+      const processingOptions: Partial<TimelineProcessingOptions> = {
+        calculateCWV: true,
+        analyzeNetwork: options.network || false,
+        analyzeJavaScript: true,
+        longTaskThreshold: 50
+      };
+
       if (options.timeline) {
-        await this.cdpSession.send('Performance.enable');
-        await this.cdpSession.send('Runtime.enable');
-        this.log('info', 'Performance timeline recording enabled');
+        this.timelineCapture = new TimelineCapture(this.cdpSession, processingOptions);
+        await this.timelineCapture.startRecording();
+        this.log('info', 'Timeline capture started');
       }
 
       if (options.network) {
-        await this.cdpSession.send('Network.enable');
-        this.log('info', 'Network recording enabled');
+        this.networkAnalysis = new NetworkAnalysis(this.cdpSession, processingOptions);
+        await this.networkAnalysis.startRecording();
+        this.log('info', 'Network analysis started');
       }
 
+      // Legacy CPU/Memory profiling (Phase 3 will improve these)
       if (options.memory) {
         await this.cdpSession.send('HeapProfiler.enable');
         this.log('info', 'Memory profiling enabled');
@@ -231,14 +231,14 @@ export class DevToolsAutomation {
         await this.cdpSession.send('Profiler.start');
         this.log('info', 'CPU profiling started');
       }
-
-      // Set up event listeners for data collection (Phase 2 implementation)
-      this.setupRecordingEventListeners();
       
       this.log('info', 'Performance recording started successfully');
       
     } catch (error) {
       this.isRecording = false;
+      // Cleanup any partially initialized collectors
+      this.timelineCapture = null;
+      this.networkAnalysis = null;
       this.log('error', 'Failed to start recording:', error);
       throw error;
     }
@@ -266,7 +266,20 @@ export class DevToolsAutomation {
         timestamp: new Date().toISOString()
       };
 
-      // Stop CDP profiling sessions
+      // Stop and collect Phase 2 data
+      if (this.currentRecordingOptions.timeline && this.timelineCapture) {
+        metrics.timeline = await this.timelineCapture.stopRecording();
+        this.timelineCapture = null;
+        this.log('info', 'Timeline data collected and processed');
+      }
+
+      if (this.currentRecordingOptions.network && this.networkAnalysis) {
+        metrics.network = await this.networkAnalysis.stopRecording();
+        this.networkAnalysis = null;
+        this.log('info', 'Network data collected and analyzed');
+      }
+
+      // Legacy CPU/Memory profiling (Phase 3 will improve these)
       if (this.currentRecordingOptions.cpu) {
         const cpuProfile = await this.cdpSession.send('Profiler.stop');
         metrics.cpu = {
@@ -277,19 +290,6 @@ export class DevToolsAutomation {
         this.log('info', 'CPU profiling stopped');
       }
 
-      // Collect timeline data (Phase 2 implementation)
-      if (this.currentRecordingOptions.timeline) {
-        metrics.timeline = await this.collectTimelineData();
-        this.log('info', 'Timeline data collected');
-      }
-
-      // Collect network data (Phase 2 implementation)  
-      if (this.currentRecordingOptions.network) {
-        metrics.network = await this.collectNetworkData();
-        this.log('info', 'Network data collected');
-      }
-
-      // Collect memory data (Phase 3 implementation)
       if (this.currentRecordingOptions.memory) {
         metrics.memory = await this.collectMemoryData();
         this.log('info', 'Memory data collected');
@@ -303,6 +303,9 @@ export class DevToolsAutomation {
     } catch (error) {
       this.log('error', 'Failed to stop recording:', error);
       this.isRecording = false; // Reset state even on error
+      // Cleanup collectors on error
+      this.timelineCapture = null;
+      this.networkAnalysis = null;
       throw error;
     }
   };
@@ -325,7 +328,13 @@ export class DevToolsAutomation {
       const base64Screenshot = screenshot.toString('base64');
       
       if (this.isRecording && this.currentRecordingOptions.screenshots) {
+        // Add to legacy screenshots array
         this.screenshots.push(base64Screenshot);
+        
+        // Also add to timeline capture if active
+        if (this.timelineCapture) {
+          await this.timelineCapture.takeScreenshot(base64Screenshot);
+        }
       }
       
       this.log('info', 'Screenshot captured');
@@ -349,6 +358,10 @@ export class DevToolsAutomation {
       if (this.isRecording) {
         this.log('warn', 'Stopping ongoing recording during cleanup');
         this.isRecording = false;
+        
+        // Cleanup collectors
+        this.timelineCapture = null;
+        this.networkAnalysis = null;
       }
 
       // Close CDP session
@@ -451,14 +464,6 @@ export class DevToolsAutomation {
     });
   };
 
-  /**
-   * Private method to set up recording-specific event listeners
-   * This will be expanded in Phase 2
-   */
-  private setupRecordingEventListeners = (): void => {
-    // Phase 2: Add CDP event listeners for timeline, network, memory data
-    this.log('info', 'Recording event listeners setup (Phase 2 implementation pending)');
-  };
 
   /**
    * Private method to collect environment data
@@ -484,27 +489,6 @@ export class DevToolsAutomation {
     };
   };
 
-  /**
-   * Private methods for data collection (Phase 2 & 3 implementations)
-   */
-  private collectTimelineData = async (): Promise<TimelineData> => {
-    // Phase 2 implementation
-    return {
-      events: this.timelineEvents,
-      metrics: {},
-      screenshots: this.currentRecordingOptions.screenshots ? this.screenshots : undefined
-    };
-  };
-
-  private collectNetworkData = async (): Promise<NetworkData> => {
-    // Phase 2 implementation
-    return {
-      requests: this.networkRequests,
-      totalTransferSize: 0,
-      totalResourceSize: 0,
-      requestCount: this.networkRequests.length
-    };
-  };
 
   private collectMemoryData = async (): Promise<MemoryData> => {
     // Phase 3 implementation
