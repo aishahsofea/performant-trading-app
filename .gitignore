@@ -58,6 +58,9 @@ performance-report.json
 # performance history
 **/.performance-history
 
+# devtools automation results
+**/devtools-results/
+
 # metrics data
 **/data/metrics.json
 

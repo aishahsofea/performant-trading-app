@@ -44,6 +44,7 @@ export class NetworkAnalysis {
   private options: TimelineProcessingOptions;
   private isRecording = false;
   private recordingStartTime: number = 0;
+  private firstRequestTimestamp: number = 0; // Will be set from first CDP timestamp
 
   // Request tracking
   private activeRequests = new Map<string, Partial<ProcessedNetworkRequest>>();
@@ -217,6 +218,12 @@ export class NetworkAnalysis {
     const requestId = params.requestId;
     const request = params.request;
     const timestamp = params.timestamp;
+    
+    // Set first request timestamp as reference point
+    if (this.firstRequestTimestamp === 0) {
+      this.firstRequestTimestamp = timestamp;
+      this.log(`First request timestamp set: ${timestamp}`);
+    }
 
     const processedRequest: Partial<ProcessedNetworkRequest> = {
       id: requestId,
@@ -225,7 +232,7 @@ export class NetworkAnalysis {
       priority: request.initialPriority,
       initiator: this.getInitiatorString(params.initiator),
       timing: {
-        startTime: timestamp * 1000 - this.recordingStartTime, // Convert to ms relative to start
+        startTime: (timestamp - this.firstRequestTimestamp) * 1000, // Convert to ms relative to first request
         endTime: 0,
         duration: 0,
         request: 0,
@@ -312,7 +319,7 @@ export class NetworkAnalysis {
 
     // Finalize timing
     if (request.timing) {
-      request.timing.endTime = timestamp * 1000 - this.recordingStartTime;
+      request.timing.endTime = (timestamp - this.firstRequestTimestamp) * 1000;
       request.timing.duration =
         request.timing.endTime - request.timing.startTime;
       request.timing.total = request.timing.duration;
@@ -351,7 +358,7 @@ export class NetworkAnalysis {
 
     // Finalize timing
     if (request.timing) {
-      request.timing.endTime = timestamp * 1000 - this.recordingStartTime;
+      request.timing.endTime = (timestamp - this.firstRequestTimestamp) * 1000;
       request.timing.duration =
         request.timing.endTime - request.timing.startTime;
       request.timing.total = request.timing.duration;
@@ -383,8 +390,7 @@ export class NetworkAnalysis {
     cdpTiming: any,
     requestStartTime: number
   ): void => {
-    const baseTime = requestStartTime * 1000 - this.recordingStartTime;
-
+    // CDP timing values are already relative durations, no base adjustment needed
     timing.dns =
       cdpTiming.dnsEnd > 0 ? cdpTiming.dnsEnd - cdpTiming.dnsStart : 0;
     timing.connect =
@@ -401,7 +407,10 @@ export class NetworkAnalysis {
    * Finalize any pending requests at recording stop
    */
   private finalizePendingRequests = (): void => {
-    const currentTime = Date.now() - this.recordingStartTime;
+    // Use current time relative to first request timestamp
+    const currentTime = this.firstRequestTimestamp > 0 
+      ? (Date.now() / 1000 - this.firstRequestTimestamp) * 1000 // Convert to same relative timing format
+      : 0;
 
     this.activeRequests.forEach((request) => {
       if (request.timing) {

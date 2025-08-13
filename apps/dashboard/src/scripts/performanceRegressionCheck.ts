@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
 import budgetData from "./performance-budget.json";
+import { DevToolsTestRunner } from "./runDevToolsTests";
 
 type LargestFile = {
   name: string;
@@ -24,6 +25,14 @@ type ImprovementItem = {
   percentageDecrease: number;
 };
 
+type RuntimeMetrics = {
+  scriptExecutionTime?: number;
+  layoutTime?: number;
+  maxMemoryUsage?: number;
+  testDuration?: number;
+  pageLoadTime?: number;
+};
+
 type PerformanceMetrics = {
   timestamp: string;
   commitHash?: string;
@@ -38,6 +47,7 @@ type PerformanceMetrics = {
   timings?: {
     [key: string]: number;
   };
+  runtime?: RuntimeMetrics;
 };
 
 type RegressionThresholds = {
@@ -45,6 +55,12 @@ type RegressionThresholds = {
   cssSize: number;
   totalSize: number;
   fileCount: number;
+
+  // DevTools runtime performance thresholds
+  scriptExecutionTime: number;
+  layoutTime: number;
+  maxMemoryUsage: number;
+  testDuration: number;
 };
 
 type RegressionResult = {
@@ -69,6 +85,12 @@ const REGRESSION_THRESHOLDS: RegressionThresholds = {
   cssSize: styleBudget * 1000 * 0.1, // 10% increase from budget (in bytes)
   totalSize: totalBudget * 1000 * 0.05, // 5% increase from budget (in bytes)
   fileCount: 3, // Allow up to 3 additional files
+
+  // DevTools runtime performance thresholds
+  scriptExecutionTime: 50, // 50ms increase in script execution time
+  layoutTime: 25, // 25ms increase in layout time
+  maxMemoryUsage: 10 * 1024 * 1024, // 10MB increase in memory usage
+  testDuration: 2000, // 2s increase in total test duration
 };
 
 const ensureHistoryDirectory = () => {
@@ -95,9 +117,10 @@ const getBuildMetrics = (): Omit<
   PerformanceMetrics,
   "timestamp" | "commitHash" | "branch" | "buildId"
 > => {
+  const NEXT_BUILD_PATH = "../../.next";
   const buildManifestPath = path.join(
     __dirname,
-    "../../.next",
+    NEXT_BUILD_PATH,
     "app-build-manifest.json"
   );
 
@@ -126,19 +149,21 @@ const getBuildMetrics = (): Omit<
   }
 
   // Calculate sizes and identify shared chunks
-  for (const [pagePath, files] of Object.entries(buildManifest.pages || {})) {
+  for (const [_pagePath, files] of Object.entries(buildManifest.pages || {})) {
     if (Array.isArray(files)) {
       files.forEach((file) => {
         if (!uniqueFiles.has(file)) {
-          const filePath = path.join(__dirname, "../../.next", file);
+          const filePath = path.join(__dirname, NEXT_BUILD_PATH, file);
+          const fileExtension = path.extname(file);
 
           if (fs.existsSync(filePath)) {
             const stats = fs.statSync(filePath);
-            const fileType = file.endsWith(".js")
-              ? "js"
-              : file.endsWith(".css")
-              ? "css"
-              : "other";
+            const fileType =
+              fileExtension === ".js"
+                ? "js"
+                : fileExtension === ".css"
+                ? "css"
+                : "other";
 
             uniqueFiles.set(file, { size: stats.size, type: fileType });
             totalSize += stats.size;
@@ -177,6 +202,61 @@ const getBuildMetrics = (): Omit<
     sharedChunks,
     largestFiles,
   };
+};
+
+const getDevToolsMetrics = async (
+  baseUrl: string = process.env.BASE_URL || "http://localhost:3000"
+): Promise<RuntimeMetrics> => {
+  console.log("🔬 Running DevTools performance tests...");
+
+  try {
+    const runner = new DevToolsTestRunner({ baseUrl, saveBaseline: false });
+    const results = await runner.runAllScenarios();
+
+    if (results.summary.passed === 0) {
+      console.warn("⚠️  No DevTools tests passed, skipping runtime metrics");
+      return {};
+    }
+
+    // Get metrics from the first successful test result
+    const successfulResult = results.results.find((r) => r.success);
+    if (!successfulResult) {
+      return {};
+    }
+
+    const metrics = successfulResult.metrics;
+    const scriptTime = metrics.timeline?.javascript?.totalExecutionTime || 0;
+    const layoutTime = metrics.timeline?.layoutPaint?.totalLayoutTime || 0;
+
+    // Calculate max memory from heap usage samples
+    let maxMemory = 0;
+    if (metrics.memory?.heapUsage?.length) {
+      maxMemory = Math.max(
+        ...metrics.memory.heapUsage.map((h) => h.usedJSHeapSize)
+      );
+    }
+
+    console.log(
+      `✅ DevTools metrics collected: Script ${scriptTime}ms, Layout ${layoutTime}ms, Memory ${(
+        maxMemory /
+        (1024 * 1024)
+      ).toFixed(1)}MB`
+    );
+
+    return {
+      scriptExecutionTime: scriptTime,
+      layoutTime: layoutTime,
+      maxMemoryUsage: maxMemory,
+      testDuration: successfulResult.duration,
+      pageLoadTime: successfulResult.duration, // Using test duration as proxy for page load time
+    };
+  } catch (error) {
+    console.warn(
+      "⚠️  DevTools metrics collection failed:",
+      error instanceof Error ? error.message : String(error)
+    );
+    return {};
+  }
 };
 
 const saveMetrics = (metrics: PerformanceMetrics) => {
@@ -231,6 +311,7 @@ const detectRegressions = (
   };
 
   const checks = [
+    // Build-time metrics
     {
       metric: "JavaScript Size",
       current: current.jsSize,
@@ -256,6 +337,57 @@ const detectRegressions = (
       threshold: REGRESSION_THRESHOLDS.fileCount,
     },
   ];
+
+  // Add runtime metrics checks if available
+  if (current.runtime && baseline.runtime) {
+    if (
+      current.runtime.scriptExecutionTime !== undefined &&
+      baseline.runtime.scriptExecutionTime !== undefined
+    ) {
+      checks.push({
+        metric: "Script Execution Time",
+        current: current.runtime.scriptExecutionTime,
+        baseline: baseline.runtime.scriptExecutionTime,
+        threshold: REGRESSION_THRESHOLDS.scriptExecutionTime,
+      });
+    }
+
+    if (
+      current.runtime.layoutTime !== undefined &&
+      baseline.runtime.layoutTime !== undefined
+    ) {
+      checks.push({
+        metric: "Layout Time",
+        current: current.runtime.layoutTime,
+        baseline: baseline.runtime.layoutTime,
+        threshold: REGRESSION_THRESHOLDS.layoutTime,
+      });
+    }
+
+    if (
+      current.runtime.maxMemoryUsage !== undefined &&
+      baseline.runtime.maxMemoryUsage !== undefined
+    ) {
+      checks.push({
+        metric: "Max Memory Usage",
+        current: current.runtime.maxMemoryUsage,
+        baseline: baseline.runtime.maxMemoryUsage,
+        threshold: REGRESSION_THRESHOLDS.maxMemoryUsage,
+      });
+    }
+
+    if (
+      current.runtime.testDuration !== undefined &&
+      baseline.runtime.testDuration !== undefined
+    ) {
+      checks.push({
+        metric: "Test Duration",
+        current: current.runtime.testDuration,
+        baseline: baseline.runtime.testDuration,
+        threshold: REGRESSION_THRESHOLDS.testDuration,
+      });
+    }
+  }
 
   checks.forEach(
     ({ metric, current: currentValue, baseline: baselineValue, threshold }) => {
@@ -289,6 +421,26 @@ const formatSize = (bytes: number): string => {
   return Math.round(bytes / 1024) + "KB";
 };
 
+const formatMemory = (bytes: number): string => {
+  return (bytes / (1024 * 1024)).toFixed(1) + "MB";
+};
+
+const formatTime = (ms: number): string => {
+  return ms.toFixed(1) + "ms";
+};
+
+const formatValue = (metric: string, value: number): string => {
+  if (metric.includes("Size") && !metric.includes("Memory")) {
+    return formatSize(value);
+  } else if (metric.includes("Memory")) {
+    return formatMemory(value);
+  } else if (metric.includes("Time") || metric.includes("Duration")) {
+    return formatTime(value);
+  } else {
+    return value.toString();
+  }
+};
+
 const generateReport = (
   current: PerformanceMetrics,
   baseline: PerformanceMetrics | null,
@@ -316,12 +468,8 @@ const generateReport = (
     console.log("\n🚨 Performance regressions detected:");
     result.regressions.forEach(
       ({ metric, current, baseline: baselineValue, percentageIncrease }) => {
-        const currentFormatted = metric.includes("Size")
-          ? formatSize(current)
-          : current.toString();
-        const baselineFormatted = metric.includes("Size")
-          ? formatSize(baselineValue)
-          : baselineValue.toString();
+        const currentFormatted = formatValue(metric, current);
+        const baselineFormatted = formatValue(metric, baselineValue);
         console.log(
           `   - ${metric}: ${currentFormatted} (was ${baselineFormatted}) - ${percentageIncrease.toFixed(
             1
@@ -334,15 +482,11 @@ const generateReport = (
   }
 
   if (result.improvements.length > 0) {
-    console.log("\n➕ Performance improvements:");
+    console.log("\nPerformance improvements:");
     result.improvements.forEach(
       ({ metric, current, baseline: baselineValue, percentageDecrease }) => {
-        const currentFormatted = metric.includes("Size")
-          ? formatSize(current)
-          : current.toString();
-        const baselineFormatted = metric.includes("Size")
-          ? formatSize(baselineValue)
-          : baselineValue.toString();
+        const currentFormatted = formatValue(metric, current);
+        const baselineFormatted = formatValue(metric, baselineValue);
         console.log(
           `   - ${metric}: ${currentFormatted} (was ${baselineFormatted}) - ${percentageDecrease.toFixed(
             1
@@ -372,11 +516,17 @@ const runRegressionCheck = async (
     const gitInfo = getGitInfo();
     const buildMetrics = getBuildMetrics();
 
+    // Get DevTools runtime metrics
+    const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+    const runtimeMetrics = await getDevToolsMetrics(baseUrl);
+
     const currentMetrics: PerformanceMetrics = {
       timestamp: new Date().toISOString(),
       buildId: process.env.BUILD_ID || undefined,
       ...gitInfo,
       ...buildMetrics,
+      runtime:
+        Object.keys(runtimeMetrics).length > 0 ? runtimeMetrics : undefined,
     };
 
     // Get baseline for comparison

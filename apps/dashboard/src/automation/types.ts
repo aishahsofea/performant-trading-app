@@ -603,7 +603,7 @@ export type MemoryData = {
 export type MemorySnapshot = {
   id: string;
   label: string;
-  timestamp: number;
+  elapsedTimeMs: number; // Milliseconds since recording started
   data: any; // Raw CDP heap snapshot data
   metadata: {
     nodeCount: number;
@@ -616,7 +616,7 @@ export type MemorySnapshot = {
  * Heap Usage Metric
  */
 export type HeapUsageMetric = {
-  timestamp: number;
+  elapsedTimeMs: number; // Milliseconds since recording started
   source: string; // 'start', 'interval', 'end', etc.
   usedJSHeapSize: number;
   totalJSHeapSize: number;
@@ -628,7 +628,7 @@ export type HeapUsageMetric = {
  * Garbage Collection Event
  */
 export type GCEvent = {
-  timestamp: number;
+  elapsedTimeMs: number; // Milliseconds since recording started
   type: string; // 'scavenge', 'mark-sweep', etc.
   duration: number; // milliseconds
   freedBytes: number;
@@ -641,7 +641,7 @@ export type GCEvent = {
  * Allocation Sample from sampling profiler
  */
 export type AllocationSample = {
-  timestamp: number;
+  elapsedTimeMs: number; // Milliseconds since recording started
   size: number;
   nodeId: number;
   ordinal: number;
