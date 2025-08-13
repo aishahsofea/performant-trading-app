@@ -37,8 +37,8 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
     const testUrl = `data:text/html,<html><body>
       <script>
         // Create some objects to profile
-        let largeArray = [];
-        let objects = [];
+        const largeArray = [];
+        const objects = [];
         
         function createMemoryLoad() {
           for (let i = 0; i < 1000; i++) {
@@ -67,8 +67,8 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
     await automation.page.evaluate(() => {
       // Define function inline to avoid timing issues
       function createMemoryLoad() {
-        let largeArray = [];
-        let objects = [];
+        const largeArray = [];
+        const objects = [];
         
         for (let i = 0; i < 1000; i++) {
           largeArray.push(new Array(100).fill(i));
@@ -370,7 +370,7 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
           element.textContent = 'Element ' + i;
           container.appendChild(element);
           // Force layout by accessing offsetHeight
-          element.offsetHeight;
+          void element.offsetHeight;
         }
         document.body.appendChild(container);
         return container;

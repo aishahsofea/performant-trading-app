@@ -7,8 +7,10 @@
   "types": "./dist/main.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/main.d.ts",
       "import": "./dist/main.js",
-      "types": "./dist/main.d.ts"
+      "require": "./dist/main.js",
+      "default": "./dist/main.js"
     }
   },
   "scripts": {

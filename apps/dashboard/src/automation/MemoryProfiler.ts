@@ -225,8 +225,8 @@ export class MemoryProfiler {
         timestamp: Date.now() - this.recordingStartTime,
         data: snapshot,
         metadata: {
-          nodeCount: snapshot.nodes?.length || 0,
-          edgeCount: snapshot.edges?.length || 0,
+          nodeCount: (snapshot as any).nodes?.length || 0,
+          edgeCount: (snapshot as any).edges?.length || 0,
           totalSize: this.calculateSnapshotSize(snapshot)
         }
       };
@@ -247,7 +247,7 @@ export class MemoryProfiler {
    */
   private setupEventListeners = (): void => {
     // GC event listener
-    const gcEventListener = (params: any) => {
+    const _gcEventListener = (params: any) => {
       if (this.options.monitorGCEvents) {
         this.handleGCEvent(params);
       }
@@ -405,7 +405,7 @@ export class MemoryProfiler {
   /**
    * Extract stack trace from allocation sample
    */
-  private extractStackTrace = (sample: any, profile: any): string[] => {
+  private extractStackTrace = (sample: any, _profile: any): string[] => {
     // Extract meaningful stack trace from sampling profile
     const stackTrace: string[] = [];
     
@@ -479,8 +479,8 @@ export class MemoryProfiler {
       return { rate: 0, trend: 'stable' };
     }
 
-    const first = this.heapUsageHistory[0];
-    const last = this.heapUsageHistory[this.heapUsageHistory.length - 1];
+    const first = this.heapUsageHistory[0]!;
+    const last = this.heapUsageHistory[this.heapUsageHistory.length - 1]!;
     const timeDiff = last.timestamp - first.timestamp;
     const memoryDiff = last.usedJSHeapSize - first.usedJSHeapSize;
 
@@ -502,8 +502,8 @@ export class MemoryProfiler {
 
     // Compare snapshots if we have multiple
     if (this.heapSnapshots.length >= 2) {
-      const first = this.heapSnapshots[0];
-      const last = this.heapSnapshots[this.heapSnapshots.length - 1];
+      const first = this.heapSnapshots[0]!;
+      const last = this.heapSnapshots[this.heapSnapshots.length - 1]!;
 
       // Simplified leak detection - look for significant size increases
       const sizeIncrease = last.metadata.totalSize - first.metadata.totalSize;

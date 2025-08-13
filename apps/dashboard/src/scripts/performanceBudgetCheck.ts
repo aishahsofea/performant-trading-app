@@ -243,13 +243,12 @@ const checkBundleSize = (generateAnalysis = false) => {
   }
 
   console.log("Analyzing bundle sizes...\n");
-  ``;
 
   // Parse build manifest for analysis
   const basicAnalysis = parseBuildManifest();
 
   // Check what bundle analyzer files are available
-  const analyzerOutput = checkBundleAnalyzerOutput();
+  checkBundleAnalyzerOutput();
 
   const showBreakdownByCategory = () => {
     const categoryBreakdown: Record<string, number> =

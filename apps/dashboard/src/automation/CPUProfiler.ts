@@ -297,7 +297,7 @@ export class CPUProfiler {
   /**
    * Analyze execution paths through the call tree
    */
-  private analyzeExecutionPaths = (profile: any, nodeMap: Map<number, any>): ExecutionPath => {
+  private analyzeExecutionPaths = (_profile: any, nodeMap: Map<number, any>): ExecutionPath => {
     // This is a simplified implementation
     // A full implementation would build the complete call tree and analyze paths
     
@@ -330,7 +330,7 @@ export class CPUProfiler {
    * Calculate approximate idle time
    */
   private calculateIdleTime = (
-    profile: any,
+    _profile: any,
     nodeMap: Map<number, any>,
     sampleCounts: Map<number, number>
   ): number => {
@@ -368,7 +368,7 @@ export class CPUProfiler {
     // Hot spot recommendations
     if (hotSpots.length > 0) {
       const topHotSpot = hotSpots[0];
-      if (topHotSpot.percentage > 20) {
+      if (topHotSpot && topHotSpot.percentage > 20) {
         recommendations.push(
           `High CPU usage in '${topHotSpot.functionName}' (${topHotSpot.percentage.toFixed(1)}%) - consider optimization`
         );

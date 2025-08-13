@@ -23,7 +23,6 @@
 import { chromium, Browser, BrowserContext, Page, CDPSession } from 'playwright';
 import { 
   DevToolsConfig, 
-  DEFAULT_DEVTOOLS_CONFIG, 
   createDevToolsConfig,
   getNetworkThrottling 
 } from './EnvironmentConfig';
