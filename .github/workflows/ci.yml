@@ -4,9 +4,6 @@ jobs:
   lhci:
     name: Lighthouse
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/dashboard
 
     steps:
       - name: Checkout repository
@@ -15,7 +12,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
@@ -25,10 +22,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
+      - name: Build all packages
         run: pnpm run build
 
       - name: Run Lighthouse CI
+        working-directory: apps/dashboard
         run: |
           pnpm add -g @lhci/cli@0.15.x
           lhci autorun
