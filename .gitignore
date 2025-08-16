@@ -52,3 +52,17 @@ web-bundles
 
 # lighthouse
 **/.lighthouseci
+performance-report.json
+**.report.html
+
+# performance history
+**/.performance-history
+
+# devtools automation results
+**/devtools-results/
+
+# metrics data
+**/data/metrics.json
+
+# playwright
+.last-run.json

@@ -14,19 +14,17 @@ export const usePerformanceMetrics = (config: PerformanceConfig) => {
         collectorRef.current.destroy();
       }
     };
-  }, []);
+  }, [config]);
 
-  useReportWebVitals(
-    useCallback((metric: WebVitalsMetric) => {
-      if (collectorRef.current) {
-        collectorRef.current.handleWebVitals(metric);
-      }
+  useReportWebVitals((metric: WebVitalsMetric) => {
+    if (collectorRef.current) {
+      collectorRef.current.handleWebVitals(metric);
+    }
 
-      if (process.env.NODE_ENV === "production") {
-        console.log(`Web Vital: ${metric}`);
-      }
-    }, [])
-  );
+    if (process.env.NODE_ENV === "production") {
+      console.log(`Web Vital: ${metric}`);
+    }
+  });
 
   const trackCustomMetric = (name: string, value: number) => {
     collectorRef.current?.trackCustomMetric(name, value);

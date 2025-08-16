@@ -9,14 +9,29 @@
     "lint": "turbo run lint",
     "clean": "turbo run clean",
     "type-check": "turbo run type-check",
-    "lighthouse:website": "pnpm run lhci --workspace=apps/dashboard"
+    "lighthouse:website": "pnpm run lhci --workspace=apps/dashboard",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.4",
+    "ts-node": "^10.9.2",
     "turbo": "^2.5.5",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "apps/dashboard/src/**/*.{js,jsx,ts,tsx}": [
+      "cd apps/dashboard && pnpm lint"
+    ]
   },
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "pnpm": {
+    "overrides": {
+      "react": "19.2.0-canary-97cdd5d3-20250710",
+      "react-dom": "19.2.0-canary-97cdd5d3-20250710"
+    }
+  }
 }

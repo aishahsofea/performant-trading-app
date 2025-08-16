@@ -1,7 +1,6 @@
 import { PerformanceMetrics } from "@/types";
 import { NextRequest, NextResponse } from "next/server";
-
-const metricsStore: PerformanceMetrics[] = [];
+import { metricsStorage } from "@/lib/metricsStorage";
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -15,7 +14,8 @@ export const POST = async (request: NextRequest) => {
     }
 
     metric.timestamp = Date.now();
-    metricsStore.push(metric);
+
+    await metricsStorage.store(metric);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -35,31 +35,16 @@ export const GET = async (request: NextRequest) => {
     const appName = searchParams.get("appName");
     const limit = parseInt(searchParams.get("limit") || "100");
 
-    let filteredMetrics = [...metricsStore];
+    const filteredMetrics = await metricsStorage.getFiltered({
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
+      appName: appName || undefined,
+      limit,
+    });
 
-    if (startDate) {
-      const start = new Date(startDate).getTime();
-      filteredMetrics = filteredMetrics.filter(
-        (metric) => metric.timestamp >= start
-      );
-    }
+    console.log("Fetched metrics:", filteredMetrics);
 
-    if (endDate) {
-      const end = new Date(endDate).getTime();
-      filteredMetrics = filteredMetrics.filter(
-        (metric) => metric.timestamp <= end
-      );
-    }
-
-    if (appName && appName !== "all") {
-      filteredMetrics = filteredMetrics.filter(
-        (metric) => metric.appName === appName
-      );
-    }
-
-    const results = filteredMetrics.slice(-limit);
-
-    return NextResponse.json(results);
+    return NextResponse.json(filteredMetrics);
   } catch (error) {
     console.error("Error fetching metrics: ", error);
     return NextResponse.json(

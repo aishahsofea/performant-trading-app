@@ -85,11 +85,11 @@ export const PerformanceDashboard = ({
 
     const validMetrics = data.filter(
       (m) =>
-        m.lcp !== undefined &&
-        m.fid !== undefined &&
-        m.cls !== undefined &&
-        m.ttfb !== undefined &&
-        m.fcp !== undefined &&
+        m.lcp !== undefined ||
+        m.fid !== undefined ||
+        m.cls !== undefined ||
+        m.ttfb !== undefined ||
+        m.fcp !== undefined ||
         m.inp !== undefined
     );
 
@@ -151,7 +151,7 @@ export const PerformanceDashboard = ({
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl">{title}</h1>
+        <h1 className="text-3xl font-semibold">{title}</h1>
         <p>Monorepo Performance Monitoring - Track metrics across all apps</p>
       </div>
 
