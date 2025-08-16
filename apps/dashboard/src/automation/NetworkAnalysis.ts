@@ -31,7 +31,6 @@
 
 import type { CDPSession } from "playwright";
 import {
-  CDPNetworkRequest,
   CDPNetworkResponse,
   ProcessedNetworkRequest,
   NetworkAnalysis as NetworkAnalysisType,
@@ -218,7 +217,7 @@ export class NetworkAnalysis {
     const requestId = params.requestId;
     const request = params.request;
     const timestamp = params.timestamp;
-    
+
     // Set first request timestamp as reference point
     if (this.firstRequestTimestamp === 0) {
       this.firstRequestTimestamp = timestamp;
@@ -282,11 +281,7 @@ export class NetworkAnalysis {
     if (request.timing) {
       const requestTiming = this.requestTimings.get(requestId);
       if (requestTiming && response.timing) {
-        this.updateDetailedTiming(
-          request.timing,
-          response.timing,
-          requestTiming.startTime
-        );
+        this.updateDetailedTiming(request.timing, response.timing);
       }
     }
 
@@ -387,8 +382,7 @@ export class NetworkAnalysis {
    */
   private updateDetailedTiming = (
     timing: ProcessedNetworkRequest["timing"],
-    cdpTiming: any,
-    requestStartTime: number
+    cdpTiming: any
   ): void => {
     // CDP timing values are already relative durations, no base adjustment needed
     timing.dns =
@@ -408,9 +402,10 @@ export class NetworkAnalysis {
    */
   private finalizePendingRequests = (): void => {
     // Use current time relative to first request timestamp
-    const currentTime = this.firstRequestTimestamp > 0 
-      ? (Date.now() / 1000 - this.firstRequestTimestamp) * 1000 // Convert to same relative timing format
-      : 0;
+    const currentTime =
+      this.firstRequestTimestamp > 0
+        ? (Date.now() / 1000 - this.firstRequestTimestamp) * 1000 // Convert to same relative timing format
+        : 0;
 
     this.activeRequests.forEach((request) => {
       if (request.timing) {

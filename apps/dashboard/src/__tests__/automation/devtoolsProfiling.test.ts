@@ -69,15 +69,15 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
       function createMemoryLoad() {
         const largeArray = [];
         const objects = [];
-        
+
         for (let i = 0; i < 1000; i++) {
           largeArray.push(new Array(100).fill(i));
-          objects.push({ id: i, data: 'test'.repeat(50) });
+          objects.push({ id: i, data: "test".repeat(50) });
         }
-        
+
         return { largeArray, objects };
       }
-      
+
       return createMemoryLoad();
     });
 
@@ -99,9 +99,9 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
 
     // Verify analysis contains expected fields
     const analysis = metrics.memory!.analysis;
-    expect(typeof analysis.avgMemoryUsage).toBe('number');
-    expect(typeof analysis.maxMemoryUsage).toBe('number');
-    expect(typeof analysis.memoryGrowthRate).toBe('number');
+    expect(typeof analysis.avgMemoryUsage).toBe("number");
+    expect(typeof analysis.maxMemoryUsage).toBe("number");
+    expect(typeof analysis.memoryGrowthRate).toBe("number");
     expect(Array.isArray(analysis.recommendations)).toBe(true);
   });
 
@@ -159,7 +159,7 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
         }
         return result;
       }
-      
+
       function performMultipleCalculations() {
         const results = [];
         for (let j = 0; j < 10; j++) {
@@ -167,7 +167,7 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
         }
         return results;
       }
-      
+
       return performMultipleCalculations();
     });
 
@@ -185,9 +185,9 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
 
     // Check analysis results
     const analysis = metrics.cpu!.analysis;
-    expect(typeof analysis.totalSamples).toBe('number');
-    expect(typeof analysis.totalTime).toBe('number');
-    expect(typeof analysis.activeTime).toBe('number');
+    expect(typeof analysis.totalSamples).toBe("number");
+    expect(typeof analysis.totalTime).toBe("number");
+    expect(typeof analysis.activeTime).toBe("number");
     expect(Array.isArray(analysis.hotSpots)).toBe(true);
     expect(Array.isArray(analysis.functionBreakdown)).toBe(true);
     expect(Array.isArray(analysis.recommendations)).toBe(true);
@@ -247,18 +247,18 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
         for (let i = 0; i < 5000; i++) {
           // CPU intensive operation
           const computed = Math.pow(i, 2) + Math.sqrt(i);
-          
+
           // Memory allocation
           data.push({
             index: i,
             computed: computed,
             array: new Array(50).fill(computed),
-            timestamp: Date.now()
+            timestamp: Date.now(),
           });
         }
         return data;
       }
-      
+
       return memoryAndCpuIntensive();
     });
 
@@ -295,10 +295,10 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
 
     // Should throw error if trying to start memory profiling twice
     await automation.startRecording({ memory: true });
-    
-    await expect(
-      automation.startRecording({ memory: true })
-    ).rejects.toThrow("Recording already in progress");
+
+    await expect(automation.startRecording({ memory: true })).rejects.toThrow(
+      "Recording already in progress"
+    );
 
     // Cleanup the ongoing recording
     await automation.stopRecording();
@@ -364,10 +364,10 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
       // Define problematic functions inline
       function inefficientFunction() {
         // Inefficient DOM manipulation
-        const container = document.createElement('div');
+        const container = document.createElement("div");
         for (let i = 0; i < 1000; i++) {
-          const element = document.createElement('div');
-          element.textContent = 'Element ' + i;
+          const element = document.createElement("div");
+          element.textContent = "Element " + i;
           container.appendChild(element);
           // Force layout by accessing offsetHeight
           void element.offsetHeight;
@@ -375,25 +375,25 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
         document.body.appendChild(container);
         return container;
       }
-      
+
       function memoryLeakFunction() {
         // Create potential memory leak
         const cache = [];
         for (let i = 0; i < 2000; i++) {
           cache.push({
             id: i,
-            data: new Array(100).fill('data'),
-            timestamp: new Date()
+            data: new Array(100).fill("data"),
+            timestamp: new Date(),
           });
         }
         // Don't clean up cache, creating potential leak
         (window as any).leakyCache = cache;
         return cache;
       }
-      
+
       const inefficientResult = inefficientFunction();
       const memoryLeakResult = memoryLeakFunction();
-      
+
       return { inefficientResult, memoryLeakResult };
     });
 
@@ -406,13 +406,13 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
     expect(metrics.cpu!.analysis.recommendations.length).toBeGreaterThan(0);
 
     // Check that recommendations are strings and not empty
-    metrics.memory!.analysis.recommendations.forEach(rec => {
-      expect(typeof rec).toBe('string');
+    metrics.memory!.analysis.recommendations.forEach((rec) => {
+      expect(typeof rec).toBe("string");
       expect(rec.length).toBeGreaterThan(10); // Meaningful recommendation
     });
 
-    metrics.cpu!.analysis.recommendations.forEach(rec => {
-      expect(typeof rec).toBe('string');
+    metrics.cpu!.analysis.recommendations.forEach((rec) => {
+      expect(typeof rec).toBe("string");
       expect(rec.length).toBeGreaterThan(10);
     });
 
@@ -435,7 +435,9 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
     });
 
     await automation.initialize();
-    await automation.page.goto("data:text/html,<html><body>Snapshot Test</body></html>");
+    await automation.page.goto(
+      "data:text/html,<html><body>Snapshot Test</body></html>"
+    );
 
     // Start recording with memory profiling (snapshots should be taken at start/end)
     await automation.startRecording({ memory: true });
@@ -457,10 +459,10 @@ test.describe("DevTools Automation - Phase 3 Profiling Functionality", () => {
     expect(metrics.memory!.snapshots.length).toBeGreaterThanOrEqual(1);
 
     // Each snapshot should have required metadata
-    metrics.memory!.snapshots.forEach(snapshot => {
+    metrics.memory!.snapshots.forEach((snapshot) => {
       expect(snapshot.id).toBeDefined();
       expect(snapshot.label).toBeDefined();
-      expect(snapshot.timestamp).toBeGreaterThanOrEqual(0);
+      expect(snapshot.elapsedTimeMs).toBeGreaterThanOrEqual(0);
       expect(snapshot.metadata).toBeDefined();
       expect(snapshot.metadata.nodeCount).toBeGreaterThanOrEqual(0);
     });
@@ -476,23 +478,25 @@ test.describe("DevTools Automation - Profiling Performance and Resources", () =>
     });
 
     await automation.initialize();
-    await automation.page.goto("data:text/html,<html><body>Performance Test</body></html>");
+    await automation.page.goto(
+      "data:text/html,<html><body>Performance Test</body></html>"
+    );
 
     const startTime = Date.now();
-    
+
     await automation.startRecording({
       memory: true,
       cpu: true,
     });
 
     await automation.page.waitForTimeout(1000); // 1 second of profiling
-    
+
     const metrics = await automation.stopRecording();
     const totalTime = Date.now() - startTime;
 
     // Profiling setup, execution, and analysis should complete in reasonable time
     expect(totalTime).toBeLessThan(15000); // Less than 15 seconds total
-    
+
     // Should have collected meaningful data
     expect(metrics.memory).toBeDefined();
     expect(metrics.cpu).toBeDefined();
@@ -508,7 +512,9 @@ test.describe("DevTools Automation - Profiling Performance and Resources", () =>
     });
 
     await automation.initialize();
-    await automation.page.goto("data:text/html,<html><body>Cleanup Test</body></html>");
+    await automation.page.goto(
+      "data:text/html,<html><body>Cleanup Test</body></html>"
+    );
 
     // Start profiling
     await automation.startRecording({
@@ -518,5 +524,171 @@ test.describe("DevTools Automation - Profiling Performance and Resources", () =>
 
     // Cleanup without stopping profiling (simulates unexpected cleanup)
     await expect(automation.cleanup()).resolves.not.toThrow();
+  });
+});
+
+test.describe("DevTools Automation - V8 Optimization Analysis", () => {
+  test("should analyze V8 optimization details when includeInlining is enabled", async () => {
+    // Test explanation: Verify V8 optimization analysis captures inlining and optimization data
+    const automation = new DevToolsAutomation({
+      browser: { headless: true },
+      logLevel: "error",
+    });
+
+    await automation.initialize();
+
+    // Create a page with functions that should trigger V8 optimization patterns
+    const testUrl = `data:text/html,<html><body>
+      <script>
+        // Small function that should be inlined
+        function addNumbers(a, b) {
+          return a + b;
+        }
+        
+        // Frequently called function
+        function fastCalculation(x) {
+          return addNumbers(x, x) * 2;
+        }
+        
+        // Large function that might not be optimized
+        function largeFunction(data) {
+          let result = 0;
+          for (let i = 0; i < data.length; i++) {
+            result += data[i] * i;
+            result = Math.sin(result);
+            result = Math.cos(result);
+            result = Math.sqrt(Math.abs(result));
+          }
+          return result;
+        }
+        
+        // Function with deoptimization risks
+        function problematicFunction() {
+          try {
+            return eval('2 + 2');
+          } catch (e) {
+            return 0;
+          }
+        }
+      </script>
+      <h1>V8 Optimization Test</h1>
+    </body></html>`;
+
+    await automation.page.goto(testUrl);
+
+    // Start CPU profiling with V8 optimization analysis enabled
+    await automation.startRecording({
+      cpu: true,
+      timeline: false,
+      memory: false,
+      network: false,
+    });
+
+    // Execute the optimization test scenario
+    await automation.page.evaluate(() => {
+      // Define the test functions inline to ensure they're available
+      function addNumbers(a: number, b: number): number {
+        return a + b;
+      }
+
+      function fastCalculation(x: number): number {
+        return addNumbers(x, x) * 2;
+      }
+
+      function largeFunction(data: number[]): number {
+        let result = 0;
+        for (let i = 0; i < data.length; i++) {
+          const value = data[i];
+          if (value !== undefined) {
+            result += value * i;
+            result = Math.sin(result);
+            result = Math.cos(result);
+            result = Math.sqrt(Math.abs(result));
+          }
+        }
+        return result;
+      }
+
+      function problematicFunction(): number {
+        try {
+          return eval("2 + 2") as number;
+        } catch (e) {
+          console.error("Deoptimization error:", e);
+          return 0;
+        }
+      }
+
+      const data = new Array(1000).fill(0).map((_, i) => i);
+
+      // Call small function many times (should be inlined)
+      for (let i = 0; i < 100; i++) {
+        fastCalculation(i);
+      }
+
+      // Call large function (should remain un-inlined)
+      largeFunction(data.slice(0, 100));
+
+      // Call problematic function (deoptimization risk)
+      problematicFunction();
+
+      return data.length;
+    });
+
+    // Wait for profiling to capture optimization data
+    await automation.page.waitForTimeout(2000);
+
+    const metrics = await automation.stopRecording();
+
+    // Verify CPU profiling with optimization analysis
+    expect(metrics.cpu).toBeDefined();
+    expect(metrics.cpu!.analysis).toBeDefined();
+    expect(metrics.cpu!.analysis.optimizations).toBeDefined();
+
+    const optimizations = metrics.cpu!.analysis.optimizations!;
+
+    // Verify optimization stats structure
+    expect(optimizations.optimizationStats).toBeDefined();
+    expect(typeof optimizations.optimizationStats.totalFunctions).toBe(
+      "number"
+    );
+    expect(typeof optimizations.optimizationStats.optimizedFunctions).toBe(
+      "number"
+    );
+    expect(typeof optimizations.optimizationStats.inlinedFunctions).toBe(
+      "number"
+    );
+    expect(typeof optimizations.optimizationStats.optimizationRatio).toBe(
+      "number"
+    );
+    expect(typeof optimizations.optimizationStats.inliningRatio).toBe("number");
+
+    // Verify arrays are defined
+    expect(Array.isArray(optimizations.inlinedFunctions)).toBe(true);
+    expect(Array.isArray(optimizations.deoptimizations)).toBe(true);
+    expect(Array.isArray(optimizations.optimizationOpportunities)).toBe(true);
+
+    // Check that hot spots include optimization information
+    const hotSpots = metrics.cpu!.analysis.hotSpots;
+    if (hotSpots.length > 0) {
+      const hasOptimizationInfo = hotSpots.some(
+        (hotSpot) => hotSpot.optimizationInfo !== undefined
+      );
+      expect(hasOptimizationInfo).toBe(true);
+    }
+
+    // Verify recommendations include optimization suggestions
+    const recommendations = metrics.cpu!.analysis.recommendations;
+    expect(Array.isArray(recommendations)).toBe(true);
+    expect(recommendations.length).toBeGreaterThan(0);
+
+    console.log("Optimization Stats:", optimizations.optimizationStats);
+    console.log("Inlined Functions:", optimizations.inlinedFunctions.length);
+    console.log("Deoptimizations:", optimizations.deoptimizations.length);
+    console.log(
+      "Optimization Opportunities:",
+      optimizations.optimizationOpportunities.length
+    );
+
+    await automation.cleanup();
   });
 });

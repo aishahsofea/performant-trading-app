@@ -729,6 +729,7 @@ export type CPUAnalysis = {
   hotSpots: HotSpot[];
   functionBreakdown: FunctionMetric[];
   executionPath: ExecutionPath;
+  optimizations?: OptimizationDetails; // V8 optimization analysis
   recommendations: string[];
 }
 
@@ -744,6 +745,11 @@ export type HotSpot = {
   totalTime: number; // microseconds
   hitCount: number;
   percentage: number; // of total execution time
+  optimizationInfo?: {
+    isInlined: boolean;
+    isOptimized: boolean;
+    deoptimizationRisk?: DeoptimizationReason;
+  };
 }
 
 /**
@@ -778,3 +784,128 @@ export type CallFrame = {
   columnNumber: number;
   scriptId: string;
 }
+
+// =============================================================================
+// V8 Optimization and Inlining Types
+// =============================================================================
+
+/**
+ * V8 Optimization Details
+ * Information about V8's function optimization decisions
+ */
+export type OptimizationDetails = {
+  inlinedFunctions: InlinedFunction[];
+  deoptimizations: DeoptimizationEvent[];
+  optimizationOpportunities: OptimizationOpportunity[];
+  optimizationStats: OptimizationStats;
+}
+
+/**
+ * Inlined Function Information
+ * Details about functions that V8 successfully inlined
+ */
+export type InlinedFunction = {
+  parentFunction: string;
+  parentUrl: string;
+  inlinedFunction: string;
+  inlinedUrl: string;
+  lineNumber: number;
+  columnNumber: number;
+  reason: InliningReason;
+  impact: OptimizationImpact;
+  selfTime: number; // Time saved by inlining (microseconds)
+  callCount: number; // Number of times this would have been called
+}
+
+/**
+ * Deoptimization Event
+ * Information about functions that were deoptimized by V8
+ */
+export type DeoptimizationEvent = {
+  functionName: string;
+  url: string;
+  lineNumber: number;
+  columnNumber: number;
+  reason: DeoptimizationReason;
+  timestamp: number;
+  bailoutType: string;
+  impact: OptimizationImpact;
+}
+
+/**
+ * Optimization Opportunity
+ * Suggestions for code changes that could improve V8 optimization
+ */
+export type OptimizationOpportunity = {
+  type: OptimizationOpportunityType;
+  functionName: string;
+  url: string;
+  lineNumber: number;
+  description: string;
+  potentialImpact: OptimizationImpact;
+  recommendation: string;
+  estimatedSavings: number; // Microseconds
+}
+
+/**
+ * Overall Optimization Statistics
+ */
+export type OptimizationStats = {
+  totalFunctions: number;
+  optimizedFunctions: number;
+  inlinedFunctions: number;
+  deoptimizedFunctions: number;
+  optimizationRatio: number; // 0-1
+  inliningRatio: number; // 0-1
+  totalTimeSaved: number; // Microseconds from optimizations
+}
+
+/**
+ * Reasons why V8 inlined a function
+ */
+export type InliningReason =
+  | 'small-function'      // Function is small enough to inline
+  | 'frequent-call'       // Function is called frequently
+  | 'hot-path'           // Function is on a hot execution path
+  | 'monomorphic'        // Function has consistent type signatures
+  | 'forced'             // Explicitly forced by V8 heuristics
+  | 'constructor'        // Constructor function inlining
+  | 'getter-setter'      // Property accessor inlining
+
+/**
+ * Reasons why V8 couldn't inline a function
+ */
+export type DeoptimizationReason =
+  | 'function-too-large'     // Function exceeds inlining size limits
+  | 'dynamic-call'           // Function called dynamically (apply/call)
+  | 'try-catch-block'        // Function contains try/catch
+  | 'with-statement'         // Function contains with statement
+  | 'eval-usage'             // Function uses eval
+  | 'arguments-object'       // Function uses arguments object
+  | 'generator-function'     // Function is a generator
+  | 'async-function'         // Function is async
+  | 'polymorphic'           // Function has inconsistent type signatures
+  | 'bailout'               // Runtime deoptimization occurred
+  | 'insufficient-type-info' // Not enough type information available
+
+/**
+ * Types of optimization opportunities
+ */
+export type OptimizationOpportunityType =
+  | 'eliminate-polymorphism'  // Reduce type variations
+  | 'avoid-dynamic-calls'     // Replace apply/call with direct calls
+  | 'reduce-function-size'    // Break down large functions
+  | 'remove-try-catch'        // Move try/catch to outer scope
+  | 'avoid-arguments-object'  // Use rest parameters instead
+  | 'enable-monomorphic-ic'   // Ensure consistent object shapes
+  | 'optimize-property-access' // Improve property access patterns
+
+/**
+ * Impact level of optimizations
+ */
+export type OptimizationImpact =
+  | 'high'     // Significant performance improvement (>10% faster)
+  | 'medium'   // Moderate performance improvement (2-10% faster)
+  | 'low'      // Minor performance improvement (<2% faster)
+  | 'neutral'  // No measurable impact
+  | 'negative' // Performance regression (rare)
