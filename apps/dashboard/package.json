@@ -22,7 +22,9 @@
     "devtools:analyze": "ts-node src/scripts/analyzeProfiles.ts",
     "devtools:baseline": "ts-node src/scripts/runDevToolsTests.ts --save-baseline",
     "test:devtools": "playwright test src/__tests__/automation/devtoolsBasic.test.ts",
-    "test:devtools:headed": "playwright test src/__tests__/automation/devtoolsBasic.test.ts --headed"
+    "test:devtools:headed": "playwright test src/__tests__/automation/devtoolsBasic.test.ts --headed",
+    "debug:node-process": "ts-node src/scripts/debugNodeProcess.ts",
+    "dev:workflow": "pnpm check-types && pnpm lint && pnpm performance:check-budgets"
   },
   "dependencies": {
     "@next/bundle-analyzer": "^15.4.5",
@@ -47,6 +49,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
     "playwright": "^1.54.2",
-    "typescript": "latest"
+    "typescript": "latest",
+    "why-is-node-running": "^3.2.2"
   }
 }

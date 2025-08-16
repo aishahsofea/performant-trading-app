@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { PerformanceProvider } from "@/providers";
+import { DevelopmentPerformancePanel } from "@/components/DevelopmentPerformancePanel";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
           <div className="min-h-screen container mx-auto max-w-full">
             {children}
           </div>
+          <DevelopmentPerformancePanel />
         </PerformanceProvider>
         <Analytics />
       </body>
