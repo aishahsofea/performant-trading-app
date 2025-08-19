@@ -5,12 +5,14 @@ import { useSession } from "next-auth/react";
 import { validateEmail } from "@/lib/auth-utils";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { CustomButton } from "@/components/ui/CustomButton";
+import { ProfileImageUpload } from "./ProfileImageUpload";
 
 type ProfileFormData = {
   name: string;
   email: string;
   bio: string;
   timezone: string;
+  profileImage?: File | null;
 };
 
 type ProfileFormProps = {
@@ -24,6 +26,7 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
     email: session?.user?.email || "",
     bio: "",
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    profileImage: null,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +43,11 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
+    setSuccessMessage("");
+  };
+
+  const handleImageChange = (file: File | null, previewUrl: string | null) => {
+    setFormData((prev) => ({ ...prev, profileImage: file }));
     setSuccessMessage("");
   };
 
@@ -101,6 +109,13 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
           <p className="text-sm text-red-400 font-medium">{errors.general}</p>
         </div>
       )}
+
+      {/* Profile Image Upload */}
+      <ProfileImageUpload
+        currentImageUrl={session?.user?.image}
+        onImageChange={handleImageChange}
+        disabled={isLoading}
+      />
 
       {/* Name Field */}
       <div>
