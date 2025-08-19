@@ -4,6 +4,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { PerformanceProvider } from "@/providers";
 import { DevelopmentPerformancePanel } from "@/components/DevelopmentPerformancePanel";
+import { SessionProvider } from "@/components/providers/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,20 +31,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <PerformanceProvider
-          config={{
-            appName: "web-app",
-            apiEndpoint: "/api/metrics",
-            userId: "user-123", // TODO: get from auth system
-            enableErrorTracking: true,
-            enableCustomMetrics: true,
-          }}
-        >
-          <div className="min-h-screen container mx-auto max-w-full">
-            {children}
-          </div>
-          <DevelopmentPerformancePanel />
-        </PerformanceProvider>
+        <SessionProvider>
+          <PerformanceProvider
+            config={{
+              appName: "web-app",
+              apiEndpoint: "/api/metrics",
+              userId: "user-123", // TODO: get from auth system
+              enableErrorTracking: true,
+              enableCustomMetrics: true,
+            }}
+          >
+            <div className="min-h-screen container mx-auto max-w-full">
+              {children}
+            </div>
+            <DevelopmentPerformancePanel />
+          </PerformanceProvider>
+        </SessionProvider>
         <Analytics />
       </body>
     </html>

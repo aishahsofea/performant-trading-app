@@ -71,8 +71,8 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
   return (
     <div className="min-w-md mx-auto" data-testid="login-form-container">
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold mb-2">Sign In</h1>
-        <p className="text-gray-600">Access your trading dashboard</p>
+        <h1 className="text-3xl font-semibold mb-2 text-gray-100">Sign In</h1>
+        <p className="text-gray-400">Access your trading dashboard</p>
       </div>
 
       {/* OAuth Section */}
@@ -86,7 +86,7 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-gray-500">
+          <span className="bg-gray-900 px-2 text-gray-500">
             Or continue with email
           </span>
         </div>
@@ -96,12 +96,12 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
       <form
         onSubmit={handleCredentialsSubmit}
         role="form"
-        className="p-6 rounded-lg shadow-sm border"
+        className="p-6 rounded-lg shadow-xl border border-gray-700 bg-gray-800"
       >
         {/* Auth Error */}
         {authError && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-sm text-red-600" role="alert">
+          <div className="mb-4 p-3 bg-red-900/20 border border-red-500 rounded-md">
+            <p className="text-sm text-red-400 font-medium" role="alert">
               {authError}
             </p>
           </div>
@@ -109,7 +109,10 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
 
         {/* Email Field */}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium mb-2 text-gray-200"
+          >
             Email
           </label>
           <input
@@ -118,12 +121,12 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full border rounded-md px-3 py-2.5 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
             placeholder="Enter your email"
             disabled={isLoading}
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600" role="alert">
+            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
               {errors.email}
             </p>
           )}
@@ -131,7 +134,10 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
 
         {/* Password Field */}
         <div className="mb-6">
-          <label htmlFor="password" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium mb-2 text-gray-200"
+          >
             Password
           </label>
           <input
@@ -140,12 +146,12 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
-            className="w-full border rounded-md px-3 py-2.5 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
             placeholder="Enter your password"
             disabled={isLoading}
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600" role="alert">
+            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
               {errors.password}
             </p>
           )}
@@ -155,18 +161,18 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="w-full bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           {isLoading ? "Signing In..." : "Sign In"}
         </button>
 
         {/* Register Link */}
         <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-400">
             Don't have an account?{" "}
             <a
               href="/auth/register"
-              className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+              className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
             >
               Sign up
             </a>

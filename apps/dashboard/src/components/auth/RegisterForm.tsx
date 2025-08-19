@@ -91,8 +91,10 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
   return (
     <div className="min-w-md mx-auto" data-testid="register-form-container">
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold mb-2">Create Account</h1>
-        <p className="text-gray-600">Start your trading journey</p>
+        <h1 className="text-3xl font-semibold mb-2 text-gray-100">
+          Create Account
+        </h1>
+        <p className="text-gray-400">Start your trading journey</p>
       </div>
 
       {/* OAuth Section */}
@@ -106,7 +108,7 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-gray-500">
+          <span className="bg-gray-900 px-2 text-gray-500">
             Or create account with email
           </span>
         </div>
@@ -116,12 +118,12 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
       <form
         onSubmit={handleRegistrationSubmit}
         role="form"
-        className="p-6 rounded-lg shadow-sm border"
+        className="p-6 rounded-lg shadow-xl border border-gray-700 bg-gray-800"
       >
         {/* Auth Error */}
         {authError && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-sm text-red-600" role="alert">
+          <div className="mb-4 p-3 bg-red-900/20 border border-red-500 rounded-md">
+            <p className="text-sm text-red-400 font-medium" role="alert">
               {authError}
             </p>
           </div>
@@ -129,7 +131,10 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
 
         {/* Name Field */}
         <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium mb-2 text-gray-200"
+          >
             Full Name
           </label>
           <input
@@ -138,12 +143,12 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
             name="name"
             value={formData.name}
             onChange={handleInputChange}
-            className="w-full border rounded-md px-3 py-2.5 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
             placeholder="Enter your full name"
             disabled={isLoading}
           />
           {errors.name && (
-            <p className="mt-1 text-sm text-red-600" role="alert">
+            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
               {errors.name}
             </p>
           )}
@@ -151,7 +156,10 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
 
         {/* Email Field */}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium mb-2 text-gray-200"
+          >
             Email
           </label>
           <input
@@ -160,12 +168,12 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full border rounded-md px-3 py-2.5 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
             placeholder="Enter your email"
             disabled={isLoading}
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600" role="alert">
+            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
               {errors.email}
             </p>
           )}
@@ -173,7 +181,10 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
 
         {/* Password Field */}
         <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium mb-2">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium mb-2 text-gray-200"
+          >
             Password
           </label>
           <input
@@ -182,12 +193,12 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
-            className="w-full border rounded-md px-3 py-2.5 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
             placeholder="Create a strong password"
             disabled={isLoading}
           />
           {errors.password && (
-            <p className="mt-1 text-sm text-red-600" role="alert">
+            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
               {errors.password}
             </p>
           )}
@@ -197,7 +208,7 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
         <div className="mb-6">
           <label
             htmlFor="confirmPassword"
-            className="block text-sm font-medium mb-2"
+            className="block text-sm font-medium mb-2 text-gray-200"
           >
             Confirm Password
           </label>
@@ -207,12 +218,12 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleInputChange}
-            className="w-full border rounded-md px-3 py-2.5 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
             placeholder="Confirm your password"
             disabled={isLoading}
           />
           {errors.confirmPassword && (
-            <p className="mt-1 text-sm text-red-600" role="alert">
+            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
               {errors.confirmPassword}
             </p>
           )}
@@ -222,18 +233,18 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="w-full bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           {isLoading ? "Creating Account..." : "Create Account"}
         </button>
 
         {/* Login Link */}
         <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-400">
             Already have an account?{" "}
             <a
               href="/auth/login"
-              className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+              className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
             >
               Sign in
             </a>
