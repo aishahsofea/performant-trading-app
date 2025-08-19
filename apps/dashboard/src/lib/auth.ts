@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import "@/types/auth"; // Import our custom type definitions
 import { validateEmail, verifyPassword } from "@/lib/auth-utils";
 
@@ -30,12 +31,16 @@ export const authOptions: NextAuthOptions = {
           email: credentials.email,
           name: "Test User",
           // This would be the actual hashed password from database
-          password: "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj.VIIqkS.ee" // "password123" hashed
+          password:
+            "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj.VIIqkS.ee", // "password123" hashed
         };
 
         // Verify password against hash
-        const isValidPassword = await verifyPassword(credentials.password, mockUser.password);
-        
+        const isValidPassword = await verifyPassword(
+          credentials.password,
+          mockUser.password
+        );
+
         if (!isValidPassword) {
           return null;
         }
@@ -47,6 +52,10 @@ export const authOptions: NextAuthOptions = {
           name: mockUser.name,
         };
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   pages: {
