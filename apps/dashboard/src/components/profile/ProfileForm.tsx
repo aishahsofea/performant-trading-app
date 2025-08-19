@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { validateEmail } from "@/lib/auth-utils";
 import { CustomSelect } from "@/components/ui/CustomSelect";
+import { CustomButton } from "@/components/ui/CustomButton";
 
 type ProfileFormData = {
   name: string;
@@ -179,7 +180,9 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
         </label>
         <CustomSelect
           value={formData.timezone}
-          onChange={(value) => setFormData((prev) => ({ ...prev, timezone: value }))}
+          onChange={(value) =>
+            setFormData((prev) => ({ ...prev, timezone: value }))
+          }
           disabled={isLoading}
           options={[
             { value: "America/New_York", label: "Eastern Time (ET)" },
@@ -196,13 +199,10 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
       </div>
 
       {/* Submit Button */}
-      <button
-        type="submit"
+      <CustomButton
+        text={isLoading ? "Saving..." : "Save Profile"}
         disabled={isLoading}
-        className="w-full bg-purple-600 text-white px-6 py-2.5 rounded-md hover:bg-purple-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-      >
-        {isLoading ? "Saving..." : "Save Profile"}
-      </button>
+      />
     </form>
   );
 };

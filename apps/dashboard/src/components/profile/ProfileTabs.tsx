@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { ProfileForm } from "./ProfileForm";
 import { TradingPreferencesForm } from "./TradingPreferencesForm";
+import { PortfolioSettingsForm } from "./PortfolioSettingsForm";
 
-type TabType = "profile" | "preferences";
+type TabType = "profile" | "preferences" | "portfolio";
 
 export const ProfileTabs = () => {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
@@ -12,6 +13,7 @@ export const ProfileTabs = () => {
   const tabs = [
     { id: "profile" as TabType, label: "Profile", icon: "👤" },
     { id: "preferences" as TabType, label: "Trading Preferences", icon: "⚙️" },
+    { id: "portfolio" as TabType, label: "Portfolio Settings", icon: "📊" },
   ];
 
   return (
@@ -42,6 +44,7 @@ export const ProfileTabs = () => {
       <div className="mt-6">
         {activeTab === "profile" && <ProfileForm />}
         {activeTab === "preferences" && <TradingPreferencesForm />}
+        {activeTab === "portfolio" && <PortfolioSettingsForm />}
       </div>
     </div>
   );

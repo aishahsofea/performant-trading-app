@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { validateLoginForm, type LoginFormData } from "@/lib/auth-utils";
 import { ContinueWithGoogle } from "./ContinueWithGoogle";
+import { CustomButton } from "@/components/ui/CustomButton";
 
 type LoginFormProps = {
   callbackUrl?: string;
@@ -158,13 +159,10 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
+        <CustomButton
+          text={isLoading ? "Signing In..." : "Sign In"}
           disabled={isLoading}
-          className="w-full bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          {isLoading ? "Signing In..." : "Sign In"}
-        </button>
+        />
 
         {/* Register Link */}
         <div className="mt-4 text-center">

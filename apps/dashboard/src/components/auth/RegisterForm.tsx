@@ -9,6 +9,7 @@ import {
   hashPassword,
 } from "@/lib/auth-utils";
 import { ContinueWithGoogle } from "./ContinueWithGoogle";
+import { CustomButton } from "@/components/ui/CustomButton";
 
 type RegisterFormProps = {
   callbackUrl?: string;
@@ -230,13 +231,10 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
+        <CustomButton
+          text={isLoading ? "Creating Account..." : "Create Account"}
           disabled={isLoading}
-          className="w-full bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-        >
-          {isLoading ? "Creating Account..." : "Create Account"}
-        </button>
+        />
 
         {/* Login Link */}
         <div className="mt-4 text-center">
