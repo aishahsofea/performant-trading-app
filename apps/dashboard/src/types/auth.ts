@@ -9,6 +9,9 @@ declare module 'next-auth' {
       name?: string
       image?: string
     }
+    lastActivity?: number
+    provider?: string
+    iat?: number // Session creation timestamp
   }
 
   interface User {
@@ -22,5 +25,10 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   interface JWT {
     id: string
+    email?: string
+    name?: string
+    lastActivity?: number
+    provider?: string
+    iat?: number
   }
 }
