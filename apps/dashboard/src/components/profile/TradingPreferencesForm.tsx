@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TradingPreferences, defaultTradingPreferences } from "@/types/profile";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { CustomButton } from "@/components/ui/CustomButton";
+import { useTradingPreferences } from "@/hooks/useTradingPreferences";
 
 type TradingPreferencesFormProps = {
   initialPreferences?: TradingPreferences;
@@ -11,11 +12,20 @@ type TradingPreferencesFormProps = {
 };
 
 export const TradingPreferencesForm = ({
-  initialPreferences = defaultTradingPreferences,
+  initialPreferences,
   onSave,
 }: TradingPreferencesFormProps) => {
-  const [preferences, setPreferences] =
-    useState<TradingPreferences>(initialPreferences);
+  const { preferences: savedPreferences, isLoading: preferencesLoading, updatePreferences } = useTradingPreferences();
+  const [preferences, setPreferences] = useState<TradingPreferences>(
+    initialPreferences || defaultTradingPreferences
+  );
+  
+  // Update form data when preferences load
+  useEffect(() => {
+    if (savedPreferences && !initialPreferences) {
+      setPreferences(savedPreferences);
+    }
+  }, [savedPreferences, initialPreferences]);
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
@@ -55,9 +65,10 @@ export const TradingPreferencesForm = ({
       if (onSave) {
         await onSave(preferences);
       } else {
-        // TODO: Replace with actual API call
-        console.log("Trading preferences update:", preferences);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const success = await updatePreferences(preferences);
+        if (!success) {
+          throw new Error("Failed to update preferences");
+        }
       }
       setSuccessMessage("Trading preferences updated successfully!");
     } catch {
@@ -66,6 +77,14 @@ export const TradingPreferencesForm = ({
       setIsLoading(false);
     }
   };
+
+  if (preferencesLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-gray-400">Loading preferences...</div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">

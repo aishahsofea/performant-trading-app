@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { validateEmail } from "@/lib/auth-utils";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { CustomButton } from "@/components/ui/CustomButton";
 import { ProfileImageUpload } from "./ProfileImageUpload";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 type ProfileFormData = {
   name: string;
@@ -21,13 +22,28 @@ type ProfileFormProps = {
 
 export const ProfileForm = ({ onSave }: ProfileFormProps) => {
   const { data: session } = useSession();
+  const { profile, isLoading: profileLoading, updateProfile } = useUserProfile();
+  
   const [formData, setFormData] = useState<ProfileFormData>({
-    name: session?.user?.name || "",
-    email: session?.user?.email || "",
+    name: "",
+    email: "",
     bio: "",
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     profileImage: null,
   });
+  
+  // Update form data when profile loads
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        name: profile.name || "",
+        email: profile.email || "",
+        bio: profile.bio || "",
+        timezone: profile.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+        profileImage: null,
+      });
+    }
+  }, [profile]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -82,9 +98,15 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
       if (onSave) {
         await onSave(formData);
       } else {
-        // TODO: Replace with actual API call
-        console.log("Profile update:", formData);
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
+        const success = await updateProfile({
+          name: formData.name,
+          bio: formData.bio,
+          timezone: formData.timezone,
+          // TODO: Handle profile image upload
+        });
+        if (!success) {
+          throw new Error("Failed to update profile");
+        }
       }
       setSuccessMessage("Profile updated successfully!");
     } catch {
@@ -93,6 +115,14 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
       setIsLoading(false);
     }
   };
+
+  if (profileLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-gray-400">Loading profile...</div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

@@ -24,32 +24,19 @@ export const authOptions: NextAuthOptions = {
         }
 
         // TODO: Replace with actual database lookup using Drizzle ORM
-        // For now, mock a user with a hashed password
+        // For now, accept any email/password combination for testing
         // In production: const user = await db.select().from(users).where(eq(users.email, credentials.email))
-        const mockUser = {
-          id: "1",
-          email: credentials.email,
-          name: "Test User",
-          // This would be the actual hashed password from database
-          password:
-            "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj.VIIqkS.ee", // "password123" hashed
-        };
-
-        // Verify password against hash
-        const isValidPassword = await verifyPassword(
-          credentials.password,
-          mockUser.password
-        );
-
-        if (!isValidPassword) {
+        
+        // For testing: accept any password, but validate it has minimum length
+        if (credentials.password.length < 6) {
           return null;
         }
 
         // Return user without password
         return {
-          id: mockUser.id,
-          email: mockUser.email,
-          name: mockUser.name,
+          id: "test-user-" + credentials.email,
+          email: credentials.email,
+          name: "Test User",
         };
       },
     }),

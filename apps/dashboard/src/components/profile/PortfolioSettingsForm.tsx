@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PortfolioSettings, defaultPortfolioSettings } from "@/types/portfolio";
 import { CustomSelect } from "@/components/ui/CustomSelect";
 import { CustomButton } from "@/components/ui/CustomButton";
+import { usePortfolioSettings } from "@/hooks/usePortfolioSettings";
 
 type PortfolioSettingsFormProps = {
   initialSettings?: PortfolioSettings;
@@ -11,10 +12,20 @@ type PortfolioSettingsFormProps = {
 };
 
 export const PortfolioSettingsForm = ({
-  initialSettings = defaultPortfolioSettings,
+  initialSettings,
   onSave,
 }: PortfolioSettingsFormProps) => {
-  const [settings, setSettings] = useState<PortfolioSettings>(initialSettings);
+  const { settings: savedSettings, isLoading: settingsLoading, updateSettings } = usePortfolioSettings();
+  const [settings, setSettings] = useState<PortfolioSettings>(
+    initialSettings || defaultPortfolioSettings
+  );
+  
+  // Update form data when settings load
+  useEffect(() => {
+    if (savedSettings && !initialSettings) {
+      setSettings(savedSettings);
+    }
+  }, [savedSettings, initialSettings]);
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
@@ -85,8 +96,10 @@ export const PortfolioSettingsForm = ({
       if (onSave) {
         await onSave(settings);
       } else {
-        console.log("Portfolio settings update:", settings);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        const success = await updateSettings(settings);
+        if (!success) {
+          throw new Error("Failed to update portfolio settings");
+        }
       }
       setSuccessMessage("Portfolio settings updated successfully!");
     } catch {
@@ -95,6 +108,14 @@ export const PortfolioSettingsForm = ({
       setIsLoading(false);
     }
   };
+
+  if (settingsLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-gray-400">Loading portfolio settings...</div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
