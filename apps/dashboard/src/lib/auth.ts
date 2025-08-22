@@ -4,8 +4,9 @@ import GoogleProvider from "next-auth/providers/google";
 import "@/types/auth"; // Import our custom type definitions
 import { validateEmail } from "@/lib/auth-utils";
 import { SESSION_CONFIG } from "./session-utils";
-import { db, users } from "@/lib/db";
+import { db, users, passwords } from "@/lib/db";
 import { eq } from "drizzle-orm";
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -40,40 +41,41 @@ export const authOptions: NextAuthOptions = {
             .where(eq(users.email, credentials.email))
             .limit(1);
 
-          if (existingUser) {
-            // For now, accept any password for existing users
-            // In production, you'd verify the hashed password here
-            console.log("Auth: Found existing user:", existingUser.email);
-            return {
-              id: existingUser.id,
-              email: existingUser.email,
-              name: existingUser.name || "User",
-            };
-          } else {
-            console.log("Auth: Creating new user for:", credentials.email);
-            // Create new user if they don't exist (sign up)
-            const newUsers = await db
-              .insert(users)
-              .values({
-                email: credentials.email,
-                name: credentials.email.split("@")[0], // Use email prefix as name
-                // In production, hash the password and store it
-              })
-              .returning();
-
-            const newUser = newUsers[0];
-            if (!newUser) {
-              console.error("Auth: Failed to create user");
-              return null;
-            }
-
-            console.log("Auth: Successfully created user:", newUser.email);
-            return {
-              id: newUser.id,
-              email: newUser.email,
-              name: newUser.name || "User",
-            };
+          if (!existingUser) {
+            console.log("Auth: User not found:", credentials.email);
+            return null;
           }
+
+          // Get the user's password hash
+          const [userPassword] = await db
+            .select()
+            .from(passwords)
+            .where(eq(passwords.userId, existingUser.id))
+            .limit(1);
+
+          if (!userPassword) {
+            // User exists but has no password (OAuth-only user)
+            console.log("Auth: User has no password (OAuth-only):", existingUser.email);
+            return null;
+          }
+
+          // Verify the password
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            userPassword.hashedPassword
+          );
+
+          if (!isPasswordValid) {
+            console.log("Auth: Invalid password for user:", existingUser.email);
+            return null;
+          }
+
+          console.log("Auth: Successfully authenticated user:", existingUser.email);
+          return {
+            id: existingUser.id,
+            email: existingUser.email,
+            name: existingUser.name || "User",
+          };
         } catch (error) {
           console.error("Database error during authentication:", error);
           return null;
@@ -137,13 +139,13 @@ export const authOptions: NextAuthOptions = {
     },
   },
   events: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       console.log(`User signed in: ${user.email} via ${account?.provider}`);
     },
     async signOut({ token }) {
       console.log(`User signed out: ${token?.email}`);
     },
-    async session({ session, token }) {
+    async session({ session }) {
       // Track session activity
       console.log(`Session accessed: ${session.user?.email}`);
     },

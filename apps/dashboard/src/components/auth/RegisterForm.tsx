@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import {
   validateRegistrationForm,
   type RegistrationFormData,
-  hashPassword,
 } from "@/lib/auth-utils";
 import { ContinueWithGoogle } from "./ContinueWithGoogle";
 import { CustomButton } from "@/components/ui/CustomButton";
@@ -52,30 +51,50 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
     setErrors({});
 
     try {
-      // TODO: Replace with actual user registration API call
-      // For now, we'll simulate registration and then sign in
-      console.log("Registration data:", {
-        name: formData.name,
-        email: formData.email,
-        // password would be hashed before sending to API
-        passwordHash: await hashPassword(formData.password),
+      // Call the registration API
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        }),
       });
 
-      // After successful registration, auto sign in
-      const result = await signIn("credentials", {
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Handle registration errors
+        if (response.status === 409) {
+          setAuthError("An account with this email already exists. Please sign in instead.");
+        } else if (response.status === 400) {
+          setAuthError(data.error || "Invalid registration data. Please check your inputs.");
+        } else {
+          setAuthError("Registration failed. Please try again.");
+        }
+        return;
+      }
+
+      // Registration successful, now sign in the user
+      const signInResult = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
         redirect: false,
       });
 
-      if (result?.error) {
+      if (signInResult?.error) {
         setAuthError(
-          "Registration successful but login failed. Please try signing in."
+          "Registration successful but login failed. Please try signing in manually."
         );
-      } else if (result?.ok) {
+      } else if (signInResult?.ok) {
         router.push(callbackUrl);
       }
-    } catch {
+    } catch (error) {
+      console.error("Registration error:", error);
       setAuthError(
         "An unexpected error occurred during registration. Please try again."
       );
