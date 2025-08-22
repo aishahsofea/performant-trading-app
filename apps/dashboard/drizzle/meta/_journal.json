@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1755862487847,
+      "tag": "0000_reflective_skin",
+      "breakpoints": true
+    }
+  ]
+}

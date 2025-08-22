@@ -2,8 +2,10 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import "@/types/auth"; // Import our custom type definitions
-import { validateEmail, verifyPassword } from "@/lib/auth-utils";
+import { validateEmail } from "@/lib/auth-utils";
 import { SESSION_CONFIG } from "./session-utils";
+import { db, users } from "@/lib/db";
+import { eq } from "drizzle-orm";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -25,21 +27,57 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // TODO: Replace with actual database lookup using Drizzle ORM
-        // For now, accept any email/password combination for testing
-        // In production: const user = await db.select().from(users).where(eq(users.email, credentials.email))
-
-        // For testing: accept any password, but validate it has minimum length
+        // Validate password length
         if (credentials.password.length < 6) {
           return null;
         }
 
-        // Return user without password
-        return {
-          id: "test-user-" + credentials.email,
-          email: credentials.email,
-          name: "Test User",
-        };
+        try {
+          // Check if user exists in database
+          const [existingUser] = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, credentials.email))
+            .limit(1);
+
+          if (existingUser) {
+            // For now, accept any password for existing users
+            // In production, you'd verify the hashed password here
+            console.log("Auth: Found existing user:", existingUser.email);
+            return {
+              id: existingUser.id,
+              email: existingUser.email,
+              name: existingUser.name || "User",
+            };
+          } else {
+            console.log("Auth: Creating new user for:", credentials.email);
+            // Create new user if they don't exist (sign up)
+            const newUsers = await db
+              .insert(users)
+              .values({
+                email: credentials.email,
+                name: credentials.email.split("@")[0], // Use email prefix as name
+                // In production, hash the password and store it
+              })
+              .returning();
+
+            const newUser = newUsers[0];
+            if (!newUser) {
+              console.error("Auth: Failed to create user");
+              return null;
+            }
+
+            console.log("Auth: Successfully created user:", newUser.email);
+            return {
+              id: newUser.id,
+              email: newUser.email,
+              name: newUser.name || "User",
+            };
+          }
+        } catch (error) {
+          console.error("Database error during authentication:", error);
+          return null;
+        }
       },
     }),
     GoogleProvider({

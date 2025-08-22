@@ -1,4 +1,4 @@
-import { getSession, signOut } from "next-auth/react";
+// Client-side functions removed to avoid Edge Runtime conflicts
 import { Session } from "next-auth";
 
 // Session configuration constants
@@ -65,18 +65,7 @@ export function validateSession(session: Session | null): SessionInfo {
   };
 }
 
-/**
- * Refreshes the current session
- */
-export async function refreshSession(): Promise<Session | null> {
-  try {
-    const session = await getSession();
-    return session;
-  } catch (error) {
-    console.error("Failed to refresh session:", error);
-    return null;
-  }
-}
+// refreshSession function removed - use client-side getSession() directly in components
 
 /**
  * Formats time in seconds to a human-readable string
@@ -94,19 +83,4 @@ export function formatTimeRemaining(seconds: number): string {
   return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
 }
 
-/**
- * Handles session expiration by signing out the user
- */
-export async function handleSessionExpiry(reason: 'expired' | 'inactive' = 'expired'): Promise<void> {
-  try {
-    console.log(`Session expired due to: ${reason}`);
-    await signOut({
-      redirect: true,
-      callbackUrl: `/auth/login?error=Session${reason === 'expired' ? 'Expired' : 'Inactive'}`,
-    });
-  } catch (error) {
-    console.error("Failed to handle session expiry:", error);
-    // Fallback: redirect manually
-    window.location.href = `/auth/login?error=Session${reason === 'expired' ? 'Expired' : 'Inactive'}`;
-  }
-}
+// handleSessionExpiry function removed - use client-side signOut() directly in components

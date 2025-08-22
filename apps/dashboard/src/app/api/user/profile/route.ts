@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { MockStorage } from '@/lib/mock-storage';
-// import { db, users, userProfiles } from '@/lib/db';
-// import { eq } from 'drizzle-orm';
+import { db, users, userProfiles } from '@/lib/db';
+import { eq } from 'drizzle-orm';
 
 export async function GET() {
   try {
@@ -12,25 +11,33 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get profile from persistent mock storage
-    let profile = MockStorage.getUserProfile(session.user.id);
-    
-    if (!profile) {
-      // Initialize with session data if profile doesn't exist
-      const initialProfile = {
-        id: session.user.id,
-        name: session.user.name || 'Test User',
-        email: session.user.email || 'test@example.com',
-        image: session.user.image || null,
-        bio: 'Experienced crypto trader focused on DeFi and portfolio optimization.',
-        timezone: 'America/New_York',
-        avatarUrl: null,
-      };
-      MockStorage.setUserProfile(session.user.id, initialProfile);
-      profile = initialProfile;
+    // Get user data from database
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, session.user.id))
+      .limit(1);
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json(profile);
+    // Get user profile (optional)
+    const [profile] = await db
+      .select()
+      .from(userProfiles)
+      .where(eq(userProfiles.userId, session.user.id))
+      .limit(1);
+
+    return NextResponse.json({
+      id: user.id,
+      name: user.name || '',
+      email: user.email,
+      image: user.image,
+      bio: profile?.bio || '',
+      timezone: profile?.timezone || 'America/New_York',
+      avatarUrl: profile?.avatarUrl,
+    });
   } catch (error) {
     console.error('Failed to get user profile:', error);
     return NextResponse.json(
@@ -50,13 +57,42 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { name, bio, timezone, avatarUrl } = body;
 
-    // Update profile in persistent mock storage
-    MockStorage.setUserProfile(session.user.id, {
-      name,
-      bio,
-      timezone,
-      avatarUrl,
-    });
+    // Update user table
+    await db
+      .update(users)
+      .set({
+        name,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, session.user.id));
+
+    // Upsert user profile
+    const existingProfile = await db
+      .select()
+      .from(userProfiles)
+      .where(eq(userProfiles.userId, session.user.id))
+      .limit(1);
+
+    if (existingProfile.length > 0) {
+      // Update existing profile
+      await db
+        .update(userProfiles)
+        .set({
+          bio,
+          timezone,
+          avatarUrl,
+          updatedAt: new Date(),
+        })
+        .where(eq(userProfiles.userId, session.user.id));
+    } else {
+      // Create new profile
+      await db.insert(userProfiles).values({
+        userId: session.user.id,
+        bio,
+        timezone,
+        avatarUrl,
+      });
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

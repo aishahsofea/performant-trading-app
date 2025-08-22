@@ -30,6 +30,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.10.0",
     "@next/bundle-analyzer": "^15.4.5",
     "@tailwindcss/postcss": "^4.1.11",
     "@types/bcryptjs": "^3.0.0",
