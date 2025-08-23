@@ -1,22 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { db, portfolioSettings } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import { defaultPortfolioSettings } from '@/types/portfolio';
+import { requireAuth } from '@/lib/auth/server';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Use new authorization system
+    const { user: authUser } = await requireAuth(["user", "admin", "premium"]);
 
     // Get portfolio settings from database
     const [settings] = await db
       .select()
       .from(portfolioSettings)
-      .where(eq(portfolioSettings.userId, session.user.id))
+      .where(eq(portfolioSettings.userId, authUser.id))
       .limit(1);
 
     if (!settings) {
@@ -36,10 +33,8 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Use new authorization system
+    const { user: authUser } = await requireAuth(["user", "admin", "premium"]);
 
     const settings = await request.json();
 
@@ -47,7 +42,7 @@ export async function PUT(request: NextRequest) {
     const existingSettings = await db
       .select()
       .from(portfolioSettings)
-      .where(eq(portfolioSettings.userId, session.user.id))
+      .where(eq(portfolioSettings.userId, authUser.id))
       .limit(1);
 
     if (existingSettings.length > 0) {
@@ -58,11 +53,11 @@ export async function PUT(request: NextRequest) {
           settings,
           updatedAt: new Date(),
         })
-        .where(eq(portfolioSettings.userId, session.user.id));
+        .where(eq(portfolioSettings.userId, authUser.id));
     } else {
       // Create new settings
       await db.insert(portfolioSettings).values({
-        userId: session.user.id,
+        userId: authUser.id,
         settings,
       });
     }

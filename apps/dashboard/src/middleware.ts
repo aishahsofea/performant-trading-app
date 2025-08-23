@@ -1,6 +1,7 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import { SESSION_CONFIG } from "./lib/session-utils";
+import { checkMiddlewareAuth } from "./lib/auth/authorization";
 
 export default withAuth(
   function middleware(req) {
@@ -18,11 +19,18 @@ export default withAuth(
       return NextResponse.next();
     }
 
-    // Check if user is authenticated for protected routes
-    if (!token) {
-      const loginUrl = new URL("/auth/login", req.url);
-      loginUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(loginUrl);
+    // Use authorization system for route protection
+    const authCheck = checkMiddlewareAuth(req, token);
+
+    if (!authCheck.allowed) {
+      if (authCheck.reason === "Authentication required") {
+        const loginUrl = new URL("/auth/login", req.url);
+        loginUrl.searchParams.set("callbackUrl", pathname);
+        return NextResponse.redirect(loginUrl);
+      } else if (authCheck.reason === "Insufficient permissions") {
+        const unauthorizedUrl = new URL("/unauthorized", req.url);
+        return NextResponse.redirect(unauthorizedUrl);
+      }
     }
 
     // Check session expiry and activity
@@ -30,7 +38,7 @@ export default withAuth(
     const maxAge = SESSION_CONFIG.MAX_AGE; // 24 hours
     const maxInactivity = SESSION_CONFIG.MAX_INACTIVITY; // 4 hours of inactivity
 
-    if (token.iat && now - token.iat > maxAge) {
+    if (token?.iat && now - token.iat > maxAge) {
       // Session expired due to age
       const loginUrl = new URL("/auth/login", req.url);
       loginUrl.searchParams.set("callbackUrl", pathname);
@@ -38,7 +46,7 @@ export default withAuth(
       return NextResponse.redirect(loginUrl);
     }
 
-    if (token.lastActivity && now - token.lastActivity > maxInactivity) {
+    if (token?.lastActivity && now - token.lastActivity > maxInactivity) {
       // Session expired due to inactivity
       const loginUrl = new URL("/auth/login", req.url);
       loginUrl.searchParams.set("callbackUrl", pathname);

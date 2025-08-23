@@ -1,22 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { db, tradingPreferences } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import { defaultTradingPreferences } from '@/types/profile';
+import { requireAuth } from '@/lib/auth/server';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Use new authorization system
+    const { user: authUser } = await requireAuth(["user", "admin", "premium"]);
 
     // Get trading preferences from database
     const [preferences] = await db
       .select()
       .from(tradingPreferences)
-      .where(eq(tradingPreferences.userId, session.user.id))
+      .where(eq(tradingPreferences.userId, authUser.id))
       .limit(1);
 
     if (!preferences) {
@@ -36,10 +33,8 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Use new authorization system
+    const { user: authUser } = await requireAuth(["user", "admin", "premium"]);
 
     const preferences = await request.json();
 
@@ -47,7 +42,7 @@ export async function PUT(request: NextRequest) {
     const existingPreferences = await db
       .select()
       .from(tradingPreferences)
-      .where(eq(tradingPreferences.userId, session.user.id))
+      .where(eq(tradingPreferences.userId, authUser.id))
       .limit(1);
 
     if (existingPreferences.length > 0) {
@@ -58,11 +53,11 @@ export async function PUT(request: NextRequest) {
           preferences,
           updatedAt: new Date(),
         })
-        .where(eq(tradingPreferences.userId, session.user.id));
+        .where(eq(tradingPreferences.userId, authUser.id));
     } else {
       // Create new preferences
       await db.insert(tradingPreferences).values({
-        userId: session.user.id,
+        userId: authUser.id,
         preferences,
       });
     }

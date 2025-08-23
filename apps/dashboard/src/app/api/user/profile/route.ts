@@ -1,24 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { db, users, userProfiles } from '@/lib/db';
 import { eq } from 'drizzle-orm';
+import { requireAuth } from '@/lib/auth/server';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Use new authorization system
+    const { user: authUser } = await requireAuth(["user", "admin", "premium"]);
 
     // Get user data from database
-    const [user] = await db
+    const [userRecord] = await db
       .select()
       .from(users)
-      .where(eq(users.id, session.user.id))
+      .where(eq(users.id, authUser.id))
       .limit(1);
 
-    if (!user) {
+    if (!userRecord) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
@@ -26,14 +23,14 @@ export async function GET() {
     const [profile] = await db
       .select()
       .from(userProfiles)
-      .where(eq(userProfiles.userId, session.user.id))
+      .where(eq(userProfiles.userId, userRecord.id))
       .limit(1);
 
     return NextResponse.json({
-      id: user.id,
-      name: user.name || '',
-      email: user.email,
-      image: user.image,
+      id: userRecord.id,
+      name: userRecord.name || '',
+      email: userRecord.email,
+      image: userRecord.image,
       bio: profile?.bio || '',
       timezone: profile?.timezone || 'America/New_York',
       avatarUrl: profile?.avatarUrl,
@@ -49,10 +46,8 @@ export async function GET() {
 
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Use new authorization system
+    const { user: authUser } = await requireAuth(["user", "admin", "premium"]);
 
     const body = await request.json();
     const { name, bio, timezone, avatarUrl } = body;
@@ -64,13 +59,13 @@ export async function PUT(request: NextRequest) {
         name,
         updatedAt: new Date(),
       })
-      .where(eq(users.id, session.user.id));
+      .where(eq(users.id, authUser.id));
 
     // Upsert user profile
     const existingProfile = await db
       .select()
       .from(userProfiles)
-      .where(eq(userProfiles.userId, session.user.id))
+      .where(eq(userProfiles.userId, authUser.id))
       .limit(1);
 
     if (existingProfile.length > 0) {
@@ -83,11 +78,11 @@ export async function PUT(request: NextRequest) {
           avatarUrl,
           updatedAt: new Date(),
         })
-        .where(eq(userProfiles.userId, session.user.id));
+        .where(eq(userProfiles.userId, authUser.id));
     } else {
       // Create new profile
       await db.insert(userProfiles).values({
-        userId: session.user.id,
+        userId: authUser.id,
         bio,
         timezone,
         avatarUrl,
