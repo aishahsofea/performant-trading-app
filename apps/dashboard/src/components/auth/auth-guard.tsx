@@ -19,7 +19,7 @@ export const AuthGuard = ({
   children,
   requiredRoles = ["user", "admin", "premium"],
   fallback = <div>Loading...</div>,
-  redirectTo = "/auth/login"
+  redirectTo = "/auth/login",
 }: AuthGuardProps) => {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -29,7 +29,9 @@ export const AuthGuard = ({
 
     if (!session) {
       const currentPath = window.location.pathname;
-      router.push(`${redirectTo}?callbackUrl=${encodeURIComponent(currentPath)}`);
+      router.push(
+        `${redirectTo}?callbackUrl=${encodeURIComponent(currentPath)}`
+      );
       return;
     }
 
@@ -73,7 +75,7 @@ export const ConditionalRender = ({
   children,
   requiredRoles,
   fallback = null,
-  requireAuth = true
+  requireAuth = true,
 }: ConditionalRenderProps) => {
   const { data: session, status } = useSession();
 
@@ -112,7 +114,7 @@ export const withPageAuth = <T extends object>(
   const {
     requiredRoles = ["user", "admin", "premium"],
     redirectTo = "/auth/login",
-    loading = <div>Loading...</div>
+    loading = <div>Loading...</div>,
   } = options;
 
   const ProtectedComponent = (props: T) => (
@@ -124,8 +126,10 @@ export const withPageAuth = <T extends object>(
       <Component {...props} />
     </AuthGuard>
   );
-  
-  ProtectedComponent.displayName = `withPageAuth(${Component.displayName || Component.name || 'Component'})`;
-  
+
+  ProtectedComponent.displayName = `withPageAuth(${
+    Component.displayName || Component.name || "Component"
+  })`;
+
   return ProtectedComponent;
 };

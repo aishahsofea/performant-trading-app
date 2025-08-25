@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ProfileForm } from "./ProfileForm";
-import { TradingPreferencesForm } from "./TradingPreferencesForm";
-import { PortfolioSettingsForm } from "./PortfolioSettingsForm";
+import { ProfileForm } from "./profile-form";
+import { TradingPreferencesForm } from "./trading-preferences-form";
+import { PortfolioSettingsForm } from "./portfolio-settings-form";
 
 type TabType = "profile" | "preferences" | "portfolio";
 

@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { PerformanceMetrics } from "@/types";
 import { useDebounce } from "@/hooks/useDebounce";
-import { DateInput } from "./DateInput";
-import { MetricCard } from "./MetricCard";
-import { SummaryStat } from "./SummaryStat";
-import { MetricsTable } from "./MetricsTable";
+import { DateInput } from "./date-input";
+import { MetricCard } from "./metric-card";
+import { SummaryStat } from "./summary-stat";
+import { MetricsTable } from "./metrics-table";
 
 type MetricsSummary = {
   avgLCP: number;

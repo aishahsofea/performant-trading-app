@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { validateEmail } from "@/lib/auth-utils";
-import { CustomSelect } from "@/components/ui/CustomSelect";
-import { CustomButton } from "@/components/ui/CustomButton";
-import { ProfileImageUpload } from "./ProfileImageUpload";
+import { CustomSelect } from "@/components/ui/custom-select";
+import { CustomButton } from "@/components/ui/custom-button";
+import { ProfileImageUpload } from "./profile-image-upload";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
 type ProfileFormData = {
@@ -22,8 +22,12 @@ type ProfileFormProps = {
 
 export const ProfileForm = ({ onSave }: ProfileFormProps) => {
   const { data: session } = useSession();
-  const { profile, isLoading: profileLoading, updateProfile } = useUserProfile();
-  
+  const {
+    profile,
+    isLoading: profileLoading,
+    updateProfile,
+  } = useUserProfile();
+
   const [formData, setFormData] = useState<ProfileFormData>({
     name: "",
     email: "",
@@ -31,7 +35,7 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     profileImage: null,
   });
-  
+
   // Update form data when profile loads
   useEffect(() => {
     if (profile) {
@@ -39,7 +43,8 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
         name: profile.name || "",
         email: profile.email || "",
         bio: profile.bio || "",
-        timezone: profile.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+        timezone:
+          profile.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
         profileImage: null,
       });
     }

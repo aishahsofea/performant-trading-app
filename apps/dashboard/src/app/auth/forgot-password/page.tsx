@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CustomButton } from "@/components/ui/CustomButton";
+import { CustomButton } from "@/components/ui/custom-button";
 import { useEmailValidation } from "@/hooks/useEmailValidation";
 
 const ForgotPasswordPage = () => {
@@ -57,7 +57,8 @@ const ForgotPasswordPage = () => {
             Forgot Password
           </h1>
           <p className="text-gray-400">
-            Enter your email address and we'll send you a link to reset your password.
+            Enter your email address and we'll send you a link to reset your
+            password.
           </p>
         </div>
 
@@ -68,9 +69,7 @@ const ForgotPasswordPage = () => {
           {/* Success Message */}
           {message && (
             <div className="mb-4 p-3 bg-green-900/20 border border-green-500 rounded-md">
-              <p className="text-sm text-green-400 font-medium">
-                {message}
-              </p>
+              <p className="text-sm text-green-400 font-medium">{message}</p>
             </div>
           )}
 

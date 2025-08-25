@@ -1,6 +1,6 @@
 import { PerformanceMetrics } from "@/types";
 import { NextRequest, NextResponse } from "next/server";
-import { metricsStorage } from "@/lib/metricsStorage";
+import { metricsStorage } from "@/lib/metrics-storage";
 
 export const POST = async (request: NextRequest) => {
   try {

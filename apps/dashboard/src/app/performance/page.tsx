@@ -1,4 +1,4 @@
-import { PerformanceDashboard } from "@/components/PerformanceDashboard";
+import { PerformanceDashboard } from "@/components/performance-dashboard";
 
 export default function PerformancePage() {
   return (

@@ -7,10 +7,10 @@ import {
   validateRegistrationForm,
   type RegistrationFormData,
 } from "@/lib/auth-utils";
-import { ContinueWithGoogle } from "./ContinueWithGoogle";
-import { CustomButton } from "@/components/ui/CustomButton";
+import { ContinueWithGoogle } from "./continue-with-google";
+import { CustomButton } from "@/components/ui/custom-button";
 import { Eye, EyeOff } from "lucide-react";
-import { CustomPasswordField } from "../ui/CustomPasswordField";
+import { CustomPasswordField } from "../ui/cutsom-password-field";
 
 type RegisterFormProps = {
   callbackUrl?: string;

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CustomButton } from "@/components/ui/CustomButton";
+import { CustomButton } from "@/components/ui/custom-button";
 import { useEmailValidation } from "@/hooks/useEmailValidation";
 
 const ResendVerificationPage = () => {
@@ -68,9 +68,7 @@ const ResendVerificationPage = () => {
           {/* Success Message */}
           {message && (
             <div className="mb-4 p-3 bg-green-900/20 border border-green-500 rounded-md">
-              <p className="text-sm text-green-400 font-medium">
-                {message}
-              </p>
+              <p className="text-sm text-green-400 font-medium">{message}</p>
             </div>
           )}
 

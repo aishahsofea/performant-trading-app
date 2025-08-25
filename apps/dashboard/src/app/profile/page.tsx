@@ -1,4 +1,4 @@
-import { ProfileTabs } from "@/components/profile/ProfileTabs";
+import { ProfileTabs } from "@/components/profile/profile-tabs";
 
 const ProfilePage = () => {
   return (

@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { TradingPreferences, defaultTradingPreferences } from "@/types/profile";
-import { CustomSelect } from "@/components/ui/CustomSelect";
-import { CustomButton } from "@/components/ui/CustomButton";
+import { CustomSelect } from "@/components/ui/custom-select";
+import { CustomButton } from "@/components/ui/custom-button";
 import { useTradingPreferences } from "@/hooks/useTradingPreferences";
 
 type TradingPreferencesFormProps = {
@@ -15,11 +15,15 @@ export const TradingPreferencesForm = ({
   initialPreferences,
   onSave,
 }: TradingPreferencesFormProps) => {
-  const { preferences: savedPreferences, isLoading: preferencesLoading, updatePreferences } = useTradingPreferences();
+  const {
+    preferences: savedPreferences,
+    isLoading: preferencesLoading,
+    updatePreferences,
+  } = useTradingPreferences();
   const [preferences, setPreferences] = useState<TradingPreferences>(
     initialPreferences || defaultTradingPreferences
   );
-  
+
   // Update form data when preferences load
   useEffect(() => {
     if (savedPreferences && !initialPreferences) {

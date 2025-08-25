@@ -4,9 +4,9 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { validateLoginForm, type LoginFormData } from "@/lib/auth-utils";
-import { ContinueWithGoogle } from "./ContinueWithGoogle";
-import { CustomButton } from "@/components/ui/CustomButton";
-import { CustomPasswordField } from "../ui/CustomPasswordField";
+import { ContinueWithGoogle } from "./continue-with-google";
+import { CustomButton } from "@/components/ui/custom-button";
+import { CustomPasswordField } from "../ui/cutsom-password-field";
 
 type LoginFormProps = {
   callbackUrl?: string;

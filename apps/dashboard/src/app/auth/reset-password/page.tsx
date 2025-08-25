@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CustomButton } from "@/components/ui/CustomButton";
-import { CustomPasswordField } from "@/components/ui/CustomPasswordField";
+import { CustomButton } from "@/components/ui/custom-button";
+import { CustomPasswordField } from "@/components/ui/cutsom-password-field";
 
-const ResetPasswordPage = () => {
+const ResetPasswordForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -72,14 +72,16 @@ const ResetPasswordPage = () => {
         body: JSON.stringify({
           token,
           email,
-          password: formData.password
+          password: formData.password,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage("Password has been reset successfully! Redirecting to login...");
+        setMessage(
+          "Password has been reset successfully! Redirecting to login..."
+        );
         setTimeout(() => {
           router.push("/auth/login");
         }, 2000);
@@ -101,9 +103,7 @@ const ResetPasswordPage = () => {
           <h1 className="text-3xl font-semibold mb-2 text-gray-100">
             Reset Password
           </h1>
-          <p className="text-gray-400">
-            Enter your new password below.
-          </p>
+          <p className="text-gray-400">Enter your new password below.</p>
         </div>
 
         <form
@@ -113,9 +113,7 @@ const ResetPasswordPage = () => {
           {/* Success Message */}
           {message && (
             <div className="mb-4 p-3 bg-green-900/20 border border-green-500 rounded-md">
-              <p className="text-sm text-green-400 font-medium">
-                {message}
-              </p>
+              <p className="text-sm text-green-400 font-medium">{message}</p>
             </div>
           )}
 
@@ -174,6 +172,18 @@ const ResetPasswordPage = () => {
         </form>
       </div>
     </div>
+  );
+};
+
+const ResetPasswordPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-gray-100">Loading...</div>
+      </div>
+    }>
+      <ResetPasswordForm />
+    </Suspense>
   );
 };
 

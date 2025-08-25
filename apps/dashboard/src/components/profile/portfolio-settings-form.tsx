@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { PortfolioSettings, defaultPortfolioSettings } from "@/types/portfolio";
-import { CustomSelect } from "@/components/ui/CustomSelect";
-import { CustomButton } from "@/components/ui/CustomButton";
+import { CustomSelect } from "@/components/ui/custom-select";
+import { CustomButton } from "@/components/ui/custom-button";
 import { usePortfolioSettings } from "@/hooks/usePortfolioSettings";
 
 type PortfolioSettingsFormProps = {
@@ -15,11 +15,15 @@ export const PortfolioSettingsForm = ({
   initialSettings,
   onSave,
 }: PortfolioSettingsFormProps) => {
-  const { settings: savedSettings, isLoading: settingsLoading, updateSettings } = usePortfolioSettings();
+  const {
+    settings: savedSettings,
+    isLoading: settingsLoading,
+    updateSettings,
+  } = usePortfolioSettings();
   const [settings, setSettings] = useState<PortfolioSettings>(
     initialSettings || defaultPortfolioSettings
   );
-  
+
   // Update form data when settings load
   useEffect(() => {
     if (savedSettings && !initialSettings) {
