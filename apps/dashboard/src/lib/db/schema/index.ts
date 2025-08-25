@@ -3,3 +3,4 @@ export * from './users';
 export * from './trading';
 export * from './auth';
 export * from './passwords';
+export * from './dashboard';
