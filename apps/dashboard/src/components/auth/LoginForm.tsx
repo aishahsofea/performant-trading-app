@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { validateLoginForm, type LoginFormData } from "@/lib/auth-utils";
 import { ContinueWithGoogle } from "./ContinueWithGoogle";
 import { CustomButton } from "@/components/ui/CustomButton";
+import { CustomPasswordField } from "../ui/CustomPasswordField";
 
 type LoginFormProps = {
   callbackUrl?: string;
@@ -135,27 +136,24 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
 
         {/* Password Field */}
         <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium mb-2 text-gray-200"
-          >
-            Password
-          </label>
-          <input
-            type="password"
+          <CustomPasswordField
             id="password"
-            name="password"
-            value={formData.password}
+            label="Password"
+            password={formData.password}
             onChange={handleInputChange}
-            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
-            placeholder="Enter your password"
-            disabled={isLoading}
+            isDisabled={isLoading}
+            error={errors.password}
           />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
-              {errors.password}
-            </p>
-          )}
+        </div>
+
+        {/* Forgot Password Link */}
+        <div className="mb-6 text-right">
+          <a
+            href="/auth/forgot-password"
+            className="text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors"
+          >
+            Forgot password?
+          </a>
         </div>
 
         {/* Submit Button */}

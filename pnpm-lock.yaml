@@ -54,6 +54,9 @@ importers:
       drizzle-orm:
         specifier: ^0.44.4
         version: 0.44.4(postgres@3.4.7)
+      lucide-react:
+        specifier: ^0.541.0
+        version: 0.541.0(react@19.2.0-canary-97cdd5d3-20250710)
       next:
         specifier: 15.4.5
         version: 15.4.5(@babel/core@7.28.3)(@playwright/test@1.54.2)(react-dom@19.2.0-canary-97cdd5d3-20250710(react@19.2.0-canary-97cdd5d3-20250710))(react@19.2.0-canary-97cdd5d3-20250710)
@@ -3138,6 +3141,11 @@ packages:
   lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
+
+  lucide-react@0.541.0:
+    resolution: {integrity: sha512-s0Vircsu5WaGv2KoJZ5+SoxiAJ3UXV5KqEM3eIFDHaHkcLIFdIWgXtZ412+Gh02UsdS7Was+jvEpBvPCWQISlg==}
+    peerDependencies:
+      react: 19.2.0-canary-97cdd5d3-20250710
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -7172,6 +7180,10 @@ snapshots:
   lru-cache@6.0.0:
     dependencies:
       yallist: 4.0.0
+
+  lucide-react@0.541.0(react@19.2.0-canary-97cdd5d3-20250710):
+    dependencies:
+      react: 19.2.0-canary-97cdd5d3-20250710
 
   lz-string@1.5.0: {}
 
