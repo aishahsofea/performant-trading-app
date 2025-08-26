@@ -60,6 +60,8 @@
     "@repo/performance-lib": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/design-system": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@testing-library/jest-dom": "^6.7.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

@@ -1,0 +1,22 @@
+{
+  "name": "@repo/ui",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./styles.css": "./dist/styles.css",
+    "./Colors": "./src/colors.tsx"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "@tailwindcss/postcss": "^4.1.12",
+    "tailwindcss": "^4.1.12",
+    "@repo/design-system": "workspace:*"
+  },
+  "scripts": {
+    "build": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
+    "lint": "eslint src/",
+    "dev": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
+    "type-check": "tsc --noEmit"
+  }
+}
