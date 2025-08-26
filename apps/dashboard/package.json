@@ -27,7 +27,11 @@
     "dev:workflow": "pnpm check-types && pnpm lint && pnpm performance:check-budgets",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.10.0",
@@ -36,6 +40,7 @@
     "@types/bcryptjs": "^3.0.0",
     "@vercel/analytics": "^1.5.0",
     "bcryptjs": "^3.0.2",
+    "clsx": "^2.1.1",
     "cross-env": "^10.0.0",
     "drizzle-orm": "^0.44.4",
     "lucide-react": "^0.541.0",
@@ -45,6 +50,7 @@
     "postgres": "^3.4.7",
     "react": "19.2.0-canary-97cdd5d3-20250710",
     "react-dom": "19.2.0-canary-97cdd5d3-20250710",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
@@ -60,6 +66,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.0.0",
+    "dotenv": "^17.2.1",
     "drizzle-kit": "^0.31.4",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",

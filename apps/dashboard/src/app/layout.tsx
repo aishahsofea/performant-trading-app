@@ -4,6 +4,7 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { PerformanceProvider, SessionProvider } from "@/providers";
 import { DevelopmentPerformancePanel } from "@/components/development-performance-panel";
+import { OnboardingProvider } from "@/components/onboarding";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,10 +41,12 @@ export default function RootLayout({
               enableCustomMetrics: true,
             }}
           >
-            <div className="min-h-screen container mx-auto max-w-full">
-              {children}
-            </div>
-            <DevelopmentPerformancePanel />
+            <OnboardingProvider>
+              <div className="min-h-screen container mx-auto max-w-full">
+                {children}
+              </div>
+              <DevelopmentPerformancePanel />
+            </OnboardingProvider>
           </PerformanceProvider>
         </SessionProvider>
         <Analytics />

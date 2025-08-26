@@ -4,3 +4,4 @@ export * from './trading';
 export * from './auth';
 export * from './passwords';
 export * from './dashboard';
+export * from './onboarding';
