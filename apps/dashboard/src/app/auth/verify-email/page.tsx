@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CustomButton } from "@/components/ui/custom-button";
+import { Button } from "@/components/ui/button";
 
 const VerifyEmailForm = () => {
   const router = useRouter();
@@ -104,16 +104,22 @@ const VerifyEmailForm = () => {
           {/* Action Buttons */}
           <div className="space-y-3">
             {isVerified ? (
-              <CustomButton
-                text="Continue to Dashboard"
+              <Button
+                type="submit"
                 onClick={() => router.push("/")}
-              />
+                className="w-full"
+              >
+                Continue to Dashboard
+              </Button>
             ) : (
               !isVerifying && (
-                <CustomButton
-                  text="Back to Login"
+                <Button
+                  type="submit"
                   onClick={() => router.push("/auth/login")}
-                />
+                  className="w-full"
+                >
+                  Back to Login
+                </Button>
               )
             )}
 

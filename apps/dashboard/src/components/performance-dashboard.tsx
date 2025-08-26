@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { PerformanceMetrics } from "@/types";
 import { useDebounce } from "@/hooks/useDebounce";
+import { Button } from "./ui/button";
+import { Select } from "./ui/select";
 import { DateInput } from "./date-input";
 import { MetricCard } from "./metric-card";
 import { SummaryStat } from "./summary-stat";
@@ -137,10 +139,10 @@ export const PerformanceDashboard = ({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <div className="text-lg text-gray-600">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-500"></div>
+          <div className="text-lg text-white">
             Loading performance metrics...
           </div>
         </div>
@@ -149,174 +151,182 @@ export const PerformanceDashboard = ({
   }
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-semibold">{title}</h1>
-        <p>Monorepo Performance Monitoring - Track metrics across all apps</p>
-      </div>
-
-      {/* Filters */}
-      <div className="mb-8 p-6 rounded-lg shadow-sm border">
-        <h2 className="text-lg font-semibold mb-4">Date Range</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl">
-          {/* Start date */}
-          <div className="flex flex-col">
-            <DateInput
-              label="Start Date"
-              id="start-date"
-              value={dateRange.start}
-              handleChange={(date) =>
-                setDateRange((prev) => ({ ...prev, start: date }))
-              }
-            />
-          </div>
-          {/* End date */}
-          <div className="flex flex-col">
-            <DateInput
-              label="End Date"
-              id="end-date"
-              value={dateRange.end}
-              handleChange={(date) =>
-                setDateRange((prev) => ({ ...prev, end: date }))
-              }
-            />
-          </div>
-
-          {showAppFilter && (
-            <div>
-              <label
-                className="block text-sm font-medium mb-2"
-                htmlFor="application"
-              >
-                Application
-              </label>
-              <select
-                id="application"
-                value={selectedApp}
-                onChange={(event) => setSelectedApp(event.target.value)}
-                className="w-full min-w-[160px] border rounded-md px-3 py-2.5 text-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors cursor-pointer"
-              >
-                <option value="all">All applications</option>
-                {getUniqueApps().map((app) => (
-                  <option key={app} value={app}>
-                    {app}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+    <div className="min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <div className="bg-gray-800 border border-gray-600 rounded-lg p-8 mb-8">
+          <h1 className="text-3xl font-semibold text-white mb-2">{title}</h1>
+          <p className="text-gray-400">
+            Real-time performance monitoring and analytics
+          </p>
         </div>
-        <button
-          onClick={fetchMetrics}
-          className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium"
-        >
-          Apply Filters
-        </button>
-      </div>
 
-      {summary ? (
-        <>
-          {/* App Breakdown */}
-          {showAppFilter && Object.keys(summary.appBreakdown).length >= 1 && (
-            <div className="mb-8 p-6 rounded-lg shadow-sm border">
-              <h3 className="text-lg font-semibold mb-4">
-                Application Breakdown
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {Object.entries(summary.appBreakdown).map(([app, count]) => (
-                  <div key={app} className="text-center">
-                    <p className="text-2xl font-bold text-blue-600">{count}</p>
-                    <p className="text-sm text-gray-400">{app}</p>
-                  </div>
-                ))}
+        {/* Filters */}
+        <div className="bg-gray-800 border border-gray-600 rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-semibold text-white mb-4">
+            Filters & Date Range
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl">
+            {/* Start date */}
+            <div className="flex flex-col">
+              <DateInput
+                label="Start Date"
+                id="start-date"
+                value={dateRange.start}
+                handleChange={(date) =>
+                  setDateRange((prev) => ({ ...prev, start: date }))
+                }
+              />
+            </div>
+            {/* End date */}
+            <div className="flex flex-col">
+              <DateInput
+                label="End Date"
+                id="end-date"
+                value={dateRange.end}
+                handleChange={(date) =>
+                  setDateRange((prev) => ({ ...prev, end: date }))
+                }
+              />
+            </div>
+
+            {showAppFilter && (
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-200 mb-2"
+                  htmlFor="application"
+                >
+                  Application
+                </label>
+                <Select
+                  options={[
+                    { value: "all", label: "All applications" },
+                    ...getUniqueApps().map((app) => ({ value: app, label: app }))
+                  ]}
+                  value={selectedApp}
+                  onChange={setSelectedApp}
+                  placeholder="Select application"
+                />
               </div>
-            </div>
-          )}
-
-          {/* Core Web Vitals */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <MetricCard
-              title="Largest Contentful Paint"
-              subtitle="LCP"
-              value={`${summary.avgLCP.toFixed(0)}ms`}
-              metric="LCP"
-              numValue={summary.avgLCP}
-              description="Time until largest element is rendered"
-              icon="🎯"
-            />
-            <MetricCard
-              title="First Input Delay"
-              subtitle="FID"
-              value={`${summary.avgFID.toFixed(0)}ms`}
-              metric="FID"
-              numValue={summary.avgFID}
-              description="Time until page responds to first interaction"
-              icon="⚡️"
-            />
-            <MetricCard
-              title="Cumulative Layout Shift"
-              subtitle="CLS"
-              value={`${summary.avgCLS.toFixed(0)}ms`}
-              metric="CLS"
-              numValue={summary.avgCLS}
-              description="Visual stability of the page"
-              icon="📐"
-            />
-            <MetricCard
-              title="Time to First Byte"
-              subtitle="TTFB"
-              value={`${summary.avgTTFB.toFixed(0)}ms`}
-              metric="TTFB"
-              numValue={summary.avgTTFB}
-              description="Server response time"
-              icon="🚀"
-            />
-            <MetricCard
-              title="Interaction to Next Paint"
-              subtitle="INP"
-              value={`${summary.avgINP.toFixed(0)}ms`}
-              metric="INP"
-              numValue={summary.avgINP}
-              description="Responsiveness to user interactions"
-              icon="👆"
-            />
+            )}
           </div>
-
-          {/* Summary Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <SummaryStat
-              icon="👥"
-              title="Total Sessions"
-              value={summary.totalSessions}
-            />
-            <SummaryStat
-              icon="⚠️"
-              title="Total Errors"
-              value={summary.totalErrors}
-            />
-            <SummaryStat
-              icon="📊"
-              title="Error Rate"
-              value={
-                summary.totalSessions > 0
-                  ? `${(
-                      (summary.totalErrors / summary.totalSessions) *
-                      100
-                    ).toFixed(2)}%`
-                  : "0%"
-              }
-            />
-          </div>
-
-          {/* Recent Metrics Table */}
-          <MetricsTable metrics={metrics} />
-        </>
-      ) : (
-        <div>
-          <h3>No data available</h3>
-          <p>No performance metrics found for the selected filters</p>
+          <Button onClick={fetchMetrics} className="mt-4">
+            Apply Filters
+          </Button>
         </div>
-      )}
+
+        {summary ? (
+          <>
+            {/* App Breakdown */}
+            {showAppFilter && Object.keys(summary.appBreakdown).length >= 1 && (
+              <div className="bg-gray-800 border border-gray-600 rounded-lg p-6 mb-8">
+                <h3 className="text-lg font-semibold text-white mb-4">
+                  Application Breakdown
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {Object.entries(summary.appBreakdown).map(([app, count]) => (
+                    <div
+                      key={app}
+                      className="text-center bg-gray-700 rounded-lg p-4"
+                    >
+                      <p className="text-2xl font-bold text-violet-400">
+                        {count}
+                      </p>
+                      <p className="text-sm text-gray-300">{app}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Core Web Vitals */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <MetricCard
+                title="Largest Contentful Paint"
+                subtitle="LCP"
+                value={`${summary.avgLCP.toFixed(0)}ms`}
+                metric="LCP"
+                numValue={summary.avgLCP}
+                description="Time until largest element is rendered"
+                icon="🎯"
+              />
+              <MetricCard
+                title="First Input Delay"
+                subtitle="FID"
+                value={`${summary.avgFID.toFixed(0)}ms`}
+                metric="FID"
+                numValue={summary.avgFID}
+                description="Time until page responds to first interaction"
+                icon="⚡️"
+              />
+              <MetricCard
+                title="Cumulative Layout Shift"
+                subtitle="CLS"
+                value={`${summary.avgCLS.toFixed(0)}ms`}
+                metric="CLS"
+                numValue={summary.avgCLS}
+                description="Visual stability of the page"
+                icon="📐"
+              />
+              <MetricCard
+                title="Time to First Byte"
+                subtitle="TTFB"
+                value={`${summary.avgTTFB.toFixed(0)}ms`}
+                metric="TTFB"
+                numValue={summary.avgTTFB}
+                description="Server response time"
+                icon="🚀"
+              />
+              <MetricCard
+                title="Interaction to Next Paint"
+                subtitle="INP"
+                value={`${summary.avgINP.toFixed(0)}ms`}
+                metric="INP"
+                numValue={summary.avgINP}
+                description="Responsiveness to user interactions"
+                icon="👆"
+              />
+            </div>
+
+            {/* Summary Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <SummaryStat
+                icon="👥"
+                title="Total Sessions"
+                value={summary.totalSessions}
+              />
+              <SummaryStat
+                icon="⚠️"
+                title="Total Errors"
+                value={summary.totalErrors}
+              />
+              <SummaryStat
+                icon="📊"
+                title="Error Rate"
+                value={
+                  summary.totalSessions > 0
+                    ? `${(
+                        (summary.totalErrors / summary.totalSessions) *
+                        100
+                      ).toFixed(2)}%`
+                    : "0%"
+                }
+              />
+            </div>
+
+            {/* Recent Metrics Table */}
+            <MetricsTable metrics={metrics} />
+          </>
+        ) : (
+          <div>
+            <h3 className="text-lg font-semibold text-white">
+              No data available
+            </h3>
+            <p className="text-gray-400">
+              No performance metrics found for the selected filters
+            </p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

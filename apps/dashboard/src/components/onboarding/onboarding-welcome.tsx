@@ -98,7 +98,7 @@ export const OnboardingWelcome = ({ onStart, onSkip }: OnboardingWelcomeProps) =
         </div>
 
         {/* Time Estimate */}
-        <div className="flex items-center justify-center gap-2 p-3 bg-blue-50 rounded-lg text-blue-700">
+        <div className="flex items-center justify-center gap-2 p-3 bg-violet-900/20 rounded-lg text-violet-300">
           <Clock className="h-4 w-4" />
           <span className="text-sm font-medium">
             Estimated time: {totalTime} minutes

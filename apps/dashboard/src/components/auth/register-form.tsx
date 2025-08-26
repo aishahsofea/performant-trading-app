@@ -8,9 +8,9 @@ import {
   type RegistrationFormData,
 } from "@/lib/auth-utils";
 import { ContinueWithGoogle } from "./continue-with-google";
-import { CustomButton } from "@/components/ui/custom-button";
+import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
-import { CustomPasswordField } from "../ui/cutsom-password-field";
+import { CustomPasswordField } from "../ui/custom-password-field";
 
 type RegisterFormProps = {
   callbackUrl?: string;
@@ -232,10 +232,9 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
         </div>
 
         {/* Submit Button */}
-        <CustomButton
-          text={isLoading ? "Creating Account..." : "Create Account"}
-          disabled={isLoading}
-        />
+        <Button type="submit" disabled={isLoading} className="w-full">
+          {isLoading ? "Creating Account..." : "Create Account"}
+        </Button>
 
         {/* Login Link */}
         <div className="mt-4 text-center">

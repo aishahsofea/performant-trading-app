@@ -2,8 +2,8 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CustomButton } from "@/components/ui/custom-button";
-import { CustomPasswordField } from "@/components/ui/cutsom-password-field";
+import { Button } from "@/components/ui/button";
+import { CustomPasswordField } from "@/components/ui/custom-password-field";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
@@ -151,10 +151,13 @@ const ResetPasswordForm = () => {
           </div>
 
           {/* Submit Button */}
-          <CustomButton
-            text={isLoading ? "Resetting Password..." : "Reset Password"}
+          <Button
+            type="submit"
             disabled={isLoading || !token || !email}
-          />
+            className="w-full"
+          >
+            {isLoading ? "Resetting Password..." : "Reset Password"}
+          </Button>
 
           {/* Back to Login */}
           <div className="mt-4 text-center">
@@ -177,11 +180,13 @@ const ResetPasswordForm = () => {
 
 const ResetPasswordPage = () => {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-gray-100">Loading...</div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-900">
+          <div className="text-gray-100">Loading...</div>
+        </div>
+      }
+    >
       <ResetPasswordForm />
     </Suspense>
   );

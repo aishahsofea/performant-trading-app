@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { validateEmail } from "@/lib/auth-utils";
-import { CustomSelect } from "@/components/ui/custom-select";
-import { CustomButton } from "@/components/ui/custom-button";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { ProfileImageUpload } from "./profile-image-upload";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
@@ -228,7 +228,7 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
         >
           Timezone
         </label>
-        <CustomSelect
+        <Select
           value={formData.timezone}
           onChange={(value) =>
             setFormData((prev) => ({ ...prev, timezone: value }))
@@ -249,10 +249,13 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
       </div>
 
       {/* Submit Button */}
-      <CustomButton
-        text={isLoading ? "Saving..." : "Save Profile"}
+      <Button
+        type="submit"
         disabled={isLoading}
-      />
+        className="w-full"
+      >
+        {isLoading ? "Saving..." : "Save Profile"}
+      </Button>
     </form>
   );
 };

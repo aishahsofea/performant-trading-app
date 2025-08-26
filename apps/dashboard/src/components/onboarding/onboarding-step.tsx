@@ -30,8 +30,8 @@ const WelcomeStepContent = ({ onDataChange }: StepContentProps) => {
     <Card>
       <CardContent className="pt-6">
         <div className="text-center space-y-4">
-          <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
-            <User className="h-8 w-8 text-blue-600" />
+          <div className="w-16 h-16 mx-auto bg-violet-900/20 rounded-full flex items-center justify-center">
+            <User className="h-8 w-8 text-violet-400" />
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-2">Welcome to your Trading Dashboard!</h3>
@@ -42,17 +42,17 @@ const WelcomeStepContent = ({ onDataChange }: StepContentProps) => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div className="text-center p-4 border rounded-lg">
-              <Settings className="h-6 w-6 mx-auto mb-2 text-blue-600" />
+              <Settings className="h-6 w-6 mx-auto mb-2 text-violet-400" />
               <h4 className="font-medium">Customize</h4>
               <p className="text-sm text-muted-foreground">Set up your preferences</p>
             </div>
             <div className="text-center p-4 border rounded-lg">
-              <BookOpen className="h-6 w-6 mx-auto mb-2 text-green-600" />
+              <BookOpen className="h-6 w-6 mx-auto mb-2 text-green-400" />
               <h4 className="font-medium">Learn</h4>
               <p className="text-sm text-muted-foreground">Discover key features</p>
             </div>
             <div className="text-center p-4 border rounded-lg">
-              <Zap className="h-6 w-6 mx-auto mb-2 text-purple-600" />
+              <Zap className="h-6 w-6 mx-auto mb-2 text-violet-400" />
               <h4 className="font-medium">Trade</h4>
               <p className="text-sm text-muted-foreground">Start monitoring performance</p>
             </div>
@@ -174,7 +174,7 @@ const DashboardTourStepContent = ({ onDataChange }: StepContentProps) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-600">1</div>
+              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">1</div>
               Performance Overview
             </h3>
             <p className="text-sm text-muted-foreground pl-8">
@@ -184,7 +184,7 @@ const DashboardTourStepContent = ({ onDataChange }: StepContentProps) => {
           
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-600">2</div>
+              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">2</div>
               Layout Customization
             </h3>
             <p className="text-sm text-muted-foreground pl-8">
@@ -194,7 +194,7 @@ const DashboardTourStepContent = ({ onDataChange }: StepContentProps) => {
           
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-600">3</div>
+              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">3</div>
               Real-time Data
             </h3>
             <p className="text-sm text-muted-foreground pl-8">
@@ -204,7 +204,7 @@ const DashboardTourStepContent = ({ onDataChange }: StepContentProps) => {
           
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-600">4</div>
+              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">4</div>
               Analytics & Reports
             </h3>
             <p className="text-sm text-muted-foreground pl-8">
@@ -213,8 +213,8 @@ const DashboardTourStepContent = ({ onDataChange }: StepContentProps) => {
           </div>
         </div>
         
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-800">
+        <div className="mt-6 p-4 bg-violet-900/20 rounded-lg">
+          <p className="text-sm text-violet-300">
             <strong>Pro Tip:</strong> You can always access help tooltips by clicking the "?" icon next to any feature.
           </p>
         </div>
@@ -236,8 +236,8 @@ const FeaturesOverviewStepContent = ({ onDataChange }: StepContentProps) => {
         <div className="space-y-4">
           <div className="p-4 border rounded-lg">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <CheckCircle className="h-4 w-4 text-green-600" />
+              <div className="w-8 h-8 bg-green-900/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <CheckCircle className="h-4 w-4 text-green-400" />
               </div>
               <div>
                 <h4 className="font-medium">Performance Analytics</h4>
@@ -250,8 +250,8 @@ const FeaturesOverviewStepContent = ({ onDataChange }: StepContentProps) => {
           
           <div className="p-4 border rounded-lg">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <Zap className="h-4 w-4 text-purple-600" />
+              <div className="w-8 h-8 bg-violet-900/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <Zap className="h-4 w-4 text-violet-400" />
               </div>
               <div>
                 <h4 className="font-medium">Smart Alerts</h4>
@@ -264,8 +264,8 @@ const FeaturesOverviewStepContent = ({ onDataChange }: StepContentProps) => {
           
           <div className="p-4 border rounded-lg">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <BookOpen className="h-4 w-4 text-blue-600" />
+              <div className="w-8 h-8 bg-violet-900/20 rounded-full flex items-center justify-center flex-shrink-0">
+                <BookOpen className="h-4 w-4 text-violet-400" />
               </div>
               <div>
                 <h4 className="font-medium">Trading Journal</h4>
@@ -277,8 +277,8 @@ const FeaturesOverviewStepContent = ({ onDataChange }: StepContentProps) => {
           </div>
         </div>
         
-        <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-          <p className="text-sm text-amber-800">
+        <div className="mt-6 p-4 bg-amber-900/20 border border-amber-600 rounded-lg">
+          <p className="text-sm text-amber-300">
             <strong>Coming Soon:</strong> AI-powered insights and recommendations based on your trading patterns and market conditions.
           </p>
         </div>
@@ -292,8 +292,8 @@ const CompletionStepContent = ({ onDataChange }: StepContentProps) => {
     <Card>
       <CardContent className="pt-6">
         <div className="text-center space-y-4">
-          <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
-            <CheckCircle className="h-8 w-8 text-green-600" />
+          <div className="w-16 h-16 mx-auto bg-green-900/20 rounded-full flex items-center justify-center">
+            <CheckCircle className="h-8 w-8 text-green-400" />
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-2">Setup Complete!</h3>
@@ -303,9 +303,9 @@ const CompletionStepContent = ({ onDataChange }: StepContentProps) => {
             </p>
           </div>
           
-          <div className="mt-6 p-4 bg-green-50 rounded-lg">
-            <h4 className="font-medium text-green-800 mb-2">What's Next?</h4>
-            <ul className="text-sm text-green-700 space-y-1 list-disc list-inside">
+          <div className="mt-6 p-4 bg-green-900/20 rounded-lg">
+            <h4 className="font-medium text-green-400 mb-2">What's Next?</h4>
+            <ul className="text-sm text-green-300 space-y-1 list-disc list-inside">
               <li>Explore your personalized dashboard</li>
               <li>Set up your first portfolio tracking</li>
               <li>Configure performance alerts</li>
@@ -362,8 +362,8 @@ export const OnboardingStep = ({ step, onComplete, onSkip, isProcessing }: Onboa
     <div className="space-y-6">
       {/* Step Header */}
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-          <IconComponent className="h-6 w-6 text-blue-600" />
+        <div className="w-12 h-12 bg-violet-900/20 rounded-full flex items-center justify-center flex-shrink-0">
+          <IconComponent className="h-6 w-6 text-violet-400" />
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">

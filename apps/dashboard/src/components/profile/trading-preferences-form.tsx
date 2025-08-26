@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { TradingPreferences, defaultTradingPreferences } from "@/types/profile";
-import { CustomSelect } from "@/components/ui/custom-select";
-import { CustomButton } from "@/components/ui/custom-button";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { useTradingPreferences } from "@/hooks/useTradingPreferences";
 
 type TradingPreferencesFormProps = {
@@ -116,7 +116,7 @@ export const TradingPreferencesForm = ({
             <label className="block text-sm font-medium mb-2 text-gray-200">
               Default View
             </label>
-            <CustomSelect
+            <Select
               value={preferences.defaultView}
               onChange={(value) => handleInputChange("defaultView", value)}
               options={[
@@ -131,7 +131,7 @@ export const TradingPreferencesForm = ({
             <label className="block text-sm font-medium mb-2 text-gray-200">
               Theme
             </label>
-            <CustomSelect
+            <Select
               value={preferences.theme}
               onChange={(value) => handleInputChange("theme", value)}
               options={[
@@ -330,7 +330,7 @@ export const TradingPreferencesForm = ({
                 <label className="block text-sm font-medium mb-1 text-gray-300">
                   Timezone
                 </label>
-                <CustomSelect
+                <Select
                   value={preferences.tradingHours.timezone}
                   onChange={(value) =>
                     handleNestedInputChange("tradingHours", "timezone", value)
@@ -384,10 +384,13 @@ export const TradingPreferencesForm = ({
       </div>
 
       {/* Submit Button */}
-      <CustomButton
-        text={isLoading ? "Saving..." : "Save Trading Preferences"}
+      <Button
+        type="submit"
         disabled={isLoading}
-      />
+        className="w-full"
+      >
+        {isLoading ? "Saving..." : "Save Trading Preferences"}
+      </Button>
     </form>
   );
 };

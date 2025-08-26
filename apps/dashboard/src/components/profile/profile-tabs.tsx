@@ -19,7 +19,7 @@ export const ProfileTabs = () => {
   return (
     <div className="w-full">
       {/* Tab Navigation */}
-      <div className="border-b border-gray-700 mb-8">
+      <div className="border-b border-gray-600 mb-8">
         <nav className="flex space-x-8">
           {tabs.map((tab) => (
             <button
@@ -27,8 +27,8 @@ export const ProfileTabs = () => {
               onClick={() => setActiveTab(tab.id)}
               className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
                 activeTab === tab.id
-                  ? "border-purple-500 text-purple-400"
-                  : "border-transparent text-gray-400 hover:text-gray-200 hover:border-gray-600"
+                  ? "border-violet-500 text-violet-400"
+                  : "border-transparent text-gray-400 hover:text-white hover:border-gray-500"
               }`}
             >
               <span className="flex items-center space-x-2">

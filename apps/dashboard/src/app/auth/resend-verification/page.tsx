@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CustomButton } from "@/components/ui/custom-button";
+import { Button } from "@/components/ui/button";
 import { useEmailValidation } from "@/hooks/useEmailValidation";
 
 const ResendVerificationPage = () => {
@@ -102,10 +102,13 @@ const ResendVerificationPage = () => {
           </div>
 
           {/* Submit Button */}
-          <CustomButton
-            text={isLoading ? "Sending..." : "Send Verification Email"}
+          <Button
+            type="submit"
             disabled={isLoading}
-          />
+            className="w-full"
+          >
+            {isLoading ? "Sending..." : "Send Verification Email"}
+          </Button>
 
           {/* Back to Login */}
           <div className="mt-4 text-center">

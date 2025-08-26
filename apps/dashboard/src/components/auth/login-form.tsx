@@ -5,8 +5,8 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { validateLoginForm, type LoginFormData } from "@/lib/auth-utils";
 import { ContinueWithGoogle } from "./continue-with-google";
-import { CustomButton } from "@/components/ui/custom-button";
-import { CustomPasswordField } from "../ui/cutsom-password-field";
+import { Button } from "@/components/ui/button";
+import { CustomPasswordField } from "../ui/custom-password-field";
 
 type LoginFormProps = {
   callbackUrl?: string;
@@ -73,7 +73,7 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
   return (
     <div className="min-w-md mx-auto" data-testid="login-form-container">
       <div className="mb-8">
-        <h1 className="text-3xl font-semibold mb-2 text-gray-100">Sign In</h1>
+        <h1 className="text-3xl font-semibold mb-2 text-white">Sign In</h1>
         <p className="text-gray-400">Access your trading dashboard</p>
       </div>
 
@@ -113,7 +113,7 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
         <div className="mb-4">
           <label
             htmlFor="email"
-            className="block text-sm font-medium mb-2 text-gray-200"
+            className="block text-sm font-medium mb-2 text-white"
           >
             Email
           </label>
@@ -123,7 +123,7 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
+            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-white bg-gray-700 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors placeholder-gray-400"
             placeholder="Enter your email"
             disabled={isLoading}
           />
@@ -150,17 +150,16 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
         <div className="mb-6 text-right">
           <a
             href="/auth/forgot-password"
-            className="text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors"
+            className="text-sm font-medium text-violet-400 hover:text-violet-300 transition-colors"
           >
             Forgot password?
           </a>
         </div>
 
         {/* Submit Button */}
-        <CustomButton
-          text={isLoading ? "Signing In..." : "Sign In"}
-          disabled={isLoading}
-        />
+        <Button type="submit" disabled={isLoading} className="w-full">
+          {isLoading ? "Signing In..." : "Sign In"}
+        </Button>
 
         {/* Register Link */}
         <div className="mt-4 text-center">
@@ -168,7 +167,7 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
             Don't have an account?{" "}
             <a
               href="/auth/register"
-              className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
+              className="font-medium text-violet-400 hover:text-violet-300 transition-colors"
             >
               Sign up
             </a>

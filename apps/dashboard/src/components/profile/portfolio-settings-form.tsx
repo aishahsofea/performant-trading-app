@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { PortfolioSettings, defaultPortfolioSettings } from "@/types/portfolio";
-import { CustomSelect } from "@/components/ui/custom-select";
-import { CustomButton } from "@/components/ui/custom-button";
+import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { usePortfolioSettings } from "@/hooks/usePortfolioSettings";
 
 type PortfolioSettingsFormProps = {
@@ -147,7 +147,7 @@ export const PortfolioSettingsForm = ({
             <label className="block text-sm font-medium mb-2 text-gray-200">
               Default Currency
             </label>
-            <CustomSelect
+            <Select
               value={settings.defaultCurrency}
               onChange={(value) => handleInputChange("defaultCurrency", value)}
               options={[
@@ -165,7 +165,7 @@ export const PortfolioSettingsForm = ({
             <label className="block text-sm font-medium mb-2 text-gray-200">
               Display Mode
             </label>
-            <CustomSelect
+            <Select
               value={settings.displayMode}
               onChange={(value) => handleInputChange("displayMode", value)}
               options={[
@@ -180,7 +180,7 @@ export const PortfolioSettingsForm = ({
             <label className="block text-sm font-medium mb-2 text-gray-200">
               Sort By
             </label>
-            <CustomSelect
+            <Select
               value={settings.sortBy}
               onChange={(value) => handleInputChange("sortBy", value)}
               options={[
@@ -196,7 +196,7 @@ export const PortfolioSettingsForm = ({
             <label className="block text-sm font-medium mb-2 text-gray-200">
               Sort Order
             </label>
-            <CustomSelect
+            <Select
               value={settings.sortOrder}
               onChange={(value) => handleInputChange("sortOrder", value)}
               options={[
@@ -220,7 +220,7 @@ export const PortfolioSettingsForm = ({
               <label className="block text-sm font-medium mb-2 text-gray-200">
                 Benchmark Index
               </label>
-              <CustomSelect
+              <Select
                 value={settings.benchmarkIndex}
                 onChange={(value) => handleInputChange("benchmarkIndex", value)}
                 options={[
@@ -237,7 +237,7 @@ export const PortfolioSettingsForm = ({
               <label className="block text-sm font-medium mb-2 text-gray-200">
                 Default Performance Period
               </label>
-              <CustomSelect
+              <Select
                 value={settings.performancePeriod}
                 onChange={(value) =>
                   handleInputChange("performancePeriod", value)
@@ -429,7 +429,7 @@ export const PortfolioSettingsForm = ({
               <label className="block text-sm font-medium mb-2 text-gray-200">
                 Default Timeframe
               </label>
-              <CustomSelect
+              <Select
                 value={settings.chartSettings.defaultTimeframe}
                 onChange={(value) =>
                   handleNestedInputChange(
@@ -453,7 +453,7 @@ export const PortfolioSettingsForm = ({
               <label className="block text-sm font-medium mb-2 text-gray-200">
                 Chart Type
               </label>
-              <CustomSelect
+              <Select
                 value={settings.chartSettings.chartType}
                 onChange={(value) =>
                   handleNestedInputChange("chartSettings", "chartType", value)
@@ -550,10 +550,13 @@ export const PortfolioSettingsForm = ({
       </div>
 
       {/* Submit Button */}
-      <CustomButton
-        text={isLoading ? "Saving..." : "Save Portfolio Settings"}
+      <Button
+        type="submit"
         disabled={isLoading}
-      />
+        className="w-full"
+      >
+        {isLoading ? "Saving..." : "Save Portfolio Settings"}
+      </Button>
     </form>
   );
 };

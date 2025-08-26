@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CustomButton } from "@/components/ui/custom-button";
+import { Button } from "@/components/ui/button";
 import { useEmailValidation } from "@/hooks/useEmailValidation";
 
 const ForgotPasswordPage = () => {
@@ -103,10 +103,13 @@ const ForgotPasswordPage = () => {
           </div>
 
           {/* Submit Button */}
-          <CustomButton
-            text={isLoading ? "Sending Reset Link..." : "Send Reset Link"}
+          <Button
+            type="submit"
             disabled={isLoading}
-          />
+            className="w-full"
+          >
+            {isLoading ? "Sending Reset Link..." : "Send Reset Link"}
+          </Button>
 
           {/* Back to Login */}
           <div className="mt-4 text-center">

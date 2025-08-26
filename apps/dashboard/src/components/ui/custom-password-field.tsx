@@ -36,8 +36,8 @@ export const CustomPasswordField = ({
           name={id}
           value={password}
           onChange={onChange}
-          className="w-full border border-gray-600 rounded-md px-3 py-2.5 pr-10 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
-          placeholder={placeholder}
+          className="w-full border border-gray-600 rounded-md px-3 py-2.5 pr-10 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors placeholder-gray-400"
+          placeholder={placeholder ?? "Enter your password"}
           disabled={isDisabled}
         />
         <button

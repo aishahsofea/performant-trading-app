@@ -104,7 +104,7 @@ export const LayoutSwitcher = () => {
                     onClick={() => switchLayout(layout.id)}
                     className={`flex-1 text-left px-2 py-1.5 text-sm rounded hover:bg-gray-700 transition-colors ${
                       layout.id === preferences?.currentLayoutId
-                        ? 'text-purple-400 bg-purple-900/20'
+                        ? 'text-violet-400 bg-violet-900/20'
                         : 'text-gray-300'
                     }`}
                   >
@@ -160,7 +160,7 @@ export const LayoutSwitcher = () => {
                     placeholder="Layout name"
                     value={newLayoutName}
                     onChange={(e) => setNewLayoutName(e.target.value)}
-                    className="w-full px-2 py-1 text-sm bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-purple-500"
+                    className="w-full px-2 py-1 text-sm bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none focus:border-violet-500"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') handleSaveNewLayout();
                       if (e.key === 'Escape') {
@@ -174,7 +174,7 @@ export const LayoutSwitcher = () => {
                     <button
                       onClick={handleSaveNewLayout}
                       disabled={!newLayoutName.trim()}
-                      className="flex-1 px-2 py-1 text-xs bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 disabled:text-gray-400 text-white rounded transition-colors"
+                      className="flex-1 px-2 py-1 text-xs bg-violet-600 hover:bg-violet-700 disabled:bg-gray-600 disabled:text-gray-400 text-white rounded transition-colors"
                     >
                       Save
                     </button>

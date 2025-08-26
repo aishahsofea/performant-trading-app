@@ -6,7 +6,7 @@ export const ContinueWithGoogle = ({ onClick }: ContinueWithGoogleProps) => {
   return (
     <button
       onClick={onClick}
-      className="w-full border rounded-sm px-6 py-2.5 text-sm font-medium hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+      className="w-full border border-gray-600 bg-gray-800 text-white rounded-md px-6 py-2.5 text-sm font-medium hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors flex items-center justify-center gap-2 cursor-pointer"
     >
       <svg className="w-5 h-5" viewBox="0 0 24 24">
         <path

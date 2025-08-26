@@ -22,12 +22,12 @@ export const MetricCard = ({
   const { grade, color } = getPerformanceGrade(metric, numValue);
 
   return (
-    <div className="bg-gray-950 p-6 rounded-lg shadow-sm border hover:shadow-md transition-all duration-200">
+    <div className="bg-gray-800 border border-gray-600 p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center">
           <span className="text-2xl mr-3">{icon}</span>
           <div>
-            <h3 className="text-lg font-semibold text-gray-200">{title}</h3>
+            <h3 className="text-lg font-semibold text-white">{title}</h3>
             <p className="text-sm text-gray-300 font-medium">{subtitle}</p>
           </div>
         </div>
@@ -38,7 +38,7 @@ export const MetricCard = ({
         </span>
       </div>
       <div className="mb-3">
-        <span className="text-3xl font-bold text-gray-200">{value}</span>
+        <span className="text-3xl font-bold text-white">{value}</span>
       </div>
       <p className="text-sm text-gray-400">{description}</p>
     </div>
@@ -55,15 +55,15 @@ const getPerformanceGrade = (
   const COLOR_MAP: Record<string, Record<string, string>> = {
     good: {
       grade: "Good",
-      color: "text-green-600 bg-green-200",
+      color: "text-green-400 bg-green-900/30 border border-green-500/30",
     },
     needs_improvement: {
       grade: "Needs Improvement",
-      color: "text-yellow-600 bg-yellow-200",
+      color: "text-amber-400 bg-amber-900/30 border border-amber-500/30",
     },
     poor: {
       grade: "Poor",
-      color: "text-red-600 bg-red-200",
+      color: "text-red-400 bg-red-900/30 border border-red-500/30",
     },
   };
 
@@ -121,7 +121,7 @@ const getPerformanceGrade = (
       break;
     default:
       grade = "Unknown";
-      color = "text-gray-600 bg-gray-100";
+      color = "text-gray-400 bg-gray-700/50 border border-gray-600/30";
   }
 
   return { grade, color };
