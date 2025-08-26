@@ -1,18 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { dashboardLayouts, dashboardPreferences } from '@/lib/db/schema';
-import { eq, and } from 'drizzle-orm';
-import { requireAuth } from '@/lib/auth/server';
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { dashboardLayouts, dashboardPreferences } from "@/lib/db/schema";
+import { eq, and } from "drizzle-orm";
+import { requireAuth } from "@/lib/auth/server";
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+interface Params {
+  id: string;
+}
+
+export async function PUT(request: NextRequest, params: any) {
   try {
-    const { user } = await requireAuth(['user', 'admin', 'premium']);
-    const { id } = params;
+    const { user } = await requireAuth(["user", "admin", "premium"]);
     const body = await request.json();
-    
+
+    const { id } = params as { id: string };
+
     const { name, layout, isDefault } = body;
 
     // Check if layout belongs to user
@@ -20,18 +22,12 @@ export async function PUT(
       .select()
       .from(dashboardLayouts)
       .where(
-        and(
-          eq(dashboardLayouts.id, id),
-          eq(dashboardLayouts.userId, user.id)
-        )
+        and(eq(dashboardLayouts.id, id), eq(dashboardLayouts.userId, user.id))
       )
       .limit(1);
 
     if (!existingLayout) {
-      return NextResponse.json(
-        { error: 'Layout not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Layout not found" }, { status: 404 });
     }
 
     await db.transaction(async (tx) => {
@@ -49,7 +45,8 @@ export async function PUT(
         .set({
           name: name || existingLayout.name,
           layout: layout || existingLayout.layout,
-          isDefault: isDefault !== undefined ? isDefault : existingLayout.isDefault,
+          isDefault:
+            isDefault !== undefined ? isDefault : existingLayout.isDefault,
           updatedAt: new Date(),
         })
         .where(eq(dashboardLayouts.id, id));
@@ -58,63 +55,52 @@ export async function PUT(
       if (isDefault) {
         await tx
           .update(dashboardPreferences)
-          .set({ 
+          .set({
             currentLayoutId: id,
-            updatedAt: new Date()
+            updatedAt: new Date(),
           })
           .where(eq(dashboardPreferences.userId, user.id));
       }
     });
 
-    return NextResponse.json({ message: 'Layout updated successfully' });
+    return NextResponse.json({ message: "Layout updated successfully" });
   } catch (error) {
-    console.error('Failed to update dashboard layout:', error);
+    console.error("Failed to update dashboard layout:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, params: any) {
   try {
-    const { user } = await requireAuth(['user', 'admin', 'premium']);
-    const { id } = params;
+    const { user } = await requireAuth(["user", "admin", "premium"]);
+    const { id } = params as { id: string };
 
     // Check if layout belongs to user
     const [existingLayout] = await db
       .select()
       .from(dashboardLayouts)
       .where(
-        and(
-          eq(dashboardLayouts.id, id),
-          eq(dashboardLayouts.userId, user.id)
-        )
+        and(eq(dashboardLayouts.id, id), eq(dashboardLayouts.userId, user.id))
       )
       .limit(1);
 
     if (!existingLayout) {
-      return NextResponse.json(
-        { error: 'Layout not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Layout not found" }, { status: 404 });
     }
 
     await db.transaction(async (tx) => {
       // Delete the layout
-      await tx
-        .delete(dashboardLayouts)
-        .where(eq(dashboardLayouts.id, id));
+      await tx.delete(dashboardLayouts).where(eq(dashboardLayouts.id, id));
 
       // If this was the current layout, clear it from preferences
       await tx
         .update(dashboardPreferences)
-        .set({ 
+        .set({
           currentLayoutId: null,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         })
         .where(
           and(
@@ -124,11 +110,11 @@ export async function DELETE(
         );
     });
 
-    return NextResponse.json({ message: 'Layout deleted successfully' });
+    return NextResponse.json({ message: "Layout deleted successfully" });
   } catch (error) {
-    console.error('Failed to delete dashboard layout:', error);
+    console.error("Failed to delete dashboard layout:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

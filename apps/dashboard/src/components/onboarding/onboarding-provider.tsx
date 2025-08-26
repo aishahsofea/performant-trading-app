@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useOnboarding } from '@/hooks/useOnboarding';
-import { OnboardingModal } from './onboarding-modal';
+import { createContext, useContext, useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useOnboarding } from "@/hooks/useOnboarding";
+import { OnboardingModal } from "./onboarding-modal";
 
 interface OnboardingContextType {
   showOnboarding: () => void;
@@ -18,22 +18,22 @@ interface OnboardingProviderProps {
 }
 
 export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
-  const { data: session, status } = useSession();
-  const { shouldShowOnboarding, onboardingState, isLoading } = useOnboarding();
+  const { status } = useSession();
+  const { shouldShowOnboarding, isLoading } = useOnboarding();
   const [isOnboardingVisible, setIsOnboardingVisible] = useState(false);
   const [hasCheckedOnboarding, setHasCheckedOnboarding] = useState(false);
 
   // Auto-show onboarding for new users
   useEffect(() => {
-    if (status === 'loading' || isLoading) return;
-    if (status === 'unauthenticated') return;
+    if (status === "loading" || isLoading) return;
+    if (status === "unauthenticated") return;
     if (hasCheckedOnboarding) return;
 
     // Only auto-show for authenticated users who should see onboarding
-    if (status === 'authenticated' && shouldShowOnboarding) {
+    if (status === "authenticated" && shouldShowOnboarding) {
       setIsOnboardingVisible(true);
     }
-    
+
     setHasCheckedOnboarding(true);
   }, [status, shouldShowOnboarding, isLoading, hasCheckedOnboarding]);
 
@@ -54,9 +54,9 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
   return (
     <OnboardingContext.Provider value={contextValue}>
       {children}
-      
+
       {/* Onboarding Modal */}
-      {status === 'authenticated' && (
+      {status === "authenticated" && (
         <OnboardingModal
           isOpen={isOnboardingVisible}
           onClose={hideOnboarding}
@@ -69,7 +69,9 @@ export const OnboardingProvider = ({ children }: OnboardingProviderProps) => {
 export const useOnboardingContext = () => {
   const context = useContext(OnboardingContext);
   if (!context) {
-    throw new Error('useOnboardingContext must be used within OnboardingProvider');
+    throw new Error(
+      "useOnboardingContext must be used within OnboardingProvider"
+    );
   }
   return context;
 };

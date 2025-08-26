@@ -9,7 +9,6 @@ import {
 } from "@/lib/auth-utils";
 import { ContinueWithGoogle } from "./continue-with-google";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff } from "lucide-react";
 import { CustomPasswordField } from "../ui/custom-password-field";
 
 type RegisterFormProps = {
@@ -27,8 +26,6 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

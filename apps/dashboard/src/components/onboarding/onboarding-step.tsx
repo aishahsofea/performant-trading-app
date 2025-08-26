@@ -1,17 +1,34 @@
 "use client";
 
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Clock, CheckCircle, User, Settings, BookOpen, Zap } from 'lucide-react';
-import type { OnboardingStep as OnboardingStepType } from '@/hooks/useOnboarding';
+import { useState } from "react";
+import { useSession } from "next-auth/react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import {
+  Clock,
+  CheckCircle,
+  User,
+  Settings,
+  BookOpen,
+  Zap,
+} from "lucide-react";
+import type { OnboardingStep as OnboardingStepType } from "@/hooks/useOnboarding";
 
 interface OnboardingStepProps {
   step: OnboardingStepType;
@@ -34,27 +51,37 @@ const WelcomeStepContent = ({ onDataChange }: StepContentProps) => {
             <User className="h-8 w-8 text-violet-400" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-2">Welcome to your Trading Dashboard!</h3>
+            <h3 className="text-lg font-semibold mb-2">
+              Welcome to your Trading Dashboard!
+            </h3>
             <p className="text-muted-foreground">
-              We're excited to help you get started with your personal trading and performance monitoring environment. 
-              This quick setup will customize your dashboard based on your trading preferences and goals.
+              We're excited to help you get started with your personal trading
+              and performance monitoring environment. This quick setup will
+              customize your dashboard based on your trading preferences and
+              goals.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div className="text-center p-4 border rounded-lg">
               <Settings className="h-6 w-6 mx-auto mb-2 text-violet-400" />
               <h4 className="font-medium">Customize</h4>
-              <p className="text-sm text-muted-foreground">Set up your preferences</p>
+              <p className="text-sm text-muted-foreground">
+                Set up your preferences
+              </p>
             </div>
             <div className="text-center p-4 border rounded-lg">
               <BookOpen className="h-6 w-6 mx-auto mb-2 text-green-400" />
               <h4 className="font-medium">Learn</h4>
-              <p className="text-sm text-muted-foreground">Discover key features</p>
+              <p className="text-sm text-muted-foreground">
+                Discover key features
+              </p>
             </div>
             <div className="text-center p-4 border rounded-lg">
               <Zap className="h-6 w-6 mx-auto mb-2 text-violet-400" />
               <h4 className="font-medium">Trade</h4>
-              <p className="text-sm text-muted-foreground">Start monitoring performance</p>
+              <p className="text-sm text-muted-foreground">
+                Start monitoring performance
+              </p>
             </div>
           </div>
         </div>
@@ -66,9 +93,9 @@ const WelcomeStepContent = ({ onDataChange }: StepContentProps) => {
 const ProfileSetupStepContent = ({ onDataChange }: StepContentProps) => {
   const { data: session } = useSession();
   const [preferences, setPreferences] = useState({
-    tradingExperience: '',
-    primaryGoals: '',
-    riskTolerance: '',
+    tradingExperience: "",
+    primaryGoals: "",
+    riskTolerance: "",
     notifications: true,
     marketUpdates: true,
   });
@@ -84,20 +111,32 @@ const ProfileSetupStepContent = ({ onDataChange }: StepContentProps) => {
       <CardHeader>
         <CardTitle>Complete Your Trading Profile</CardTitle>
         <CardDescription>
-          Help us personalize your dashboard by sharing some information about your trading goals and preferences.
+          Help us personalize your dashboard by sharing some information about
+          your trading goals and preferences.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="experience">Trading Experience Level</Label>
-          <Select value={preferences.tradingExperience} onValueChange={(value: string) => handleChange('tradingExperience', value)}>
+          <Select
+            value={preferences.tradingExperience}
+            onValueChange={(value: string) =>
+              handleChange("tradingExperience", value)
+            }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select your experience level" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="beginner">Beginner (Less than 1 year)</SelectItem>
-              <SelectItem value="intermediate">Intermediate (1-3 years)</SelectItem>
-              <SelectItem value="experienced">Experienced (3+ years)</SelectItem>
+              <SelectItem value="beginner">
+                Beginner (Less than 1 year)
+              </SelectItem>
+              <SelectItem value="intermediate">
+                Intermediate (1-3 years)
+              </SelectItem>
+              <SelectItem value="experienced">
+                Experienced (3+ years)
+              </SelectItem>
               <SelectItem value="professional">Professional Trader</SelectItem>
             </SelectContent>
           </Select>
@@ -109,7 +148,7 @@ const ProfileSetupStepContent = ({ onDataChange }: StepContentProps) => {
             id="goals"
             placeholder="e.g., Build long-term wealth, Generate monthly income, Learn market fundamentals..."
             value={preferences.primaryGoals}
-            onChange={(e) => handleChange('primaryGoals', e.target.value)}
+            onChange={(e) => handleChange("primaryGoals", e.target.value)}
             className="resize-none"
             rows={3}
           />
@@ -117,14 +156,26 @@ const ProfileSetupStepContent = ({ onDataChange }: StepContentProps) => {
 
         <div className="space-y-2">
           <Label htmlFor="risk">Risk Tolerance</Label>
-          <Select value={preferences.riskTolerance} onValueChange={(value: string) => handleChange('riskTolerance', value)}>
+          <Select
+            value={preferences.riskTolerance}
+            onValueChange={(value: string) =>
+              handleChange("riskTolerance", value)
+            }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select your risk tolerance" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="conservative">Conservative - Prefer stable, lower-risk investments</SelectItem>
-              <SelectItem value="moderate">Moderate - Balanced approach to risk and reward</SelectItem>
-              <SelectItem value="aggressive">Aggressive - Comfortable with higher risk for higher potential returns</SelectItem>
+              <SelectItem value="conservative">
+                Conservative - Prefer stable, lower-risk investments
+              </SelectItem>
+              <SelectItem value="moderate">
+                Moderate - Balanced approach to risk and reward
+              </SelectItem>
+              <SelectItem value="aggressive">
+                Aggressive - Comfortable with higher risk for higher potential
+                returns
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -134,24 +185,36 @@ const ProfileSetupStepContent = ({ onDataChange }: StepContentProps) => {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <Label htmlFor="notifications" className="font-normal">Performance Alerts</Label>
-                <p className="text-sm text-muted-foreground">Get notified about significant portfolio changes</p>
+                <Label htmlFor="notifications" className="font-normal">
+                  Performance Alerts
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Get notified about significant portfolio changes
+                </p>
               </div>
               <Switch
                 id="notifications"
                 checked={preferences.notifications}
-                onCheckedChange={(checked) => handleChange('notifications', checked)}
+                onCheckedChange={(checked) =>
+                  handleChange("notifications", checked)
+                }
               />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <Label htmlFor="market-updates" className="font-normal">Market Updates</Label>
-                <p className="text-sm text-muted-foreground">Receive daily market summaries and insights</p>
+                <Label htmlFor="market-updates" className="font-normal">
+                  Market Updates
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  Receive daily market summaries and insights
+                </p>
               </div>
               <Switch
                 id="market-updates"
                 checked={preferences.marketUpdates}
-                onCheckedChange={(checked) => handleChange('marketUpdates', checked)}
+                onCheckedChange={(checked) =>
+                  handleChange("marketUpdates", checked)
+                }
               />
             </div>
           </div>
@@ -167,55 +230,69 @@ const DashboardTourStepContent = ({ onDataChange }: StepContentProps) => {
       <CardHeader>
         <CardTitle>Dashboard Tour</CardTitle>
         <CardDescription>
-          Let's take a quick tour of your dashboard's key features and how to customize your trading workspace.
+          Let's take a quick tour of your dashboard's key features and how to
+          customize your trading workspace.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">1</div>
+              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">
+                1
+              </div>
               Performance Overview
             </h3>
             <p className="text-sm text-muted-foreground pl-8">
-              Monitor your portfolio performance with real-time charts, P&L tracking, and performance metrics.
+              Monitor your portfolio performance with real-time charts, P&L
+              tracking, and performance metrics.
             </p>
           </div>
-          
+
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">2</div>
+              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">
+                2
+              </div>
               Layout Customization
             </h3>
             <p className="text-sm text-muted-foreground pl-8">
-              Customize your dashboard layout, save different configurations, and switch between trading setups.
+              Customize your dashboard layout, save different configurations,
+              and switch between trading setups.
             </p>
           </div>
-          
+
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">3</div>
+              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">
+                3
+              </div>
               Real-time Data
             </h3>
             <p className="text-sm text-muted-foreground pl-8">
-              Access real-time market data, price alerts, and technical indicators for informed decision making.
+              Access real-time market data, price alerts, and technical
+              indicators for informed decision making.
             </p>
           </div>
-          
+
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">4</div>
+              <div className="w-6 h-6 bg-violet-900/20 rounded-full flex items-center justify-center text-sm font-bold text-violet-400">
+                4
+              </div>
               Analytics & Reports
             </h3>
             <p className="text-sm text-muted-foreground pl-8">
-              Generate detailed performance reports, analyze trading patterns, and track your progress over time.
+              Generate detailed performance reports, analyze trading patterns,
+              and track your progress over time.
             </p>
           </div>
         </div>
-        
+
         <div className="mt-6 p-4 bg-violet-900/20 rounded-lg">
           <p className="text-sm text-violet-300">
-            <strong>Pro Tip:</strong> You can always access help tooltips by clicking the "?" icon next to any feature.
+            <strong>Pro Tip:</strong> You can always access help tooltips by
+            clicking the "?" icon next to any feature.
           </p>
         </div>
       </CardContent>
@@ -229,7 +306,8 @@ const FeaturesOverviewStepContent = ({ onDataChange }: StepContentProps) => {
       <CardHeader>
         <CardTitle>Discover Powerful Features</CardTitle>
         <CardDescription>
-          Explore advanced features designed to enhance your trading performance and decision-making process.
+          Explore advanced features designed to enhance your trading performance
+          and decision-making process.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -242,12 +320,13 @@ const FeaturesOverviewStepContent = ({ onDataChange }: StepContentProps) => {
               <div>
                 <h4 className="font-medium">Performance Analytics</h4>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Advanced analytics including Sharpe ratio, maximum drawdown, win rate, and risk-adjusted returns.
+                  Advanced analytics including Sharpe ratio, maximum drawdown,
+                  win rate, and risk-adjusted returns.
                 </p>
               </div>
             </div>
           </div>
-          
+
           <div className="p-4 border rounded-lg">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-violet-900/20 rounded-full flex items-center justify-center flex-shrink-0">
@@ -256,12 +335,13 @@ const FeaturesOverviewStepContent = ({ onDataChange }: StepContentProps) => {
               <div>
                 <h4 className="font-medium">Smart Alerts</h4>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Customizable alerts for price movements, portfolio changes, and performance milestones.
+                  Customizable alerts for price movements, portfolio changes,
+                  and performance milestones.
                 </p>
               </div>
             </div>
           </div>
-          
+
           <div className="p-4 border rounded-lg">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-violet-900/20 rounded-full flex items-center justify-center flex-shrink-0">
@@ -270,16 +350,19 @@ const FeaturesOverviewStepContent = ({ onDataChange }: StepContentProps) => {
               <div>
                 <h4 className="font-medium">Trading Journal</h4>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Track your trades, document strategies, and analyze what works best for your trading style.
+                  Track your trades, document strategies, and analyze what works
+                  best for your trading style.
                 </p>
               </div>
             </div>
           </div>
         </div>
-        
+
         <div className="mt-6 p-4 bg-amber-900/20 border border-amber-600 rounded-lg">
           <p className="text-sm text-amber-300">
-            <strong>Coming Soon:</strong> AI-powered insights and recommendations based on your trading patterns and market conditions.
+            <strong>Coming Soon:</strong> AI-powered insights and
+            recommendations based on your trading patterns and market
+            conditions.
           </p>
         </div>
       </CardContent>
@@ -298,11 +381,12 @@ const CompletionStepContent = ({ onDataChange }: StepContentProps) => {
           <div>
             <h3 className="text-lg font-semibold mb-2">Setup Complete!</h3>
             <p className="text-muted-foreground">
-              Congratulations! Your trading dashboard is now configured and ready to use. 
-              You can start monitoring your performance and exploring all the features.
+              Congratulations! Your trading dashboard is now configured and
+              ready to use. You can start monitoring your performance and
+              exploring all the features.
             </p>
           </div>
-          
+
           <div className="mt-6 p-4 bg-green-900/20 rounded-lg">
             <h4 className="font-medium text-green-400 mb-2">What's Next?</h4>
             <ul className="text-sm text-green-300 space-y-1 list-disc list-inside">
@@ -312,9 +396,10 @@ const CompletionStepContent = ({ onDataChange }: StepContentProps) => {
               <li>Start recording your trades</li>
             </ul>
           </div>
-          
+
           <p className="text-xs text-muted-foreground">
-            Need help getting started? Check out our help center or contact support.
+            Need help getting started? Check out our help center or contact
+            support.
           </p>
         </div>
       </CardContent>
@@ -324,33 +409,59 @@ const CompletionStepContent = ({ onDataChange }: StepContentProps) => {
 
 const getStepIcon = (stepId: string) => {
   switch (stepId) {
-    case 'welcome': return User;
-    case 'profile-setup': return Settings;
-    case 'dashboard-tour': return BookOpen;
-    case 'features-overview': return Zap;
-    case 'completion': return CheckCircle;
-    default: return User;
+    case "welcome":
+      return User;
+    case "profile-setup":
+      return Settings;
+    case "dashboard-tour":
+      return BookOpen;
+    case "features-overview":
+      return Zap;
+    case "completion":
+      return CheckCircle;
+    default:
+      return User;
   }
 };
 
 const getStepContent = (stepId: string, onDataChange?: (data: any) => void) => {
   switch (stepId) {
-    case 'welcome':
+    case "welcome":
       return <WelcomeStepContent stepId={stepId} onDataChange={onDataChange} />;
-    case 'profile-setup':
-      return <ProfileSetupStepContent stepId={stepId} onDataChange={onDataChange} />;
-    case 'dashboard-tour':
-      return <DashboardTourStepContent stepId={stepId} onDataChange={onDataChange} />;
-    case 'features-overview':
-      return <FeaturesOverviewStepContent stepId={stepId} onDataChange={onDataChange} />;
-    case 'completion':
-      return <CompletionStepContent stepId={stepId} onDataChange={onDataChange} />;
+    case "profile-setup":
+      return (
+        <ProfileSetupStepContent stepId={stepId} onDataChange={onDataChange} />
+      );
+    case "dashboard-tour":
+      return (
+        <DashboardTourStepContent stepId={stepId} onDataChange={onDataChange} />
+      );
+    case "features-overview":
+      return (
+        <FeaturesOverviewStepContent
+          stepId={stepId}
+          onDataChange={onDataChange}
+        />
+      );
+    case "completion":
+      return (
+        <CompletionStepContent stepId={stepId} onDataChange={onDataChange} />
+      );
     default:
-      return <div className="text-center py-8 text-muted-foreground">Step content not found</div>;
+      return (
+        <div className="text-center py-8 text-muted-foreground">
+          Step content not found
+        </div>
+      );
   }
 };
 
-export const OnboardingStep = ({ step, onComplete, onSkip, isProcessing }: OnboardingStepProps) => {
+export const OnboardingStep = ({
+  step,
+  onComplete,
+  onSkip,
+  isProcessing,
+}: OnboardingStepProps) => {
   const [stepData, setStepData] = useState<any>(null);
   const IconComponent = getStepIcon(step.id);
 
@@ -385,9 +496,7 @@ export const OnboardingStep = ({ step, onComplete, onSkip, isProcessing }: Onboa
       </div>
 
       {/* Step Content */}
-      <div>
-        {getStepContent(step.id, handleDataChange)}
-      </div>
+      <div>{getStepContent(step.id, handleDataChange)}</div>
     </div>
   );
 };
