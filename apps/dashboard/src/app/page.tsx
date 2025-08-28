@@ -1,9 +1,9 @@
 "use client";
 
 import { usePerformance } from "@/providers";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Button } from "@repo/ui/components";
 
 export default function Home() {
   const { trackCustomMetric, startTimer, trackError } = usePerformance();
@@ -54,7 +54,9 @@ export default function Home() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-gray-400">Button clicks:</span>
-                <span className="text-violet-400 font-mono text-lg">{clickCount}</span>
+                <span className="text-violet-400 font-mono text-lg">
+                  {clickCount}
+                </span>
               </div>
               <Button
                 variant="default"

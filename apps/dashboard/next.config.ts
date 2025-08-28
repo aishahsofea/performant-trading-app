@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-  transpilePackages: ["@repo/design-system", "@repo/ui"],
+  transpilePackages: ["@repo/ui"],
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
