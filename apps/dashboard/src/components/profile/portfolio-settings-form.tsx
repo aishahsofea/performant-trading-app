@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { PortfolioSettings, defaultPortfolioSettings } from "@/types/portfolio";
-import { Select } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { Select } from "@repo/ui/components";
+import { Button, NumberInput, Checkbox } from "@repo/ui/components";
 import { usePortfolioSettings } from "@/hooks/usePortfolioSettings";
 
 type PortfolioSettingsFormProps = {
@@ -257,41 +257,23 @@ export const PortfolioSettingsForm = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="showUnrealizedGains"
-                checked={settings.showUnrealizedGains}
-                onChange={(e) =>
-                  handleInputChange("showUnrealizedGains", e.target.checked)
-                }
-                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-800"
-              />
-              <label
-                htmlFor="showUnrealizedGains"
-                className="ml-2 text-sm text-gray-200"
-              >
-                Show Unrealized Gains/Losses
-              </label>
-            </div>
+            <Checkbox
+              id="showUnrealizedGains"
+              label="Show Unrealized Gains/Losses"
+              checked={settings.showUnrealizedGains}
+              onChange={(e) =>
+                handleInputChange("showUnrealizedGains", e.target.checked)
+              }
+            />
 
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="showDividends"
-                checked={settings.showDividends}
-                onChange={(e) =>
-                  handleInputChange("showDividends", e.target.checked)
-                }
-                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-800"
-              />
-              <label
-                htmlFor="showDividends"
-                className="ml-2 text-sm text-gray-200"
-              >
-                Include Dividends in Performance
-              </label>
-            </div>
+            <Checkbox
+              id="showDividends"
+              label="Include Dividends in Performance"
+              checked={settings.showDividends}
+              onChange={(e) =>
+                handleInputChange("showDividends", e.target.checked)
+              }
+            />
           </div>
         </div>
       </div>
@@ -305,13 +287,10 @@ export const PortfolioSettingsForm = ({
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Max Position Size (%)
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="100"
+              <NumberInput
+                label="Max Position Size (%)"
+                min={1}
+                max={100}
                 value={settings.positionSizeLimit}
                 onChange={(e) =>
                   handleInputChange(
@@ -319,18 +298,14 @@ export const PortfolioSettingsForm = ({
                     parseInt(e.target.value)
                   )
                 }
-                className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Max Drawdown Alert (%)
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="50"
+              <NumberInput
+                label="Max Drawdown Alert (%)"
+                min={1}
+                max={50}
                 value={settings.maxDrawdownAlert}
                 onChange={(e) =>
                   handleInputChange(
@@ -338,18 +313,14 @@ export const PortfolioSettingsForm = ({
                     parseInt(e.target.value)
                   )
                 }
-                className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Rebalance Threshold (%)
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="20"
+              <NumberInput
+                label="Rebalance Threshold (%)"
+                min={1}
+                max={20}
                 value={settings.rebalanceThreshold}
                 onChange={(e) =>
                   handleInputChange(
@@ -357,28 +328,18 @@ export const PortfolioSettingsForm = ({
                     parseInt(e.target.value)
                   )
                 }
-                className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
               />
             </div>
           </div>
 
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="enableRiskAlerts"
-              checked={settings.enableRiskAlerts}
-              onChange={(e) =>
-                handleInputChange("enableRiskAlerts", e.target.checked)
-              }
-              className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-800"
-            />
-            <label
-              htmlFor="enableRiskAlerts"
-              className="ml-2 text-sm text-gray-200"
-            >
-              Enable Risk Management Alerts
-            </label>
-          </div>
+          <Checkbox
+            id="enableRiskAlerts"
+            label="Enable Risk Management Alerts"
+            checked={settings.enableRiskAlerts}
+            onChange={(e) =>
+              handleInputChange("enableRiskAlerts", e.target.checked)
+            }
+          />
         </div>
       </div>
 
@@ -401,16 +362,14 @@ export const PortfolioSettingsForm = ({
               <label className="block text-sm font-medium mb-1 text-gray-300 capitalize">
                 {asset} (%)
               </label>
-              <input
-                type="number"
-                min="0"
-                max="100"
-                step="0.1"
+              <NumberInput
+                min={0}
+                max={100}
+                step={0.1}
                 value={value}
                 onChange={(e) =>
                   handleAllocationChange(asset, parseFloat(e.target.value) || 0)
                 }
-                className="w-full border border-gray-600 rounded-md px-3 py-2 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
               />
             </div>
           ))}
@@ -468,49 +427,31 @@ export const PortfolioSettingsForm = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="showVolume"
-                checked={settings.chartSettings.showVolume}
-                onChange={(e) =>
-                  handleNestedInputChange(
-                    "chartSettings",
-                    "showVolume",
-                    e.target.checked
-                  )
-                }
-                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-800"
-              />
-              <label
-                htmlFor="showVolume"
-                className="ml-2 text-sm text-gray-200"
-              >
-                Show Volume Indicator
-              </label>
-            </div>
+            <Checkbox
+              id="showVolume"
+              label="Show Volume Indicator"
+              checked={settings.chartSettings.showVolume}
+              onChange={(e) =>
+                handleNestedInputChange(
+                  "chartSettings",
+                  "showVolume",
+                  e.target.checked
+                )
+              }
+            />
 
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="showMovingAverages"
-                checked={settings.chartSettings.showMovingAverages}
-                onChange={(e) =>
-                  handleNestedInputChange(
-                    "chartSettings",
-                    "showMovingAverages",
-                    e.target.checked
-                  )
-                }
-                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-800"
-              />
-              <label
-                htmlFor="showMovingAverages"
-                className="ml-2 text-sm text-gray-200"
-              >
-                Show Moving Averages
-              </label>
-            </div>
+            <Checkbox
+              id="showMovingAverages"
+              label="Show Moving Averages"
+              checked={settings.chartSettings.showMovingAverages}
+              onChange={(e) =>
+                handleNestedInputChange(
+                  "chartSettings",
+                  "showMovingAverages",
+                  e.target.checked
+                )
+              }
+            />
           </div>
         </div>
       </div>
@@ -524,37 +465,28 @@ export const PortfolioSettingsForm = ({
         <div className="space-y-4">
           {Object.entries(settings.portfolioNotifications).map(
             ([key, value]) => (
-              <div key={key} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={key}
-                  checked={value}
-                  onChange={(e) =>
-                    handleNestedInputChange(
-                      "portfolioNotifications",
-                      key,
-                      e.target.checked
-                    )
-                  }
-                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-800"
-                />
-                <label htmlFor={key} className="ml-2 text-sm text-gray-200">
-                  {key
-                    .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (str) => str.toUpperCase())}
-                </label>
-              </div>
+              <Checkbox
+                key={key}
+                id={key}
+                label={key
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (str) => str.toUpperCase())}
+                checked={value}
+                onChange={(e) =>
+                  handleNestedInputChange(
+                    "portfolioNotifications",
+                    key,
+                    e.target.checked
+                  )
+                }
+              />
             )
           )}
         </div>
       </div>
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full"
-      >
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? "Saving..." : "Save Portfolio Settings"}
       </Button>
     </form>

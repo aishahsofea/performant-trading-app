@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import { PerformanceMetrics } from "@/types";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Button } from "./ui/button";
+import { Button, DateInput } from "@repo/ui/components";
 import { Select } from "./ui/select";
-import { DateInput } from "./date-input";
 import { MetricCard } from "./metric-card";
 import { SummaryStat } from "./summary-stat";
 import { MetricsTable } from "./metrics-table";
@@ -200,7 +199,10 @@ export const PerformanceDashboard = ({
                 <Select
                   options={[
                     { value: "all", label: "All applications" },
-                    ...getUniqueApps().map((app) => ({ value: app, label: app }))
+                    ...getUniqueApps().map((app) => ({
+                      value: app,
+                      label: app,
+                    })),
                   ]}
                   value={selectedApp}
                   onChange={setSelectedApp}

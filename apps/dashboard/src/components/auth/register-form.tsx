@@ -7,9 +7,12 @@ import {
   validateRegistrationForm,
   type RegistrationFormData,
 } from "@/lib/auth-utils";
-import { ContinueWithGoogle } from "./continue-with-google";
-import { Button } from "@/components/ui/button";
-import { CustomPasswordField } from "../ui/custom-password-field";
+import {
+  Button,
+  PasswordInput,
+  ContinueWithGoogle,
+  Input,
+} from "@repo/ui/components";
 
 type RegisterFormProps = {
   callbackUrl?: string;
@@ -130,7 +133,7 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
       {/* Divider */}
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+          <span className="w-full border-t border-gray-500" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-gray-900 px-2 text-gray-500">
@@ -156,74 +159,58 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
 
         {/* Name Field */}
         <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium mb-2 text-gray-200"
-          >
-            Full Name
-          </label>
-          <input
+          <Input
             type="text"
             id="name"
             name="name"
+            label="Full Name"
             value={formData.name}
             onChange={handleInputChange}
-            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
             placeholder="Enter your full name"
             disabled={isLoading}
+            error={errors.name}
           />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
-              {errors.name}
-            </p>
-          )}
         </div>
 
         {/* Email Field */}
         <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium mb-2 text-gray-200"
-          >
-            Email
-          </label>
-          <input
+          <Input
             type="email"
             id="email"
             name="email"
+            label="Email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
             placeholder="Enter your email"
             disabled={isLoading}
+            error={errors.email}
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
-              {errors.email}
-            </p>
-          )}
         </div>
 
         {/* Password Field */}
         <div className="mb-4">
-          <CustomPasswordField
+          <PasswordInput
             id="password"
             label="Password"
-            password={formData.password}
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
             onChange={handleInputChange}
-            isDisabled={isLoading}
+            disabled={isLoading}
             error={errors.password}
           />
         </div>
 
         {/* Confirm Password Field */}
         <div className="mb-6">
-          <CustomPasswordField
+          <PasswordInput
             id="confirmPassword"
             label="Confirm Password"
-            password={formData.confirmPassword}
+            name="confirmPassword"
+            placeholder="Enter your password"
+            value={formData.confirmPassword}
             onChange={handleInputChange}
-            isDisabled={isLoading}
+            disabled={isLoading}
             error={errors.confirmPassword}
           />
         </div>
@@ -237,12 +224,14 @@ export const RegisterForm = ({ callbackUrl = "/" }: RegisterFormProps) => {
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-400">
             Already have an account?{" "}
-            <a
-              href="/auth/login"
-              className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
+            <Button
+              variant="link"
+              size="link"
+              onClick={() => router.push("/auth/login")}
+              disabled={isLoading}
             >
               Sign in
-            </a>
+            </Button>
           </p>
         </div>
       </form>

@@ -4,9 +4,12 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { validateLoginForm, type LoginFormData } from "@/lib/auth-utils";
-import { ContinueWithGoogle } from "./continue-with-google";
-import { Button } from "@/components/ui/button";
-import { CustomPasswordField } from "../ui/custom-password-field";
+import {
+  ContinueWithGoogle,
+  Button,
+  PasswordInput,
+  Input,
+} from "@repo/ui/components";
 
 type LoginFormProps = {
   callbackUrl?: string;
@@ -85,7 +88,7 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
       {/* Divider */}
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
+          <span className="w-full border-t border-gray-500" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-gray-900 px-2 text-gray-500">
@@ -111,49 +114,43 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
 
         {/* Email Field */}
         <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium mb-2 text-white"
-          >
-            Email
-          </label>
-          <input
+          <Input
             type="email"
             id="email"
             name="email"
+            label="Email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-white bg-gray-700 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors placeholder-gray-400"
             placeholder="Enter your email"
             disabled={isLoading}
+            error={errors.email}
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
-              {errors.email}
-            </p>
-          )}
         </div>
 
         {/* Password Field */}
         <div className="mb-6">
-          <CustomPasswordField
+          <PasswordInput
             id="password"
+            name="password"
             label="Password"
-            password={formData.password}
+            placeholder="Enter your password"
+            value={formData.password}
             onChange={handleInputChange}
-            isDisabled={isLoading}
+            disabled={isLoading}
             error={errors.password}
           />
         </div>
 
         {/* Forgot Password Link */}
         <div className="mb-6 text-right">
-          <a
-            href="/auth/forgot-password"
-            className="text-sm font-medium text-violet-400 hover:text-violet-300 transition-colors"
+          <Button
+            variant="link"
+            size="link"
+            onClick={() => router.push("/auth/forgot-password")}
+            disabled={isLoading}
           >
             Forgot password?
-          </a>
+          </Button>
         </div>
 
         {/* Submit Button */}
@@ -164,13 +161,15 @@ export const LoginForm = ({ callbackUrl = "/" }: LoginFormProps) => {
         {/* Register Link */}
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-400">
-            Don't have an account?{" "}
-            <a
-              href="/auth/register"
-              className="font-medium text-violet-400 hover:text-violet-300 transition-colors"
+            Don't have an account?
+            <Button
+              variant="link"
+              size="link"
+              onClick={() => router.push("/auth/register")}
+              disabled={isLoading}
             >
               Sign up
-            </a>
+            </Button>
           </p>
         </div>
       </form>

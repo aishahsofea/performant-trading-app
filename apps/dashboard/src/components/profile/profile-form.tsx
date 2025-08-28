@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { validateEmail } from "@/lib/auth-utils";
-import { Select } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { Select } from "@repo/ui/components";
+import { Button, Input } from "@repo/ui/components";
 import { ProfileImageUpload } from "./profile-image-upload";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
@@ -154,50 +154,32 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
 
       {/* Name Field */}
       <div>
-        <label
-          htmlFor="name"
-          className="block text-sm font-medium mb-2 text-gray-200"
-        >
-          Full Name
-        </label>
-        <input
+        <Input
           type="text"
           id="name"
           name="name"
+          label="Full Name"
           value={formData.name}
           onChange={handleInputChange}
-          className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
           placeholder="Enter your full name"
           disabled={isLoading}
+          error={errors.name}
         />
-        {errors.name && (
-          <p className="mt-1 text-sm text-red-400 font-medium">{errors.name}</p>
-        )}
       </div>
 
       {/* Email Field */}
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium mb-2 text-gray-200"
-        >
-          Email Address
-        </label>
-        <input
+        <Input
           type="email"
           id="email"
           name="email"
+          label="Email Address"
           value={formData.email}
           onChange={handleInputChange}
-          className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
           placeholder="Enter your email address"
           disabled={isLoading}
+          error={errors.email}
         />
-        {errors.email && (
-          <p className="mt-1 text-sm text-red-400 font-medium">
-            {errors.email}
-          </p>
-        )}
       </div>
 
       {/* Bio Field */}
@@ -249,11 +231,7 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
       </div>
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full"
-      >
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? "Saving..." : "Save Profile"}
       </Button>
     </form>

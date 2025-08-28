@@ -42,7 +42,7 @@ export default function RootLayout({
             }}
           >
             <OnboardingProvider>
-              <div className="min-h-screen container mx-auto max-w-full">
+              <div className="min-h-screen container mx-auto max-w-full bg-gray-900">
                 {children}
               </div>
               <DevelopmentPerformancePanel />

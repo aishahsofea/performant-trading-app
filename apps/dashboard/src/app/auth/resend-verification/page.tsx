@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button, Input } from "@repo/ui/components";
 import { useEmailValidation } from "@/hooks/useEmailValidation";
 
 const ResendVerificationPage = () => {
@@ -83,18 +83,12 @@ const ResendVerificationPage = () => {
 
           {/* Email Field */}
           <div className="mb-6">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium mb-2 text-gray-200"
-            >
-              Email Address
-            </label>
-            <input
+            <Input
               type="email"
               id="email"
+              label="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors placeholder-gray-400"
               placeholder="Enter your email address"
               disabled={isLoading}
               required
@@ -102,11 +96,7 @@ const ResendVerificationPage = () => {
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full"
-          >
+          <Button type="submit" disabled={isLoading} className="w-full">
             {isLoading ? "Sending..." : "Send Verification Email"}
           </Button>
 

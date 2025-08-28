@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useState, useRef, useEffect, createContext, useContext } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../utils";
 
 type Option = {
   value: string;
@@ -16,7 +16,7 @@ const SelectContext = createContext<{
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
 }>({
-  value: '',
+  value: "",
   isOpen: false,
   setIsOpen: () => {},
 });
@@ -29,6 +29,8 @@ type SimpleSelectProps = {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  label?: string;
+  error?: string;
 };
 
 // Compositional API Props
@@ -38,13 +40,15 @@ type CompositeSelectProps = {
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
+  label?: string;
+  error?: string;
 };
 
 type SelectProps = SimpleSelectProps | CompositeSelectProps;
 
 // Type guard to differentiate between APIs
 function isSimpleSelect(props: SelectProps): props is SimpleSelectProps {
-  return 'options' in props;
+  return "options" in props;
 }
 
 export const Select = (props: SelectProps) => {
@@ -67,7 +71,16 @@ export const Select = (props: SelectProps) => {
 
   // Simple API
   if (isSimpleSelect(props)) {
-    const { options, value, onChange, placeholder = "Select option", disabled = false, className = "" } = props;
+    const {
+      options,
+      value,
+      onChange,
+      placeholder = "Select option",
+      disabled = false,
+      className = "",
+      label,
+      error,
+    } = props;
     const selectedOption = options.find((option) => option.value === value);
 
     const handleOptionSelect = (optionValue: string) => {
@@ -76,45 +89,83 @@ export const Select = (props: SelectProps) => {
     };
 
     return (
-      <div ref={selectRef} className={cn("relative", className)}>
-        <SelectTrigger disabled={disabled} onClick={() => !disabled && setIsOpen(!isOpen)}>
-          <SelectValue>
-            {selectedOption ? selectedOption.label : placeholder}
-          </SelectValue>
-        </SelectTrigger>
-
-        {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-md shadow-xl max-h-60 overflow-auto">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => handleOptionSelect(option.value)}
-                className={cn(
-                  "w-full px-3 py-2.5 text-sm text-left transition-all duration-200",
-                  option.value === value
-                    ? "bg-violet-600 text-white"
-                    : "text-gray-200 hover:bg-gray-700 hover:text-white"
-                )}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
+      <>
+        {label && (
+          <label className="block text-sm font-medium mb-2 text-gray-200">
+            {label}
+          </label>
         )}
-      </div>
+        <div ref={selectRef} className={cn("relative", className)}>
+          <SelectTrigger
+            disabled={disabled}
+            onClick={() => !disabled && setIsOpen(!isOpen)}
+            className={error ? "border-red-500 focus:ring-red-500" : ""}
+          >
+            <SelectValue>
+              {selectedOption ? selectedOption.label : placeholder}
+            </SelectValue>
+          </SelectTrigger>
+
+          {isOpen && (
+            <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-md shadow-xl max-h-60 overflow-auto">
+              {options.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => handleOptionSelect(option.value)}
+                  className={cn(
+                    "w-full px-3 py-2.5 text-sm text-left transition-all duration-200",
+                    option.value === value
+                      ? "bg-violet-600 text-white"
+                      : "text-gray-200 hover:bg-gray-700 hover:text-white"
+                  )}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        {error && (
+          <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
+            {error}
+          </p>
+        )}
+      </>
     );
   }
 
   // Compositional API
-  const { value, onValueChange, children, disabled = false, className = "" } = props;
-  
+  const {
+    value,
+    onValueChange,
+    children,
+    disabled = false,
+    className = "",
+    label,
+    error,
+  } = props;
+
   return (
-    <SelectContext.Provider value={{ value, onValueChange, isOpen, setIsOpen }}>
-      <div ref={selectRef} className={cn("relative", className)}>
-        {children}
-      </div>
-    </SelectContext.Provider>
+    <>
+      {label && (
+        <label className="block text-sm font-medium mb-2 text-gray-200">
+          {label}
+        </label>
+      )}
+      <SelectContext.Provider
+        value={{ value, onValueChange, isOpen, setIsOpen }}
+      >
+        <div ref={selectRef} className={cn("relative", className)}>
+          {children}
+        </div>
+      </SelectContext.Provider>
+      {error && (
+        <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
+          {error}
+        </p>
+      )}
+    </>
   );
 };
 
@@ -126,13 +177,13 @@ const SelectTrigger = React.forwardRef<
   }
 >(({ className, children, onClick, ...props }, ref) => {
   const { isOpen, setIsOpen } = useContext(SelectContext);
-  
+
   return (
     <button
       ref={ref}
       type="button"
       className={cn(
-        "w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-white bg-gray-700",
+        "w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-white bg-gray-800",
         "hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500",
         "transition-all duration-200 text-left flex items-center justify-between",
         "disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer",
@@ -147,7 +198,7 @@ const SelectTrigger = React.forwardRef<
       {children}
       <svg
         className={cn(
-          "w-4 h-4 text-gray-400 transition-transform",
+          "w-4 h-4 text-gray-400 transition-transform ml-1.5",
           isOpen ? "rotate-180" : ""
         )}
         fill="none"
@@ -175,10 +226,7 @@ const SelectValue = React.forwardRef<
 >(({ className, children, placeholder, ...props }, ref) => (
   <span
     ref={ref}
-    className={cn(
-      children ? "text-white" : "text-gray-400",
-      className
-    )}
+    className={cn(children ? "text-white" : "text-gray-400", className)}
     {...props}
   >
     {children || placeholder}
@@ -191,9 +239,9 @@ const SelectContent = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => {
   const { isOpen } = useContext(SelectContext);
-  
+
   if (!isOpen) return null;
-  
+
   return (
     <div
       ref={ref}
@@ -216,9 +264,13 @@ const SelectItem = React.forwardRef<
     children?: React.ReactNode;
   }
 >(({ className, children, value, onClick, ...props }, ref) => {
-  const { value: selectedValue, onValueChange, setIsOpen } = useContext(SelectContext);
+  const {
+    value: selectedValue,
+    onValueChange,
+    setIsOpen,
+  } = useContext(SelectContext);
   const isSelected = value === selectedValue;
-  
+
   return (
     <button
       ref={ref}
@@ -243,9 +295,4 @@ const SelectItem = React.forwardRef<
 });
 SelectItem.displayName = "SelectItem";
 
-export {
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-};
+export { SelectTrigger, SelectValue, SelectContent, SelectItem };

@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@repo/ui/components";
 import { Badge } from "@/components/ui/badge";
 import {
   Clock,

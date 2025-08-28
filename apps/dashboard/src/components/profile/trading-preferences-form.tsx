@@ -2,8 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { TradingPreferences, defaultTradingPreferences } from "@/types/profile";
-import { Select } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+import { Select } from "@repo/ui/components";
+import {
+  Button,
+  NumberInput,
+  TimeInput,
+  Checkbox,
+  RadioGroup,
+} from "@repo/ui/components";
 import { useTradingPreferences } from "@/hooks/useTradingPreferences";
 
 type TradingPreferencesFormProps = {
@@ -153,13 +159,10 @@ export const TradingPreferencesForm = ({
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Refresh Interval (seconds)
-              </label>
-              <input
-                type="number"
-                min="5"
-                max="300"
+              <NumberInput
+                label="Refresh Interval (seconds)"
+                min={5}
+                max={300}
                 value={preferences.metricsRefreshInterval}
                 onChange={(e) =>
                   handleInputChange(
@@ -167,27 +170,17 @@ export const TradingPreferencesForm = ({
                     parseInt(e.target.value)
                   )
                 }
-                className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
               />
             </div>
 
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="realTimeAlerts"
-                checked={preferences.showRealTimeAlerts}
-                onChange={(e) =>
-                  handleInputChange("showRealTimeAlerts", e.target.checked)
-                }
-                className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-800"
-              />
-              <label
-                htmlFor="realTimeAlerts"
-                className="ml-2 text-sm text-gray-200"
-              >
-                Enable Real-time Alerts
-              </label>
-            </div>
+            <Checkbox
+              id="realTimeAlerts"
+              label="Enable Real-time Alerts"
+              checked={preferences.showRealTimeAlerts}
+              onChange={(e) =>
+                handleInputChange("showRealTimeAlerts", e.target.checked)
+              }
+            />
           </div>
 
           {/* Alert Thresholds */}
@@ -197,11 +190,8 @@ export const TradingPreferencesForm = ({
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-300">
-                  LCP (ms)
-                </label>
-                <input
-                  type="number"
+                <NumberInput
+                  label="LCP (ms)"
                   value={preferences.alertThresholds.lcp}
                   onChange={(e) =>
                     handleNestedInputChange(
@@ -210,15 +200,11 @@ export const TradingPreferencesForm = ({
                       parseInt(e.target.value)
                     )
                   }
-                  className="w-full border border-gray-600 rounded-md px-3 py-2 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-300">
-                  FID (ms)
-                </label>
-                <input
-                  type="number"
+                <NumberInput
+                  label="FID (ms)"
                   value={preferences.alertThresholds.fid}
                   onChange={(e) =>
                     handleNestedInputChange(
@@ -227,16 +213,12 @@ export const TradingPreferencesForm = ({
                       parseInt(e.target.value)
                     )
                   }
-                  className="w-full border border-gray-600 rounded-md px-3 py-2 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-300">
-                  CLS
-                </label>
-                <input
-                  type="number"
-                  step="0.01"
+                <NumberInput
+                  label="CLS"
+                  step={0.01}
                   value={preferences.alertThresholds.cls}
                   onChange={(e) =>
                     handleNestedInputChange(
@@ -245,7 +227,6 @@ export const TradingPreferencesForm = ({
                       parseFloat(e.target.value)
                     )
                   }
-                  className="w-full border border-gray-600 rounded-md px-3 py-2 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 />
               </div>
             </div>
@@ -260,32 +241,18 @@ export const TradingPreferencesForm = ({
         </h3>
 
         <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium mb-2 text-gray-200">
-              Risk Tolerance
-            </label>
-            <div className="flex space-x-4">
-              {(["conservative", "moderate", "aggressive"] as const).map(
-                (level) => (
-                  <label key={level} className="flex items-center">
-                    <input
-                      type="radio"
-                      name="riskTolerance"
-                      value={level}
-                      checked={preferences.riskTolerance === level}
-                      onChange={(e) =>
-                        handleInputChange("riskTolerance", e.target.value)
-                      }
-                      className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 bg-gray-800"
-                    />
-                    <span className="ml-2 text-sm text-gray-200 capitalize">
-                      {level}
-                    </span>
-                  </label>
-                )
-              )}
-            </div>
-          </div>
+          <RadioGroup
+            name="riskTolerance"
+            label="Risk Tolerance"
+            value={preferences.riskTolerance}
+            onChange={(value) => handleInputChange("riskTolerance", value)}
+            options={[
+              { value: "conservative", label: "Conservative" },
+              { value: "moderate", label: "Moderate" },
+              { value: "aggressive", label: "Aggressive" },
+            ]}
+            orientation="horizontal"
+          />
 
           <div>
             <h4 className="text-md font-medium text-gray-200 mb-3">
@@ -293,11 +260,8 @@ export const TradingPreferencesForm = ({
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-300">
-                  Start Time
-                </label>
-                <input
-                  type="time"
+                <TimeInput
+                  label="Start Time"
                   value={preferences.tradingHours.start}
                   onChange={(e) =>
                     handleNestedInputChange(
@@ -306,15 +270,11 @@ export const TradingPreferencesForm = ({
                       e.target.value
                     )
                   }
-                  className="w-full border border-gray-600 rounded-md px-3 py-2 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-300">
-                  End Time
-                </label>
-                <input
-                  type="time"
+                <TimeInput
+                  label="End Time"
                   value={preferences.tradingHours.end}
                   onChange={(e) =>
                     handleNestedInputChange(
@@ -323,7 +283,6 @@ export const TradingPreferencesForm = ({
                       e.target.value
                     )
                   }
-                  className="w-full border border-gray-600 rounded-md px-3 py-2 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
                 />
               </div>
               <div>
@@ -358,37 +317,28 @@ export const TradingPreferencesForm = ({
         <div className="space-y-4">
           {Object.entries(preferences.emailNotifications).map(
             ([key, value]) => (
-              <div key={key} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={key}
-                  checked={value}
-                  onChange={(e) =>
-                    handleNestedInputChange(
-                      "emailNotifications",
-                      key,
-                      e.target.checked
-                    )
-                  }
-                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded bg-gray-800"
-                />
-                <label htmlFor={key} className="ml-2 text-sm text-gray-200">
-                  {key
-                    .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, (str) => str.toUpperCase())}
-                </label>
-              </div>
+              <Checkbox
+                key={key}
+                id={key}
+                label={key
+                  .replace(/([A-Z])/g, " $1")
+                  .replace(/^./, (str) => str.toUpperCase())}
+                checked={value}
+                onChange={(e) =>
+                  handleNestedInputChange(
+                    "emailNotifications",
+                    key,
+                    e.target.checked
+                  )
+                }
+              />
             )
           )}
         </div>
       </div>
 
       {/* Submit Button */}
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full"
-      >
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? "Saving..." : "Save Trading Preferences"}
       </Button>
     </form>

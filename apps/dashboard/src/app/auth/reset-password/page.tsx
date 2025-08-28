@@ -2,8 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { CustomPasswordField } from "@/components/ui/custom-password-field";
+import { Button, PasswordInput } from "@repo/ui/components";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
@@ -128,24 +127,24 @@ const ResetPasswordForm = () => {
 
           {/* New Password Field */}
           <div className="mb-4">
-            <CustomPasswordField
+            <PasswordInput
               id="password"
               label="New Password"
-              password={formData.password}
+              value={formData.password}
               onChange={handleInputChange}
-              isDisabled={isLoading}
+              disabled={isLoading}
               placeholder="Enter your new password"
             />
           </div>
 
           {/* Confirm Password Field */}
           <div className="mb-6">
-            <CustomPasswordField
+            <PasswordInput
               id="confirmPassword"
               label="Confirm New Password"
-              password={formData.confirmPassword}
+              value={formData.confirmPassword}
               onChange={handleInputChange}
-              isDisabled={isLoading}
+              disabled={isLoading}
               placeholder="Confirm your new password"
             />
           </div>

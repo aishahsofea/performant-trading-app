@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui/components";
 
 const VerifyEmailForm = () => {
   const router = useRouter();
@@ -145,11 +145,13 @@ const VerifyEmailForm = () => {
 
 const VerifyEmailPage = () => {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-gray-100">Loading...</div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gray-900">
+          <div className="text-gray-100">Loading...</div>
+        </div>
+      }
+    >
       <VerifyEmailForm />
     </Suspense>
   );
