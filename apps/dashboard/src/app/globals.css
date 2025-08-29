@@ -1,1 +1,4 @@
 @import "@repo/tailwind-config";
+
+/* NECESSARY FOR SCANNING TAILWIND CLASSES */
+@source '../../node_modules/@repo/ui';

@@ -3,10 +3,18 @@
 import { useEffect, useState } from "react";
 import { PerformanceMetrics } from "@/types";
 import { useDebounce } from "@/hooks/useDebounce";
-import { Button, DateInput } from "@repo/ui/components";
-import { Select } from "./ui/select";
+import {
+  Button,
+  DateInput,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Spinner,
+  SummaryStats,
+} from "@repo/ui/components";
 import { MetricCard } from "./metric-card";
-import { SummaryStat } from "./summary-stat";
 import { MetricsTable } from "./metrics-table";
 
 type MetricsSummary = {
@@ -139,12 +147,7 @@ export const PerformanceDashboard = ({
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-violet-500"></div>
-          <div className="text-lg text-white">
-            Loading performance metrics...
-          </div>
-        </div>
+        <Spinner size="lg" text="Loading performance metrics..." />
       </div>
     );
   }
@@ -190,24 +193,23 @@ export const PerformanceDashboard = ({
 
             {showAppFilter && (
               <div>
-                <label
-                  className="block text-sm font-medium text-gray-200 mb-2"
-                  htmlFor="application"
-                >
-                  Application
-                </label>
                 <Select
-                  options={[
-                    { value: "all", label: "All applications" },
-                    ...getUniqueApps().map((app) => ({
-                      value: app,
-                      label: app,
-                    })),
-                  ]}
+                  label="Application"
                   value={selectedApp}
-                  onChange={setSelectedApp}
-                  placeholder="Select application"
-                />
+                  onValueChange={setSelectedApp}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select application" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All applications</SelectItem>
+                    {getUniqueApps().map((app) => (
+                      <SelectItem key={app} value={app}>
+                        {app}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             )}
           </div>
@@ -291,17 +293,18 @@ export const PerformanceDashboard = ({
 
             {/* Summary Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <SummaryStat
+              <SummaryStats
                 icon="👥"
                 title="Total Sessions"
                 value={summary.totalSessions}
               />
-              <SummaryStat
+              <SummaryStats
                 icon="⚠️"
                 title="Total Errors"
                 value={summary.totalErrors}
+                variant={summary.totalErrors > 0 ? "warning" : "default"}
               />
-              <SummaryStat
+              <SummaryStats
                 icon="📊"
                 title="Error Rate"
                 value={
@@ -312,6 +315,7 @@ export const PerformanceDashboard = ({
                       ).toFixed(2)}%`
                     : "0%"
                 }
+                variant={summary.totalErrors > 0 ? "danger" : "success"}
               />
             </div>
 

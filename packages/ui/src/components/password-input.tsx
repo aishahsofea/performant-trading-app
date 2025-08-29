@@ -42,17 +42,16 @@ const toggleButtonVariants = cva(
   }
 );
 
-export interface PasswordInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size">,
-    VariantProps<typeof passwordInputVariants> {
+export type PasswordInputProps = {
   label: string;
   error?: string;
-}
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "size"> &
+  VariantProps<typeof passwordInputVariants>;
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ className, variant, size, label, error, disabled, ...props }, ref) => {
     const [showPassword, setShowPassword] = useState(false);
-    
+
     const inputVariant = error ? "error" : variant;
 
     return (
@@ -66,17 +65,21 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
-            className={cn(passwordInputVariants({ variant: inputVariant, size, className }))}
+            className={cn(
+              passwordInputVariants({ variant: inputVariant, size, className })
+            )}
             ref={ref}
             disabled={disabled}
             {...props}
           />
           <button
             type="button"
-            onClick={disabled ? undefined : () => setShowPassword(!showPassword)}
+            onClick={
+              disabled ? undefined : () => setShowPassword(!showPassword)
+            }
             className={cn(
-              toggleButtonVariants({ 
-                state: disabled ? "disabled" : "enabled" 
+              toggleButtonVariants({
+                state: disabled ? "disabled" : "enabled",
               })
             )}
             disabled={disabled}

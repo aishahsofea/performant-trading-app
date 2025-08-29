@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@repo/ui/components";
+import { Button, Spinner } from "@repo/ui/components";
 
 const VerifyEmailForm = () => {
   const router = useRouter();
@@ -77,7 +77,7 @@ const VerifyEmailForm = () => {
           {isVerifying && (
             <div className="mb-4 p-3 bg-blue-900/20 border border-blue-500 rounded-md">
               <div className="flex items-center">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400 mr-2"></div>
+                <Spinner size="sm" className="mr-2 border-blue-400" />
                 <p className="text-sm text-blue-400 font-medium">
                   Verifying your email address...
                 </p>

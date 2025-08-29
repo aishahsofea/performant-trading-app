@@ -15,6 +15,8 @@ const SelectContext = createContext<{
   onValueChange?: (value: string) => void;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  selectedLabel?: string;
+  setSelectedLabel?: (label: string) => void;
 }>({
   value: "",
   isOpen: false,
@@ -23,6 +25,7 @@ const SelectContext = createContext<{
 
 // Simple API Props
 type SimpleSelectProps = {
+  id: string;
   options: Option[];
   value: string;
   onChange: (value: string) => void;
@@ -53,6 +56,7 @@ function isSimpleSelect(props: SelectProps): props is SimpleSelectProps {
 
 export const Select = (props: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedLabel, setSelectedLabel] = useState("");
   const selectRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -69,72 +73,6 @@ export const Select = (props: SelectProps) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Simple API
-  if (isSimpleSelect(props)) {
-    const {
-      options,
-      value,
-      onChange,
-      placeholder = "Select option",
-      disabled = false,
-      className = "",
-      label,
-      error,
-    } = props;
-    const selectedOption = options.find((option) => option.value === value);
-
-    const handleOptionSelect = (optionValue: string) => {
-      onChange(optionValue);
-      setIsOpen(false);
-    };
-
-    return (
-      <>
-        {label && (
-          <label className="block text-sm font-medium mb-2 text-gray-200">
-            {label}
-          </label>
-        )}
-        <div ref={selectRef} className={cn("relative", className)}>
-          <SelectTrigger
-            disabled={disabled}
-            onClick={() => !disabled && setIsOpen(!isOpen)}
-            className={error ? "border-red-500 focus:ring-red-500" : ""}
-          >
-            <SelectValue>
-              {selectedOption ? selectedOption.label : placeholder}
-            </SelectValue>
-          </SelectTrigger>
-
-          {isOpen && (
-            <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-md shadow-xl max-h-60 overflow-auto">
-              {options.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => handleOptionSelect(option.value)}
-                  className={cn(
-                    "w-full px-3 py-2.5 text-sm text-left transition-all duration-200",
-                    option.value === value
-                      ? "bg-violet-600 text-white"
-                      : "text-gray-200 hover:bg-gray-700 hover:text-white"
-                  )}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-        {error && (
-          <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
-            {error}
-          </p>
-        )}
-      </>
-    );
-  }
-
   // Compositional API
   const {
     value,
@@ -144,7 +82,91 @@ export const Select = (props: SelectProps) => {
     className = "",
     label,
     error,
-  } = props;
+  } = props as CompositeSelectProps;
+
+  // Extract label from children when value changes
+  useEffect(() => {
+    if (value && children) {
+      const findLabelFromChildren = (
+        children: React.ReactNode,
+        targetValue: string
+      ): string => {
+        let foundLabel = "";
+
+        React.Children.forEach(children, (child) => {
+          if (React.isValidElement(child)) {
+            // Handle Fragment case (React.Fragment or <>)
+            const childProps = child.props as {
+              children?: React.ReactNode;
+              value?: string;
+            };
+            if (child.type === React.Fragment && child.props) {
+              foundLabel = findLabelFromChildren(
+                childProps.children,
+                targetValue
+              );
+            }
+            // Check by displayName instead of direct type comparison
+            else if (
+              child.type &&
+              typeof child.type === "function" &&
+              (child.type as React.ComponentType<any>).displayName ===
+                "SelectContent"
+            ) {
+              foundLabel = findLabelFromChildren(
+                childProps.children,
+                targetValue
+              );
+            } else if (
+              child.type &&
+              typeof child.type === "function" &&
+              (child.type as React.ComponentType<any>).displayName ===
+                "SelectItem" &&
+              childProps.value === targetValue
+            ) {
+              foundLabel = childProps.children?.toString() || targetValue;
+            }
+            // Also check direct type comparison as fallback
+            else if (child.type === SelectContent) {
+              foundLabel = findLabelFromChildren(
+                childProps.children,
+                targetValue
+              );
+            } else if (
+              child.type === SelectItem &&
+              childProps.value === targetValue
+            ) {
+              foundLabel = childProps.children?.toString() || targetValue;
+            }
+          }
+        });
+
+        return foundLabel;
+      };
+
+      const label = findLabelFromChildren(children, value);
+      if (label) {
+        setSelectedLabel(label);
+      }
+    }
+  }, [value, children]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [isOpen]);
 
   return (
     <>
@@ -154,7 +176,14 @@ export const Select = (props: SelectProps) => {
         </label>
       )}
       <SelectContext.Provider
-        value={{ value, onValueChange, isOpen, setIsOpen }}
+        value={{
+          value,
+          onValueChange,
+          isOpen,
+          setIsOpen,
+          selectedLabel,
+          setSelectedLabel,
+        }}
       >
         <div ref={selectRef} className={cn("relative", className)}>
           {children}
@@ -223,15 +252,30 @@ const SelectValue = React.forwardRef<
     placeholder?: string;
     children?: React.ReactNode;
   }
->(({ className, children, placeholder, ...props }, ref) => (
-  <span
-    ref={ref}
-    className={cn(children ? "text-white" : "text-gray-400", className)}
-    {...props}
-  >
-    {children || placeholder}
-  </span>
-));
+>(({ className, children, placeholder, ...props }, ref) => {
+  const { value, selectedLabel } = useContext(SelectContext);
+
+  // If children are provided, use them (for custom content)
+  if (children) {
+    return (
+      <span ref={ref} className={cn("text-white", className)} {...props}>
+        {children}
+      </span>
+    );
+  }
+
+  // Show the selected label, or value, or placeholder
+  const displayValue = selectedLabel || value || placeholder;
+  return (
+    <span
+      ref={ref}
+      className={cn(value ? "text-white" : "text-gray-400", className)}
+      {...props}
+    >
+      {displayValue}
+    </span>
+  );
+});
 SelectValue.displayName = "SelectValue";
 
 const SelectContent = React.forwardRef<
@@ -268,6 +312,7 @@ const SelectItem = React.forwardRef<
     value: selectedValue,
     onValueChange,
     setIsOpen,
+    setSelectedLabel,
   } = useContext(SelectContext);
   const isSelected = value === selectedValue;
 
@@ -284,7 +329,8 @@ const SelectItem = React.forwardRef<
       )}
       onClick={(e) => {
         onValueChange?.(value);
-        setIsOpen(false);
+        setSelectedLabel?.(children?.toString() || value);
+        setIsOpen?.(false);
         onClick?.(e);
       }}
       {...props}

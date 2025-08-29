@@ -1,13 +1,13 @@
 import * as React from "react";
 import { cn } from "../utils";
 
-export interface RadioOption {
+export type RadioOption = {
   value: string;
   label: string;
   disabled?: boolean;
-}
+};
 
-export interface RadioGroupProps {
+export type RadioGroupProps = {
   name: string;
   options: RadioOption[];
   value?: string;
@@ -17,7 +17,7 @@ export interface RadioGroupProps {
   error?: string;
   label?: string;
   orientation?: "horizontal" | "vertical";
-}
+};
 
 const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
   (

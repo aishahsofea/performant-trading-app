@@ -7,10 +7,11 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+  DialogBody,
+  DialogFooter,
+} from "@repo/ui/components";
 import { Button } from "@repo/ui/components";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { OnboardingWelcome } from "./onboarding-welcome";
 import { OnboardingStep } from "./onboarding-step";
 import { X, ArrowLeft, ArrowRight, Check } from "lucide-react";
@@ -106,34 +107,8 @@ export const OnboardingModal = ({ isOpen, onClose }: OnboardingModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader className="flex flex-row items-center justify-between space-y-0">
-          <DialogTitle className="text-xl font-semibold">
-            {showWelcome ? "Welcome!" : currentStep?.title || "Setup"}
-          </DialogTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleClose}
-            className="h-6 w-6 p-0"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </DialogHeader>
-
-        {!showWelcome && (
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span>
-                Step {currentStepIndex + 1} of {steps.length}
-              </span>
-              <span>{Math.round(progress)}% complete</span>
-            </div>
-            <Progress value={progress} className="h-2" />
-          </div>
-        )}
-
-        <div className="py-4">
+      <DialogContent className="max-w-4xl">
+        <DialogBody>
           {showWelcome ? (
             <OnboardingWelcome
               onStart={handleStartOnboarding}
@@ -151,10 +126,10 @@ export const OnboardingModal = ({ isOpen, onClose }: OnboardingModalProps) => {
               <p className="text-muted-foreground">Loading...</p>
             </div>
           )}
-        </div>
+        </DialogBody>
 
         {!showWelcome && currentStep && (
-          <div className="flex items-center justify-between pt-4 border-t">
+          <DialogFooter className="flex items-center justify-between pt-4">
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
@@ -168,11 +143,7 @@ export const OnboardingModal = ({ isOpen, onClose }: OnboardingModalProps) => {
             </div>
 
             <div className="flex items-center gap-2">
-              {currentStep.isRequired ? (
-                <Badge variant="outline" className="text-xs">
-                  Required
-                </Badge>
-              ) : (
+              {currentStep.isRequired ? null : (
                 <Button
                   variant="outline"
                   onClick={handleSkipStep}
@@ -202,7 +173,7 @@ export const OnboardingModal = ({ isOpen, onClose }: OnboardingModalProps) => {
                 )}
               </Button>
             </div>
-          </div>
+          </DialogFooter>
         )}
       </DialogContent>
     </Dialog>

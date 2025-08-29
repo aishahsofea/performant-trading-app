@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@repo/ui/components";
 
 const LogoutPage = () => {
   const { data: session, status } = useSession();
@@ -67,13 +68,14 @@ const LogoutPage = () => {
           <h1 className="text-2xl font-semibold text-gray-100 mb-4">
             Sign Out
           </h1>
-          
+
           <div className="mb-6">
             <p className="text-gray-300 mb-2">
               Are you sure you want to sign out?
             </p>
             <p className="text-sm text-gray-400">
-              You're currently signed in as <span className="font-medium">{session?.user?.email}</span>
+              You're currently signed in as{" "}
+              <span className="font-medium">{session?.user?.email}</span>
             </p>
           </div>
 
@@ -93,14 +95,14 @@ const LogoutPage = () => {
                   Cancel
                 </button>
               </div>
-              
+
               <p className="text-xs text-gray-500">
                 You will be automatically signed out in 5 seconds
               </p>
             </>
           ) : (
             <div className="flex items-center justify-center space-x-2">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-purple-500"></div>
+              <Spinner size="sm" className="border-purple-500" />
               <span className="text-gray-400">Signing out...</span>
             </div>
           )}

@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { validateEmail } from "@/lib/auth-utils";
-import { Select } from "@repo/ui/components";
-import { Button, Input } from "@repo/ui/components";
+import { Select, Button, Input, Textarea, Alert } from "@repo/ui/components";
 import { ProfileImageUpload } from "./profile-image-upload";
 import { useUserProfile } from "@/hooks/useUserProfile";
 
@@ -133,16 +132,16 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Success Message */}
       {successMessage && (
-        <div className="p-3 bg-green-900/20 border border-green-500 rounded-md">
-          <p className="text-sm text-green-400 font-medium">{successMessage}</p>
-        </div>
+        <Alert variant="success">
+          {successMessage}
+        </Alert>
       )}
 
       {/* General Error */}
       {errors.general && (
-        <div className="p-3 bg-red-900/20 border border-red-500 rounded-md">
-          <p className="text-sm text-red-400 font-medium">{errors.general}</p>
-        </div>
+        <Alert variant="error">
+          {errors.general}
+        </Alert>
       )}
 
       {/* Profile Image Upload */}
@@ -183,34 +182,22 @@ export const ProfileForm = ({ onSave }: ProfileFormProps) => {
       </div>
 
       {/* Bio Field */}
-      <div>
-        <label
-          htmlFor="bio"
-          className="block text-sm font-medium mb-2 text-gray-200"
-        >
-          Bio
-        </label>
-        <textarea
-          id="bio"
-          name="bio"
-          value={formData.bio}
-          onChange={handleInputChange}
-          rows={4}
-          className="w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-gray-100 bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors resize-vertical placeholder-gray-400"
-          placeholder="Tell us about yourself and your trading experience"
-          disabled={isLoading}
-        />
-      </div>
+      <Textarea
+        id="bio"
+        name="bio"
+        label="Bio"
+        value={formData.bio}
+        onChange={handleInputChange}
+        rows={4}
+        placeholder="Tell us about yourself and your trading experience"
+        disabled={isLoading}
+      />
 
       {/* Timezone Field */}
       <div>
-        <label
-          htmlFor="timezone"
-          className="block text-sm font-medium mb-2 text-gray-200"
-        >
-          Timezone
-        </label>
         <Select
+          id="timezone"
+          label="Timezone"
           value={formData.timezone}
           onChange={(value) =>
             setFormData((prev) => ({ ...prev, timezone: value }))

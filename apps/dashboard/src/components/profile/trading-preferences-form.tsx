@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { TradingPreferences, defaultTradingPreferences } from "@/types/profile";
-import { Select } from "@repo/ui/components";
 import {
+  Select,
   Button,
   NumberInput,
   TimeInput,
   Checkbox,
   RadioGroup,
+  Alert,
 } from "@repo/ui/components";
 import { useTradingPreferences } from "@/hooks/useTradingPreferences";
 
@@ -100,15 +101,15 @@ export const TradingPreferencesForm = ({
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Success/Error Messages */}
       {successMessage && (
-        <div className="p-3 bg-green-900/20 border border-green-500 rounded-md">
-          <p className="text-sm text-green-400 font-medium">{successMessage}</p>
-        </div>
+        <Alert variant="success">
+          {successMessage}
+        </Alert>
       )}
 
       {error && (
-        <div className="p-3 bg-red-900/20 border border-red-500 rounded-md">
-          <p className="text-sm text-red-400 font-medium">{error}</p>
-        </div>
+        <Alert variant="error">
+          {error}
+        </Alert>
       )}
 
       {/* Display Settings */}
@@ -119,10 +120,9 @@ export const TradingPreferencesForm = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-200">
-              Default View
-            </label>
             <Select
+              id="defaultView"
+              label="Default View"
               value={preferences.defaultView}
               onChange={(value) => handleInputChange("defaultView", value)}
               options={[
@@ -134,10 +134,9 @@ export const TradingPreferencesForm = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-200">
-              Theme
-            </label>
             <Select
+              id="theme"
+              label="Theme"
               value={preferences.theme}
               onChange={(value) => handleInputChange("theme", value)}
               options={[
@@ -286,10 +285,9 @@ export const TradingPreferencesForm = ({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1 text-gray-300">
-                  Timezone
-                </label>
                 <Select
+                  id="timezone"
+                  label="Timezone"
                   value={preferences.tradingHours.timezone}
                   onChange={(value) =>
                     handleNestedInputChange("tradingHours", "timezone", value)

@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { PortfolioSettings, defaultPortfolioSettings } from "@/types/portfolio";
-import { Select } from "@repo/ui/components";
-import { Button, NumberInput, Checkbox } from "@repo/ui/components";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Button, NumberInput, Checkbox, Alert } from "@repo/ui/components";
 import { usePortfolioSettings } from "@/hooks/usePortfolioSettings";
 
 type PortfolioSettingsFormProps = {
@@ -125,15 +124,15 @@ export const PortfolioSettingsForm = ({
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Success/Error Messages */}
       {successMessage && (
-        <div className="p-3 bg-green-900/20 border border-green-500 rounded-md">
-          <p className="text-sm text-green-400 font-medium">{successMessage}</p>
-        </div>
+        <Alert variant="success">
+          {successMessage}
+        </Alert>
       )}
 
       {error && (
-        <div className="p-3 bg-red-900/20 border border-red-500 rounded-md">
-          <p className="text-sm text-red-400 font-medium">{error}</p>
-        </div>
+        <Alert variant="error">
+          {error}
+        </Alert>
       )}
 
       {/* Display Settings */}
@@ -144,66 +143,74 @@ export const PortfolioSettingsForm = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-200">
-              Default Currency
-            </label>
             <Select
+              label="Default Currency"
               value={settings.defaultCurrency}
-              onChange={(value) => handleInputChange("defaultCurrency", value)}
-              options={[
-                { value: "USD", label: "US Dollar (USD)" },
-                { value: "EUR", label: "Euro (EUR)" },
-                { value: "GBP", label: "British Pound (GBP)" },
-                { value: "JPY", label: "Japanese Yen (JPY)" },
-                { value: "CAD", label: "Canadian Dollar (CAD)" },
-                { value: "AUD", label: "Australian Dollar (AUD)" },
-              ]}
-            />
+              onValueChange={(value) => handleInputChange("defaultCurrency", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select currency" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="USD">US Dollar (USD)</SelectItem>
+                <SelectItem value="EUR">Euro (EUR)</SelectItem>
+                <SelectItem value="GBP">British Pound (GBP)</SelectItem>
+                <SelectItem value="JPY">Japanese Yen (JPY)</SelectItem>
+                <SelectItem value="CAD">Canadian Dollar (CAD)</SelectItem>
+                <SelectItem value="AUD">Australian Dollar (AUD)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-200">
-              Display Mode
-            </label>
             <Select
+              label="Display Mode"
               value={settings.displayMode}
-              onChange={(value) => handleInputChange("displayMode", value)}
-              options={[
-                { value: "detailed", label: "Detailed View" },
-                { value: "compact", label: "Compact View" },
-                { value: "grid", label: "Grid View" },
-              ]}
-            />
+              onValueChange={(value) => handleInputChange("displayMode", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select display mode" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="detailed">Detailed View</SelectItem>
+                <SelectItem value="compact">Compact View</SelectItem>
+                <SelectItem value="grid">Grid View</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-200">
-              Sort By
-            </label>
             <Select
+              label="Sort By"
               value={settings.sortBy}
-              onChange={(value) => handleInputChange("sortBy", value)}
-              options={[
-                { value: "name", label: "Name" },
-                { value: "value", label: "Value" },
-                { value: "performance", label: "Performance" },
-                { value: "allocation", label: "Allocation" },
-              ]}
-            />
+              onValueChange={(value) => handleInputChange("sortBy", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select sort field" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="name">Name</SelectItem>
+                <SelectItem value="value">Value</SelectItem>
+                <SelectItem value="performance">Performance</SelectItem>
+                <SelectItem value="allocation">Allocation</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-gray-200">
-              Sort Order
-            </label>
             <Select
+              label="Sort Order"
               value={settings.sortOrder}
-              onChange={(value) => handleInputChange("sortOrder", value)}
-              options={[
-                { value: "asc", label: "Ascending" },
-                { value: "desc", label: "Descending" },
-              ]}
-            />
+              onValueChange={(value) => handleInputChange("sortOrder", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select sort order" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="asc">Ascending</SelectItem>
+                <SelectItem value="desc">Descending</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
@@ -217,42 +224,46 @@ export const PortfolioSettingsForm = ({
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Benchmark Index
-              </label>
               <Select
+                label="Benchmark Index"
                 value={settings.benchmarkIndex}
-                onChange={(value) => handleInputChange("benchmarkIndex", value)}
-                options={[
-                  { value: "SPY", label: "S&P 500 (SPY)" },
-                  { value: "QQQ", label: "NASDAQ 100 (QQQ)" },
-                  { value: "VTI", label: "Total Stock Market (VTI)" },
-                  { value: "IWM", label: "Russell 2000 (IWM)" },
-                  { value: "EFA", label: "International Stocks (EFA)" },
-                ]}
-              />
+                onValueChange={(value) => handleInputChange("benchmarkIndex", value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select benchmark" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="SPY">S&P 500 (SPY)</SelectItem>
+                  <SelectItem value="QQQ">NASDAQ 100 (QQQ)</SelectItem>
+                  <SelectItem value="VTI">Total Stock Market (VTI)</SelectItem>
+                  <SelectItem value="IWM">Russell 2000 (IWM)</SelectItem>
+                  <SelectItem value="EFA">International Stocks (EFA)</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Default Performance Period
-              </label>
               <Select
+                label="Default Performance Period"
                 value={settings.performancePeriod}
-                onChange={(value) =>
+                onValueChange={(value) =>
                   handleInputChange("performancePeriod", value)
                 }
-                options={[
-                  { value: "1D", label: "1 Day" },
-                  { value: "1W", label: "1 Week" },
-                  { value: "1M", label: "1 Month" },
-                  { value: "3M", label: "3 Months" },
-                  { value: "6M", label: "6 Months" },
-                  { value: "1Y", label: "1 Year" },
-                  { value: "YTD", label: "Year to Date" },
-                  { value: "ALL", label: "All Time" },
-                ]}
-              />
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select period" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1D">1 Day</SelectItem>
+                  <SelectItem value="1W">1 Week</SelectItem>
+                  <SelectItem value="1M">1 Month</SelectItem>
+                  <SelectItem value="3M">3 Months</SelectItem>
+                  <SelectItem value="6M">6 Months</SelectItem>
+                  <SelectItem value="1Y">1 Year</SelectItem>
+                  <SelectItem value="YTD">Year to Date</SelectItem>
+                  <SelectItem value="ALL">All Time</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -385,44 +396,48 @@ export const PortfolioSettingsForm = ({
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Default Timeframe
-              </label>
               <Select
+                label="Default Timeframe"
                 value={settings.chartSettings.defaultTimeframe}
-                onChange={(value) =>
+                onValueChange={(value) =>
                   handleNestedInputChange(
                     "chartSettings",
                     "defaultTimeframe",
                     value
                   )
                 }
-                options={[
-                  { value: "1D", label: "1 Day" },
-                  { value: "1W", label: "1 Week" },
-                  { value: "1M", label: "1 Month" },
-                  { value: "3M", label: "3 Months" },
-                  { value: "6M", label: "6 Months" },
-                  { value: "1Y", label: "1 Year" },
-                ]}
-              />
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select timeframe" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1D">1 Day</SelectItem>
+                  <SelectItem value="1W">1 Week</SelectItem>
+                  <SelectItem value="1M">1 Month</SelectItem>
+                  <SelectItem value="3M">3 Months</SelectItem>
+                  <SelectItem value="6M">6 Months</SelectItem>
+                  <SelectItem value="1Y">1 Year</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-gray-200">
-                Chart Type
-              </label>
               <Select
+                label="Chart Type"
                 value={settings.chartSettings.chartType}
-                onChange={(value) =>
+                onValueChange={(value) =>
                   handleNestedInputChange("chartSettings", "chartType", value)
                 }
-                options={[
-                  { value: "line", label: "Line Chart" },
-                  { value: "candlestick", label: "Candlestick" },
-                  { value: "area", label: "Area Chart" },
-                ]}
-              />
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select chart type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="line">Line Chart</SelectItem>
+                  <SelectItem value="candlestick">Candlestick</SelectItem>
+                  <SelectItem value="area">Area Chart</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 

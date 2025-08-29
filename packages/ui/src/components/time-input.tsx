@@ -1,11 +1,10 @@
 import * as React from "react";
 import { cn } from "../utils";
 
-export interface TimeInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+export type TimeInputProps = {
   label?: string;
   error?: string;
-}
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
 
 const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
   ({ className, label, error, ...props }, ref) => {

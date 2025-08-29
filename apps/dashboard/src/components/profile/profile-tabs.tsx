@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Tabs } from "@repo/ui/components";
 import { ProfileForm } from "./profile-form";
 import { TradingPreferencesForm } from "./trading-preferences-form";
 import { PortfolioSettingsForm } from "./portfolio-settings-form";
@@ -17,35 +18,14 @@ export const ProfileTabs = () => {
   ];
 
   return (
-    <div className="w-full">
-      {/* Tab Navigation */}
-      <div className="border-b border-gray-600 mb-8">
-        <nav className="flex space-x-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer ${
-                activeTab === tab.id
-                  ? "border-violet-500 text-violet-400"
-                  : "border-transparent text-gray-400 hover:text-white hover:border-gray-500"
-              }`}
-            >
-              <span className="flex items-center space-x-2">
-                <span>{tab.icon}</span>
-                <span>{tab.label}</span>
-              </span>
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* Tab Content */}
-      <div className="mt-6">
-        {activeTab === "profile" && <ProfileForm />}
-        {activeTab === "preferences" && <TradingPreferencesForm />}
-        {activeTab === "portfolio" && <PortfolioSettingsForm />}
-      </div>
-    </div>
+    <Tabs
+      tabs={tabs}
+      activeTab={activeTab}
+      onTabChange={(tabId) => setActiveTab(tabId as TabType)}
+    >
+      {activeTab === "profile" && <ProfileForm />}
+      {activeTab === "preferences" && <TradingPreferencesForm />}
+      {activeTab === "portfolio" && <PortfolioSettingsForm />}
+    </Tabs>
   );
 };

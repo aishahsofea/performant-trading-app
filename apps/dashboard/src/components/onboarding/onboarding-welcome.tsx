@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@repo/ui/components";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle, Clock, ArrowRight } from "lucide-react";
 
@@ -94,9 +94,7 @@ export const OnboardingWelcome = ({
                     <div className="flex items-center gap-2">
                       <h4 className="font-medium">{step.title}</h4>
                       {step.isRequired && (
-                        <Badge variant="outline" className="text-xs">
-                          Required
-                        </Badge>
+                        <Badge className="text-xs">Required</Badge>
                       )}
                       {isSkipped && (
                         <Badge variant="secondary" className="text-xs">

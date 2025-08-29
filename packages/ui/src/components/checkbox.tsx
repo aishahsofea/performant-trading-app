@@ -1,11 +1,10 @@
 import * as React from "react";
 import { cn } from "../utils";
 
-export interface CheckboxProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
+export type CheckboxProps = {
   label?: string;
   error?: string;
-}
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">;
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, label, error, ...props }, ref) => {
@@ -23,10 +22,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             {...props}
           />
           {label && (
-            <label
-              htmlFor={props.id}
-              className="ml-2 text-sm text-gray-200"
-            >
+            <label htmlFor={props.id} className="ml-2 text-sm text-gray-200">
               {label}
             </label>
           )}
