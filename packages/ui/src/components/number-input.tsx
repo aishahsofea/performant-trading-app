@@ -13,7 +13,7 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         {label && (
           <label
             htmlFor={props.id}
-            className="block text-sm font-medium mb-2 text-gray-200"
+            className="block text-sm font-medium mb-2 text-content-secondary"
           >
             {label}
           </label>
@@ -21,15 +21,15 @@ const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
         <input
           type="number"
           className={cn(
-            "flex h-10 w-full rounded-md border border-gray-600  text-gray-100 px-3 py-2 text-sm hover:border-gray-500 file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-50 transition-colors",
-            error && "border-red-500 focus-visible:ring-red-500",
+            "flex h-10 w-full rounded-md border border-border-primary text-content-primary px-3 py-2 text-sm hover:border-border-secondary file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-content-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background-primary disabled:cursor-not-allowed disabled:opacity-50 transition-colors",
+            error && "border-danger focus-visible:ring-danger",
             className
           )}
           ref={ref}
           {...props}
         />
         {error && (
-          <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
+          <p className="mt-1 text-sm text-danger-400 font-medium" role="alert">
             {error}
           </p>
         )}

@@ -13,7 +13,7 @@ export const DateInput = ({
 }: DateInputProps) => {
   return (
     <>
-      <label className="block text-sm font-medium mb-2 text-white" htmlFor={id}>
+      <label className="block text-sm font-medium mb-2 text-content-primary" htmlFor={id}>
         {label}
       </label>
       <input
@@ -21,7 +21,7 @@ export const DateInput = ({
         id={id}
         value={value}
         onChange={(e) => handleChange?.(e.target.value)}
-        className="w-full min-w-[160px] border border-gray-600 text-white rounded-md px-3 py-2.5 text-sm hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors cursor-pointer"
+        className="w-full min-w-[160px] border border-border-primary text-content-primary rounded-md px-3 py-2.5 text-sm hover:border-border-secondary focus:outline-none focus:ring-2 focus:ring-border-focus focus:border-border-focus transition-colors cursor-pointer"
         style={{
           colorScheme: "dark",
         }}

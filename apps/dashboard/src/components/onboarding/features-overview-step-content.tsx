@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@repo/ui/components";
 import { StepContentProps } from "./onboarding-step";
 import { CheckCircle, BookOpen, Zap } from "lucide-react";
 

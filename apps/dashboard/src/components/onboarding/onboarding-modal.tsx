@@ -5,13 +5,10 @@ import { useOnboarding } from "@/hooks/useOnboarding";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogBody,
   DialogFooter,
 } from "@repo/ui/components";
 import { Button } from "@repo/ui/components";
-import { Progress } from "@/components/ui/progress";
 import { OnboardingWelcome } from "./onboarding-welcome";
 import { OnboardingStep } from "./onboarding-step";
 import { X, ArrowLeft, ArrowRight, Check } from "lucide-react";

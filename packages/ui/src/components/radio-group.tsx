@@ -53,7 +53,7 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     return (
       <div ref={ref} {...props}>
         {label && (
-          <label className="block text-sm font-medium mb-2 text-gray-200">
+          <label className="block text-sm font-medium mb-2 text-content-secondary">
             {label}
           </label>
         )}
@@ -75,13 +75,13 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
                 onChange={() => handleChange(option.value)}
                 disabled={option.disabled}
                 className={cn(
-                  "h-4 w-4 text-violet-600 focus:ring-violet-500 border-gray-600 transition-colors disabled:cursor-not-allowed disabled:opacity-50",
-                  error && "border-red-500 focus:ring-red-500"
+                  "h-4 w-4 text-primary-600 focus:ring-border-focus border-border-primary transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+                  error && "border-danger focus:ring-danger"
                 )}
               />
               <label
                 htmlFor={`${name}-${option.value}`}
-                className="ml-2 text-sm text-gray-200"
+                className="ml-2 text-sm text-content-secondary"
               >
                 {option.label}
               </label>
@@ -89,7 +89,7 @@ const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
           ))}
         </div>
         {error && (
-          <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
+          <p className="mt-1 text-sm text-danger-400 font-medium" role="alert">
             {error}
           </p>
         )}

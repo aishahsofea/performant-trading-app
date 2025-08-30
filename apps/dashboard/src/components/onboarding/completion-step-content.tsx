@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@repo/ui/components";
 import { CheckCircle } from "lucide-react";
 import { StepContentProps } from "./onboarding-step";
 

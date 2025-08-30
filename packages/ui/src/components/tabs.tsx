@@ -8,9 +8,9 @@ const tabsVariants = cva("w-full");
 const tabsListVariants = cva("border-b", {
   variants: {
     variant: {
-      default: "border-gray-600",
-      light: "border-gray-300",
-      dark: "border-gray-700",
+      default: "border-border-primary",
+      light: "border-border-secondary",
+      dark: "border-border-tertiary",
     },
   },
   defaultVariants: {
@@ -51,35 +51,35 @@ const tabsTriggerVariants = cva(
       {
         variant: "default",
         state: "active",
-        className: "border-violet-500 text-violet-400",
+        className: "border-primary text-primary-400",
       },
       {
         variant: "default",
         state: "inactive",
         className:
-          "border-transparent text-gray-400 hover:text-white hover:border-gray-500",
+          "border-transparent text-content-tertiary hover:text-content-primary hover:border-border-secondary",
       },
       {
         variant: "light",
         state: "active",
-        className: "border-violet-500 text-violet-400",
+        className: "border-primary text-primary-400",
       },
       {
         variant: "light",
         state: "inactive",
         className:
-          "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300",
+          "border-transparent text-secondary-600 hover:text-secondary-900 hover:border-border-secondary",
       },
       {
         variant: "dark",
         state: "active",
-        className: "border-purple-400 text-purple-300",
+        className: "border-primary-400 text-primary-300",
       },
       {
         variant: "dark",
         state: "inactive",
         className:
-          "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-600",
+          "border-transparent text-content-tertiary hover:text-content-secondary hover:border-border-primary",
       },
     ],
     defaultVariants: {

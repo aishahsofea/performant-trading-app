@@ -3,13 +3,13 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
 const textareaVariants = cva(
-  "w-full border rounded-md px-3 py-2.5 text-sm transition-colors resize-vertical placeholder-gray-400 focus:outline-none focus:ring-2",
+  "w-full border rounded-md px-3 py-2.5 text-sm transition-colors resize-vertical placeholder-content-tertiary focus:outline-none focus:ring-2",
   {
     variants: {
       variant: {
-        default: "border-gray-600 text-gray-100 bg-gray-800 hover:border-gray-500 focus:ring-purple-500 focus:border-purple-500",
-        error: "border-red-500 text-gray-100 bg-gray-800 hover:border-red-400 focus:ring-red-500 focus:border-red-500",
-        success: "border-green-500 text-gray-100 bg-gray-800 hover:border-green-400 focus:ring-green-500 focus:border-green-500",
+        default: "border-border-primary text-content-primary bg-surface-primary hover:border-border-secondary focus:ring-border-focus focus:border-border-focus",
+        error: "border-danger text-content-primary bg-surface-primary hover:border-danger-400 focus:ring-danger focus:border-danger",
+        success: "border-success text-content-primary bg-surface-primary hover:border-success-400 focus:ring-success focus:border-success",
       },
       size: {
         sm: "px-2 py-1.5 text-xs",
@@ -29,10 +29,10 @@ const labelVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-gray-200 text-sm",
-        error: "text-red-400 text-sm",
-        success: "text-green-400 text-sm",
-        light: "text-gray-700 text-sm",
+        default: "text-content-secondary text-sm",
+        error: "text-danger-400 text-sm",
+        success: "text-success-400 text-sm",
+        light: "text-content-tertiary text-sm",
       },
       size: {
         sm: "text-xs",
@@ -50,10 +50,10 @@ const labelVariants = cva(
 const errorVariants = cva("mt-1 text-xs", {
   variants: {
     variant: {
-      default: "text-red-400",
-      error: "text-red-400",
-      success: "text-green-400",
-      light: "text-red-600",
+      default: "text-danger-400",
+      error: "text-danger-400",
+      success: "text-success-400",
+      light: "text-danger-600",
     },
   },
   defaultVariants: {

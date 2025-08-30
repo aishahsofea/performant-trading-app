@@ -1,15 +1,9 @@
 import type { Preview } from "@storybook/react-vite";
+import { withThemeByDataAttribute } from "@storybook/addon-themes";
 import "../src/index.css";
 
 const preview: Preview = {
   parameters: {
-    backgrounds: {
-      default: "dark",
-      values: [
-        { name: "dark", value: "#333" }, // Define your 'dark' background value
-        { name: "light", value: "#F7F9F2" },
-      ],
-    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -24,11 +18,13 @@ const preview: Preview = {
       test: "todo",
     },
   },
-  initialGlobals: {
-    backgrounds: {
-      value: "dark", // Ensure the initial selected background is 'dark'
-    },
-  },
+  decorators: [
+    withThemeByDataAttribute({
+      defaultTheme: "dark",
+      themes: { dark: "dark", light: "light" },
+      attributeName: "data-mode",
+    }),
+  ],
 };
 
 export default preview;

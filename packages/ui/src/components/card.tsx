@@ -1,5 +1,7 @@
+"use client";
+
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "../utils";
 
 const Card = React.forwardRef<
   HTMLDivElement,
@@ -8,7 +10,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border border-gray-600 bg-gray-800 text-white shadow-lg",
+      "rounded-lg border border-border-primary bg-surface-primary text-content-primary shadow-lg",
       className
     )}
     {...props}
@@ -49,7 +51,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-gray-400", className)}
+    className={cn("text-sm text-content-secondary", className)}
     {...props}
   />
 ));

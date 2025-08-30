@@ -2,6 +2,7 @@
 export * from "./components/alert";
 export * from "./components/badge";
 export * from "./components/button";
+export * from "./components/card";
 export * from "./components/continue-with-google";
 export * from "./components/date-input";
 export * from "./components/dialog";

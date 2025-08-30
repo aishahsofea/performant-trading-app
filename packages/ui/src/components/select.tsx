@@ -171,7 +171,7 @@ export const Select = (props: SelectProps) => {
   return (
     <>
       {label && (
-        <label className="block text-sm font-medium mb-2 text-gray-200">
+        <label className="block text-sm font-medium mb-2 text-content-secondary">
           {label}
         </label>
       )}
@@ -190,7 +190,7 @@ export const Select = (props: SelectProps) => {
         </div>
       </SelectContext.Provider>
       {error && (
-        <p className="mt-1 text-sm text-red-400 font-medium" role="alert">
+        <p className="mt-1 text-sm text-danger-400 font-medium" role="alert">
           {error}
         </p>
       )}
@@ -212,8 +212,8 @@ const SelectTrigger = React.forwardRef<
       ref={ref}
       type="button"
       className={cn(
-        "w-full border border-gray-600 rounded-md px-3 py-2.5 text-sm text-white bg-gray-800",
-        "hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500",
+        "w-full border border-border-primary rounded-md px-3 py-2.5 text-sm text-content-primary bg-surface-primary",
+        "hover:border-border-secondary focus:outline-none focus:ring-2 focus:ring-border-focus focus:border-border-focus",
         "transition-all duration-200 text-left flex items-center justify-between",
         "disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer",
         className
@@ -227,7 +227,7 @@ const SelectTrigger = React.forwardRef<
       {children}
       <svg
         className={cn(
-          "w-4 h-4 text-gray-400 transition-transform ml-1.5",
+          "w-4 h-4 text-content-tertiary transition-transform ml-1.5",
           isOpen ? "rotate-180" : ""
         )}
         fill="none"
@@ -258,7 +258,7 @@ const SelectValue = React.forwardRef<
   // If children are provided, use them (for custom content)
   if (children) {
     return (
-      <span ref={ref} className={cn("text-white", className)} {...props}>
+      <span ref={ref} className={cn("text-content-primary", className)} {...props}>
         {children}
       </span>
     );
@@ -269,7 +269,7 @@ const SelectValue = React.forwardRef<
   return (
     <span
       ref={ref}
-      className={cn(value ? "text-white" : "text-gray-400", className)}
+      className={cn(value ? "text-content-primary" : "text-content-tertiary", className)}
       {...props}
     >
       {displayValue}
@@ -290,7 +290,7 @@ const SelectContent = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-md shadow-xl max-h-60 overflow-auto",
+        "absolute z-50 w-full mt-1 bg-surface-primary border border-border-primary rounded-md shadow-xl max-h-60 overflow-auto",
         className
       )}
       {...props}
@@ -323,8 +323,8 @@ const SelectItem = React.forwardRef<
       className={cn(
         "w-full px-3 py-2.5 text-sm text-left transition-all duration-200",
         isSelected
-          ? "bg-violet-600 text-white"
-          : "text-gray-200 hover:bg-gray-700 hover:text-white",
+          ? "bg-primary-600 text-content-primary"
+          : "text-content-secondary hover:bg-surface-secondary hover:text-content-primary",
         className
       )}
       onClick={(e) => {

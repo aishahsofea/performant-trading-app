@@ -9,14 +9,12 @@ import {
   SelectValue,
   Textarea,
   Switch,
-} from "@repo/ui/components";
-import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@repo/ui/components";
 import { Label } from "@/components/ui/label";
 
 export const ProfileSetupStepContent = ({ onDataChange }: StepContentProps) => {

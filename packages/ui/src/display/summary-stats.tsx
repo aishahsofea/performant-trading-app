@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
 const summaryStatsVariants = cva(
-  "bg-gray-800 border border-gray-600 p-6 rounded-lg shadow-lg",
+  "bg-surface-primary border border-border-primary p-6 rounded-lg shadow-lg",
   {
     variants: {
       size: {
@@ -12,10 +12,10 @@ const summaryStatsVariants = cva(
         lg: "p-8",
       },
       variant: {
-        default: "bg-gray-800 border-gray-600",
-        success: "bg-green-900/20 border-green-500",
-        warning: "bg-amber-900/20 border-amber-500",
-        danger: "bg-red-900/20 border-red-500",
+        default: "bg-surface-primary border-border-primary",
+        success: "bg-success-900/20 border-success",
+        warning: "bg-warning-900/20 border-warning",
+        danger: "bg-danger-900/20 border-danger",
       },
     },
     defaultVariants: {
@@ -28,10 +28,10 @@ const summaryStatsVariants = cva(
 const iconContainerVariants = cva("py-4 px-5 rounded-full mr-4", {
   variants: {
     variant: {
-      default: "bg-gray-700 border border-gray-600",
-      success: "bg-green-800/40 border border-green-600",
-      warning: "bg-amber-800/40 border border-amber-600",
-      danger: "bg-red-800/40 border border-red-600",
+      default: "bg-surface-secondary border border-border-primary",
+      success: "bg-success-800/40 border border-success-600",
+      warning: "bg-warning-800/40 border border-warning-600",
+      danger: "bg-danger-800/40 border border-danger-600",
     },
   },
   defaultVariants: {
@@ -42,10 +42,10 @@ const iconContainerVariants = cva("py-4 px-5 rounded-full mr-4", {
 const valueVariants = cva("text-3xl font-bold", {
   variants: {
     variant: {
-      default: "text-violet-400",
-      success: "text-green-400",
-      warning: "text-amber-400",
-      danger: "text-red-400",
+      default: "text-primary-400",
+      success: "text-success-400",
+      warning: "text-warning-400",
+      danger: "text-danger-400",
     },
   },
   defaultVariants: {
@@ -73,7 +73,7 @@ const SummaryStats = React.forwardRef<HTMLDivElement, SummaryStatsProps>(
             <span className="text-2xl">{icon}</span>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">{title}</h3>
+            <h3 className="text-lg font-semibold text-content-primary">{title}</h3>
             <p className={cn(valueVariants({ variant }))}>{value}</p>
           </div>
         </div>

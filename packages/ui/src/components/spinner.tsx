@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
 const spinnerVariants = cva(
-  "animate-spin rounded-full border-b-2 border-violet-500",
+  "animate-spin rounded-full border-b-2 border-primary",
   {
     variants: {
       size: {
@@ -38,7 +38,7 @@ const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
           {...props}
         >
           <div className={cn(spinnerVariants({ size }))} />
-          <div className="text-lg text-gray-200">{text}</div>
+          <div className="text-lg text-content-secondary">{text}</div>
         </div>
       );
     }

@@ -1,1 +1,127 @@
 @import "tailwindcss";
+
+@theme {
+  /* Primary semantic colors - mapping to violet */
+  --color-primary-50: var(--color-violet-50);
+  --color-primary-100: var(--color-violet-100);
+  --color-primary-200: var(--color-violet-200);
+  --color-primary-300: var(--color-violet-300);
+  --color-primary-400: var(--color-violet-400);
+  --color-primary-500: var(--color-violet-500);
+  --color-primary-600: var(--color-violet-600);
+  --color-primary-700: var(--color-violet-700);
+  --color-primary-800: var(--color-violet-800);
+  --color-primary-900: var(--color-violet-900);
+  --color-primary-950: var(--color-violet-950);
+  --color-primary: var(--color-violet-500);
+
+  /* Secondary semantic colors - mapping to slate */
+  --color-secondary-50: var(--color-slate-50);
+  --color-secondary-100: var(--color-slate-100);
+  --color-secondary-200: var(--color-slate-200);
+  --color-secondary-300: var(--color-slate-300);
+  --color-secondary-400: var(--color-slate-400);
+  --color-secondary-500: var(--color-slate-500);
+  --color-secondary-600: var(--color-slate-600);
+  --color-secondary-700: var(--color-slate-700);
+  --color-secondary-800: var(--color-slate-800);
+  --color-secondary-900: var(--color-slate-900);
+  --color-secondary-950: var(--color-slate-950);
+  --color-secondary: var(--color-slate-500);
+
+  /* Success colors - mapping to green */
+  --color-success-50: var(--color-green-50);
+  --color-success-100: var(--color-green-100);
+  --color-success-200: var(--color-green-200);
+  --color-success-300: var(--color-green-300);
+  --color-success-400: var(--color-green-400);
+  --color-success-500: var(--color-green-500);
+  --color-success-600: var(--color-green-600);
+  --color-success-700: var(--color-green-700);
+  --color-success-800: var(--color-green-800);
+  --color-success-900: var(--color-green-900);
+  --color-success-950: var(--color-green-950);
+  --color-success: var(--color-green-500);
+
+  /* Danger colors - mapping to red */
+  --color-danger-50: var(--color-red-50);
+  --color-danger-100: var(--color-red-100);
+  --color-danger-200: var(--color-red-200);
+  --color-danger-300: var(--color-red-300);
+  --color-danger-400: var(--color-red-400);
+  --color-danger-500: var(--color-red-500);
+  --color-danger-600: var(--color-red-600);
+  --color-danger-700: var(--color-red-700);
+  --color-danger-800: var(--color-red-800);
+  --color-danger-900: var(--color-red-900);
+  --color-danger-950: var(--color-red-950);
+  --color-danger: var(--color-red-500);
+
+  /* Warning colors - mapping to amber */
+  --color-warning-50: var(--color-amber-50);
+  --color-warning-100: var(--color-amber-100);
+  --color-warning-200: var(--color-amber-200);
+  --color-warning-300: var(--color-amber-300);
+  --color-warning-400: var(--color-amber-400);
+  --color-warning-500: var(--color-amber-500);
+  --color-warning-600: var(--color-amber-600);
+  --color-warning-700: var(--color-amber-700);
+  --color-warning-800: var(--color-amber-800);
+  --color-warning-900: var(--color-amber-900);
+  --color-warning-950: var(--color-amber-950);
+  --color-warning: var(--color-amber-500);
+
+  /* Info colors - mapping to blue */
+  --color-info-50: var(--color-blue-50);
+  --color-info-100: var(--color-blue-100);
+  --color-info-200: var(--color-blue-200);
+  --color-info-300: var(--color-blue-300);
+  --color-info-400: var(--color-blue-400);
+  --color-info-500: var(--color-blue-500);
+  --color-info-600: var(--color-blue-600);
+  --color-info-700: var(--color-blue-700);
+  --color-info-800: var(--color-blue-800);
+  --color-info-900: var(--color-blue-900);
+  --color-info-950: var(--color-blue-950);
+  --color-info: var(--color-blue-500);
+
+  /* Background semantic colors - mapping to gray/slate */
+  --color-background-primary: var(--color-gray-900);
+  --color-background-secondary: var(--color-gray-800);
+  --color-background-tertiary: var(--color-gray-700);
+  --color-background: var(--color-gray-900);
+
+  /* Surface colors - mapping to gray */
+  --color-surface-primary: var(--color-gray-800);
+  --color-surface-secondary: var(--color-gray-700);
+  --color-surface-tertiary: var(--color-gray-600);
+  --color-surface: var(--color-gray-800);
+
+  /* Content/Text colors - mapping to white/gray */
+  --color-content-primary: var(--color-white);
+  --color-content-secondary: var(--color-gray-400);
+  --color-content-tertiary: var(--color-gray-500);
+  --color-content-inverse: var(--color-gray-900);
+  --color-content: var(--color-white);
+
+  /* Border colors - mapping to gray/violet */
+  --color-border-primary: var(--color-gray-600);
+  --color-border-secondary: var(--color-gray-500);
+  --color-border-tertiary: var(--color-gray-400);
+  --color-border-focus: var(--color-violet-500);
+  --color-border: var(--color-gray-600);
+
+  /* Trading colors - mapping to green/red/gray/indigo */
+  --color-trading-profit: var(--color-green-500);
+  --color-trading-loss: var(--color-red-500);
+  --color-trading-neutral: var(--color-gray-500);
+  --color-trading-volume: var(--color-indigo-500);
+  --color-trading: var(--color-gray-500);
+
+  /* Brand colors - mapping to violet/pink */
+  --color-brand-primary: var(--color-violet-500);
+  --color-brand-secondary: var(--color-violet-600);
+  --color-brand-light: var(--color-violet-400);
+  --color-brand-accent: var(--color-pink-500);
+  --color-brand: var(--color-violet-500);
+}

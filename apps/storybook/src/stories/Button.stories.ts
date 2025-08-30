@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { fn } from "storybook/test";
-import { Button } from "@repo/ui/components";
+import { Button, buttonVariantsConfig } from "@repo/ui/components";
 
 const meta = {
   title: "Button",
@@ -9,7 +9,24 @@ const meta = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  args: { onClick: fn() },
+  args: {
+    onClick: fn(),
+    disabled: false,
+    size: "default",
+  },
+  argTypes: {
+    disabled: {
+      control: "boolean",
+    },
+    variant: {
+      control: "select",
+      options: Object.keys(buttonVariantsConfig.variant),
+    },
+    size: {
+      control: "select",
+      options: Object.keys(buttonVariantsConfig.size),
+    },
+  },
 } satisfies Meta<typeof Button>;
 
 export default meta;
@@ -31,7 +48,7 @@ export const Secondary: Story = {
 
 export const Destructive: Story = {
   args: {
-    variant: "destructive",
+    variant: "profit",
     children: "Destructive",
   },
 };
@@ -68,5 +85,16 @@ export const Loss: Story = {
   args: {
     variant: "loss",
     children: "Loss",
+  },
+};
+
+export const Light: Story = {
+  args: {
+    children: "Light",
+  },
+  parameters: {
+    themes: {
+      themeOverride: "light",
+    },
   },
 };

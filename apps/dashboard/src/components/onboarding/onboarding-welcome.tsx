@@ -9,9 +9,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@repo/ui/components";
-import { Progress } from "@/components/ui/progress";
+  Badge,
+} from "@repo/ui/components";
 import { CheckCircle, Clock, ArrowRight } from "lucide-react";
 
 interface OnboardingWelcomeProps {
@@ -59,10 +58,6 @@ export const OnboardingWelcome = ({
               {completedSteps}/{totalSteps} completed
             </span>
           </div>
-          <Progress
-            value={(completedSteps / totalSteps) * 100}
-            className="h-2"
-          />
         </div>
 
         {/* Steps Preview */}
