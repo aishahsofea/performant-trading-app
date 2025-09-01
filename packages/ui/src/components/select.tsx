@@ -49,11 +49,6 @@ type CompositeSelectProps = {
 
 type SelectProps = SimpleSelectProps | CompositeSelectProps;
 
-// Type guard to differentiate between APIs
-function isSimpleSelect(props: SelectProps): props is SimpleSelectProps {
-  return "options" in props;
-}
-
 export const Select = (props: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState("");
@@ -78,7 +73,6 @@ export const Select = (props: SelectProps) => {
     value,
     onValueChange,
     children,
-    disabled = false,
     className = "",
     label,
     error,
@@ -258,7 +252,11 @@ const SelectValue = React.forwardRef<
   // If children are provided, use them (for custom content)
   if (children) {
     return (
-      <span ref={ref} className={cn("text-content-primary", className)} {...props}>
+      <span
+        ref={ref}
+        className={cn("text-content-primary", className)}
+        {...props}
+      >
         {children}
       </span>
     );
@@ -269,7 +267,10 @@ const SelectValue = React.forwardRef<
   return (
     <span
       ref={ref}
-      className={cn(value ? "text-content-primary" : "text-content-tertiary", className)}
+      className={cn(
+        value ? "text-content-primary" : "text-content-tertiary",
+        className
+      )}
       {...props}
     >
       {displayValue}
