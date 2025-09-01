@@ -30,6 +30,10 @@ jobs:
       - name: Debug env
         run: echo "DATABASE_URL=${DATABASE_URL}"
 
+      - name: Create env file for dashboard
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> apps/dashboard/.env
+
       - name: Build all packages
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
