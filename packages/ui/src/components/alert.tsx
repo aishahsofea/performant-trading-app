@@ -2,8 +2,11 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
-const alertVariants = cva(
-  "p-3 border rounded-md",
+const alertVariants = cva([
+  "p-3",
+  "border",
+  "rounded-md",
+],
   {
     variants: {
       variant: {
@@ -19,8 +22,10 @@ const alertVariants = cva(
   }
 );
 
-const alertTextVariants = cva(
-  "text-sm font-medium",
+const alertTextVariants = cva([
+  "text-sm",
+  "font-medium",
+],
   {
     variants: {
       variant: {

@@ -3,9 +3,9 @@ import { useState } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
-const tabsVariants = cva("w-full");
+const tabsVariants = cva(["w-full"]);
 
-const tabsListVariants = cva("border-b", {
+const tabsListVariants = cva(["border-b"], {
   variants: {
     variant: {
       default: "border-border-primary",
@@ -18,9 +18,9 @@ const tabsListVariants = cva("border-b", {
   },
 });
 
-const tabsNavVariants = cva("flex");
+const tabsNavVariants = cva(["flex"]);
 
-const tabsListUlVariants = cva("flex flex-row", {
+const tabsListUlVariants = cva(["flex", "flex-row"], {
   variants: {
     spacing: {
       default: "gap-x-8",
@@ -34,7 +34,17 @@ const tabsListUlVariants = cva("flex flex-row", {
 });
 
 const tabsTriggerVariants = cva(
-  "py-2 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer no-underline inline-block",
+  [
+    "py-2",
+    "px-1",
+    "border-b-2",
+    "font-medium",
+    "text-sm",
+    "transition-colors",
+    "cursor-pointer",
+    "no-underline",
+    "inline-block",
+  ],
   {
     variants: {
       variant: {
@@ -89,7 +99,7 @@ const tabsTriggerVariants = cva(
   }
 );
 
-const tabsContentVariants = cva("mt-6");
+const tabsContentVariants = cva(["mt-6"]);
 
 export type TabItem = {
   id: string;

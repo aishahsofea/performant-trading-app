@@ -4,8 +4,22 @@ import { Eye, EyeOff } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
-const passwordInputVariants = cva(
-  "w-full border rounded-md px-3 pr-10 text-sm transition-colors placeholder-content-tertiary focus:outline-none focus:ring-2 focus:ring-border-focus focus:border-border-focus disabled:opacity-50 disabled:cursor-not-allowed",
+const passwordInputVariants = cva([
+  "w-full",
+  "border",
+  "rounded-md",
+  "px-3",
+  "pr-10",
+  "text-sm",
+  "transition-colors",
+  "placeholder-content-tertiary",
+  "focus:outline-none",
+  "focus:ring-2",
+  "focus:ring-border-focus",
+  "focus:border-border-focus",
+  "disabled:opacity-50",
+  "disabled:cursor-not-allowed",
+],
   {
     variants: {
       variant: {
@@ -27,8 +41,16 @@ const passwordInputVariants = cva(
   }
 );
 
-const toggleButtonVariants = cva(
-  "absolute inset-y-0 right-0 pr-3 flex items-center text-content-tertiary transition-colors",
+const toggleButtonVariants = cva([
+  "absolute",
+  "inset-y-0",
+  "right-0",
+  "pr-3",
+  "flex",
+  "items-center",
+  "text-content-tertiary",
+  "transition-colors",
+],
   {
     variants: {
       state: {

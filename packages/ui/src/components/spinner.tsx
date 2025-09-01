@@ -2,8 +2,12 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
-const spinnerVariants = cva(
-  "animate-spin rounded-full border-b-2 border-primary",
+const spinnerVariants = cva([
+  "animate-spin",
+  "rounded-full",
+  "border-b-2",
+  "border-primary",
+],
   {
     variants: {
       size: {

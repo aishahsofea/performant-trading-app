@@ -12,14 +12,14 @@ const buttonVariantsConfig = {
       "border border-border-primary bg-transparent text-content-secondary hover:bg-surface-primary hover:text-content-primary",
     secondary:
       "bg-surface-primary text-content-secondary hover:bg-surface-secondary border border-border-primary",
-    ghost: "hover:bg-surface-primary text-content-secondary border border-transparent",
+    ghost:
+      "hover:bg-surface-primary text-content-secondary border border-transparent",
     link: "text-primary-400 underline-offset-4 hover:underline hover:text-primary-300",
     success:
       "bg-success text-content-primary hover:bg-success-600 border border-success",
     warning:
       "bg-warning text-content-primary hover:bg-warning-600 border border-warning",
-    info:
-      "bg-info text-content-primary hover:bg-info-600 border border-info",
+    info: "bg-info text-content-primary hover:bg-info-600 border border-info",
     profit:
       "bg-trading-profit text-content-primary hover:bg-success-600 border border-trading-profit",
     loss: "bg-trading-loss text-content-primary hover:bg-danger-600 border border-trading-loss",
@@ -33,8 +33,29 @@ const buttonVariantsConfig = {
   },
 };
 
+export type ButtonVariant = keyof (typeof buttonVariantsConfig)["variant"];
+export type ButtonSize = keyof (typeof buttonVariantsConfig)["size"];
+
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-focus focus-visible:ring-offset-2 focus-visible:ring-offset-background-primary disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+  [
+    "inline-flex",
+    "items-center",
+    "justify-center",
+    "whitespace-nowrap",
+    "rounded-md",
+    "text-sm",
+    "font-medium",
+    "transition-all",
+    "duration-200",
+    "focus-visible:outline-none",
+    "focus-visible:ring-2",
+    "focus-visible:ring-border-focus",
+    "focus-visible:ring-offset-2",
+    "focus-visible:ring-offset-background-primary",
+    "disabled:pointer-events-none",
+    "disabled:opacity-50",
+    "cursor-pointer",
+  ],
   {
     variants: buttonVariantsConfig,
     defaultVariants: {

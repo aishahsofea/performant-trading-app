@@ -2,8 +2,14 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
-const summaryStatsVariants = cva(
-  "bg-surface-primary border border-border-primary p-6 rounded-lg shadow-lg",
+const summaryStatsVariants = cva([
+  "bg-surface-primary",
+  "border",
+  "border-border-primary",
+  "p-6",
+  "rounded-lg",
+  "shadow-lg",
+],
   {
     variants: {
       size: {
@@ -25,7 +31,7 @@ const summaryStatsVariants = cva(
   }
 );
 
-const iconContainerVariants = cva("py-4 px-5 rounded-full mr-4", {
+const iconContainerVariants = cva(["py-4", "px-5", "rounded-full", "mr-4"], {
   variants: {
     variant: {
       default: "bg-surface-secondary border border-border-primary",
@@ -39,7 +45,7 @@ const iconContainerVariants = cva("py-4 px-5 rounded-full mr-4", {
   },
 });
 
-const valueVariants = cva("text-3xl font-bold", {
+const valueVariants = cva(["text-3xl", "font-bold"], {
   variants: {
     variant: {
       default: "text-primary-400",

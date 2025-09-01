@@ -2,8 +2,19 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../utils";
 
-const textareaVariants = cva(
-  "w-full border rounded-md px-3 py-2.5 text-sm transition-colors resize-vertical placeholder-content-tertiary focus:outline-none focus:ring-2",
+const textareaVariants = cva([
+  "w-full",
+  "border",
+  "rounded-md",
+  "px-3",
+  "py-2.5",
+  "text-sm",
+  "transition-colors",
+  "resize-vertical",
+  "placeholder-content-tertiary",
+  "focus:outline-none",
+  "focus:ring-2",
+],
   {
     variants: {
       variant: {
@@ -24,8 +35,11 @@ const textareaVariants = cva(
   }
 );
 
-const labelVariants = cva(
-  "block font-medium mb-2",
+const labelVariants = cva([
+  "block",
+  "font-medium",
+  "mb-2",
+],
   {
     variants: {
       variant: {
@@ -47,7 +61,7 @@ const labelVariants = cva(
   }
 );
 
-const errorVariants = cva("mt-1 text-xs", {
+const errorVariants = cva(["mt-1", "text-xs"], {
   variants: {
     variant: {
       default: "text-danger-400",

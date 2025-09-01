@@ -86,3 +86,12 @@ export const NoLabel: Story = {
     rows: 3,
   },
 };
+
+export const WithMaxLength: Story = {
+  args: {
+    label: "Bio",
+    placeholder: "Tell us about yourself and your trading experience",
+    rows: 4,
+    maxLength: 200,
+  },
+};
