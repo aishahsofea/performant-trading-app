@@ -150,6 +150,7 @@ const getBuildMetrics = (): Omit<
 
   // Calculate sizes and identify shared chunks
   for (const [_pagePath, files] of Object.entries(buildManifest.pages || {})) {
+    console.log({ _pagePath });
     if (Array.isArray(files)) {
       files.forEach((file) => {
         if (!uniqueFiles.has(file)) {

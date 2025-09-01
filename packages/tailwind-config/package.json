@@ -5,11 +5,13 @@
   "private": true,
   "exports": {
     ".": "./shared-styles.css",
-    "./postcss": "./postcss.config.js"
+    "./postcss": "./postcss.config.mjs"
   },
-  "devDependencies": {
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.11",
     "@tailwindcss/postcss": "^4.1.11",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11"
-  }
+    "tailwindcss": "^4.1.11",
+    "postcss": "^8.5.6"
+  },
+  "devDependencies": {}
 }

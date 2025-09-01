@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
         fs: false,
       };
     }
-    
+
     // Development performance monitoring
     if (dev) {
       // Enable detailed webpack stats for performance analysis
@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
         modules: false,
         assets: true,
       };
-      
+
       // Add performance monitoring in development
       config.optimization = {
         ...config.optimization,
@@ -36,9 +36,10 @@ const nextConfig: NextConfig = {
         usedExports: true,
       };
     }
-    
+
     return config;
   },
+  transpilePackages: ["@repo/ui"],
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

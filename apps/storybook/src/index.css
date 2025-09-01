@@ -1,0 +1,14 @@
+@import "@repo/tailwind-config";
+
+/* NECESSARY FOR SCANNING TAILWIND CLASSES */
+@source '../node_modules/@repo/ui';
+
+@layer base {
+  [data-mode="dark"] {
+    @apply bg-background-primary text-content-primary;
+  }
+
+  [data-mode="light"] {
+    @apply bg-secondary-50 text-content-inverse;
+  }
+}
