@@ -18,5 +18,10 @@ export * from "./components/switch";
 export * from "./components/tabs";
 export * from "./components/textarea";
 
+// Heavy Components
+export * from "./components/heavy-button";
+export * from "./components/heavy-trading-chart";
+export * from "./components/heavy-data-table";
+
 // Display
 export * from "./display/summary-stats";
