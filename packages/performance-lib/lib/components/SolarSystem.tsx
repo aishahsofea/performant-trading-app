@@ -3,13 +3,32 @@
 import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars, PerspectiveCamera } from "@react-three/drei";
+import {
+  EffectComposer,
+  Bloom,
+  ToneMapping,
+} from "@react-three/postprocessing";
 import { Planet } from "./Planet";
 import type {
   SolarSystemData,
   PlanetData,
   SolarSystemConfig,
 } from "../types/solarSystem";
-import { formatFileSize } from "../utils/bunderParser";
+import { formatFileSize } from "../utils/bundleParser";
+
+// Sun component with bright emissive material for bloom effect
+const Sun = () => {
+  return (
+    <mesh position={[0, 0, 0]}>
+      <sphereGeometry args={[1, 100, 100]} />
+      <meshStandardMaterial
+        color="orange"
+        emissive="orange"
+        emissiveIntensity={4}
+      />
+    </mesh>
+  );
+};
 
 type SolarSystemProps = {
   data: SolarSystemData;
@@ -45,7 +64,7 @@ export const SolarSystem = ({
       >
         <Suspense fallback={null}>
           {/* Camera */}x
-          <PerspectiveCamera makeDefault position={[10, 8, 10]} fov={75} />
+          <PerspectiveCamera makeDefault position={[15, 3, 10]} fov={130} />
           {/* Controls */}
           <OrbitControls
             enablePan={true}
@@ -56,16 +75,16 @@ export const SolarSystem = ({
             minDistance={5}
             maxDistance={50}
           />
-          {/* Lighting */}
-          <ambientLight intensity={0.4} />
-          <directionalLight
-            position={[10, 10, 5]}
-            intensity={1}
-            castShadow
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
+          {/* Lighting - realistic solar system lighting */}
+          <color attach="background" args={["#111"]} />
+          <ambientLight intensity={0.2} color="#101012" />
+          <pointLight
+            position={[0, 0, 0]}
+            intensity={5}
+            color="#FFFFFF"
+            distance={0}
+            decay={1}
           />
-          <pointLight position={[0, 0, 0]} intensity={1.5} color="#ffffff" />
           {/* Space background */}
           <Stars
             radius={100}
@@ -77,14 +96,7 @@ export const SolarSystem = ({
             speed={1}
           />
           {/* Central sun (representing the main application) */}
-          <mesh position={[0, 0, 0]}>
-            <sphereGeometry args={[1, 32, 32]} />
-            <meshStandardMaterial
-              color="#FFA500"
-              emissive="#FFA500"
-              emissiveIntensity={0.3}
-            />
-          </mesh>
+          <Sun />
           {/* Planets representing bundles */}
           {data.planets.map((planet) => (
             <Planet
@@ -96,6 +108,16 @@ export const SolarSystem = ({
               onHover={handlePlanetHover}
             />
           ))}
+          {/* Post-processing effects for sun glow */}
+          <EffectComposer disableNormalPass>
+            <Bloom
+              mipmapBlur
+              luminanceThreshold={1.0}
+              levels={5}
+              intensity={0.5}
+            />
+            <ToneMapping />
+          </EffectComposer>
         </Suspense>
       </Canvas>
 

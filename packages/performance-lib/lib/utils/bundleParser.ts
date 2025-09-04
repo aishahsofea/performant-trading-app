@@ -56,12 +56,15 @@ export const createSolarSystemFromBundles = (
   const totalSize = bundles.reduce((sum, bundle) => sum + bundle.size, 0);
   const planets: PlanetData[] = [];
 
-  // Sort bundles by size (largest first)
-  const sortedBundles = [...bundles].sort((a, b) => b.size - a.size);
+  // Sort bundles by size (smallest first)
+  const sortedBundles = [...bundles].sort((a, b) => a.size - b.size);
+
+  // Find max bundle size for scaling
+  const maxBundleSize = Math.max(...sortedBundles.map((b) => b.size));
 
   // Create planets with positions based on size and type
   sortedBundles.forEach((bundle, index) => {
-    const planet = createPlanetFromBundle(bundle, index, totalSize);
+    const planet = createPlanetFromBundle(bundle, index, maxBundleSize);
     planets.push(planet);
   });
 
@@ -79,25 +82,28 @@ export const createSolarSystemFromBundles = (
 const createPlanetFromBundle = (
   bundle: BundleData,
   index: number,
-  totalSize: number
+  maxBundleSize: number
 ): PlanetData => {
-  const sizeRatio = bundle.size / totalSize;
-
   // Add some randomness but keep it deterministic based on bundle name
   const seedHash = bundle.name
     .split("")
     .reduce((a, b) => a + b.charCodeAt(0), 0);
   const randomOffset = (seedHash % 100) / 100; // 0-1 based on name
 
-  // Calculate orbit radius based on bundle type and index with better spacing
-  const baseRadius = 3;
-  const radiusMultiplier = Math.pow(index + 1, 0.7) + randomOffset * 1.5; // Add some radius variation
-  const orbitRadius = baseRadius + radiusMultiplier * 2.5; // More spread out
+  // Calculate planet size with better scaling to show size differences
+  const minSize = 0.3;
+  const maxSize = 2.5;
 
-  // Calculate planet size (with minimum size for visibility)
-  const minSize = 0.2;
-  const maxSize = 2.0;
-  const planetSize = Math.max(minSize, Math.min(maxSize, sizeRatio * 20));
+  // Use logarithmic scaling to better show size differences
+  const normalizedSize = bundle.size / maxBundleSize;
+  const logScale = Math.log10(normalizedSize * 9 + 1); // Log scale from 0 to 1
+  const planetSize = minSize + (maxSize - minSize) * logScale;
+
+  // Calculate orbit radius based on planet size to prevent overlaps
+  const baseRadius = 2;
+  const sizeBasedSpacing = planetSize * 2; // More space for bigger planets
+  const indexSpacing = index * 2; // Base spacing between orbits
+  const orbitRadius = baseRadius + indexSpacing + sizeBasedSpacing;
 
   // Position planet on orbit with better distribution
   // Use golden angle for better distribution
@@ -119,7 +125,7 @@ const createPlanetFromBundle = (
     position,
     color: getBundleTypeColor(bundle.type),
     orbitRadius,
-    orbitSpeed: 0.01 / (orbitRadius * 0.5), // Slower orbit for outer planets
+    orbitSpeed: 0.1 / (orbitRadius * 0.5), // Faster orbit - visible animation
     bundle,
   };
 };

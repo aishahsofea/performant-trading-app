@@ -40,7 +40,7 @@ export const ROUTE_PERMISSIONS: RoutePermissions[] = [
   // Premium features
   {
     path: "/solar-system",
-    allowedRoles: ["premium", "admin"],
+    allowedRoles: ["user", "premium", "admin"],
     requireAuth: true,
   },
 

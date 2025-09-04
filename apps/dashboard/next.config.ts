@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-  transpilePackages: ["@repo/ui"],
+  transpilePackages: ["@repo/ui", "@repo/performance-lib"],
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

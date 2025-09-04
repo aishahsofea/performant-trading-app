@@ -6,7 +6,7 @@ import type {
 import {
   parseBundleAnalyzerData,
   createSolarSystemFromBundles,
-} from "./bunderParser";
+} from "./bundleParser";
 
 export const createDemoSolarSystemData = () => {
   // Create sample bundle analyzer data

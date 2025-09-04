@@ -1,11 +1,12 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useLoader } from "@react-three/fiber";
 import { Sphere, Html } from "@react-three/drei";
 import { Mesh } from "three";
 import type { PlanetData } from "../types/solarSystem";
-import { formatFileSize } from "../utils/bunderParser";
+import { formatFileSize } from "../utils/bundleParser";
+import { TextureLoader } from "three/src/loaders/TextureLoader";
 
 type PlanetProps = {
   data: PlanetData;
@@ -57,8 +58,10 @@ export const Planet = ({
     onClick?.(data);
   };
 
+  const name = (type: string) => `Lava004_1K-JPG_${type}.jpg`;
+  const [roughnessMap] = useLoader(TextureLoader, [name("Roughness")]);
+
   const planetScale = isHovered ? data.size * 1.2 : data.size;
-  const planetOpacity = isHovered ? 0.9 : 0.8;
 
   return (
     <group>
@@ -78,11 +81,12 @@ export const Planet = ({
         <meshStandardMaterial
           color={data.color}
           transparent
-          opacity={planetOpacity}
-          metalness={0.7}
-          roughness={0.3}
+          opacity={1}
+          metalness={0.1}
+          roughness={1.0}
           emissive={data.color}
-          emissiveIntensity={isHovered ? 0.2 : 0.1}
+          emissiveIntensity={isHovered ? 0.1 : 0.08}
+          roughnessMap={roughnessMap}
         />
       </Sphere>
 
@@ -110,7 +114,7 @@ export const Planet = ({
           ]}
           center
         >
-          <div className="bg-black/80 text-white p-3 rounded-lg shadow-lg text-sm max-w-xs">
+          <div className="bg-black/80 text-white p-3 rounded-lg shadow-lg text-sm pointer-events-none">
             <div className="font-semibold mb-1">{data.bundle.name}</div>
             <div className="text-xs space-y-1">
               <div>Size: {formatFileSize(data.bundle.size)}</div>
