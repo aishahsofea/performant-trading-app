@@ -33,5 +33,9 @@
       "react": "19.2.0-canary-97cdd5d3-20250710",
       "react-dom": "19.2.0-canary-97cdd5d3-20250710"
     }
+  },
+  "dependencies": {
+    "framer-motion": "^12.23.12",
+    "lottie-react": "^2.4.1"
   }
 }

@@ -10,9 +10,9 @@ const heavyButtonVariantsConfig = {
     destructive:
       "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white shadow-xl transform transition-all duration-500 hover:scale-105 hover:rotate-1 hover:shadow-2xl animate-bounce",
     outline:
-      "border-4 border-dashed border-gradient-to-r from-cyan-500 to-blue-500 bg-transparent text-gradient shadow-xl transform transition-all duration-500 hover:scale-105 hover:rotate-1",
+      "border-4 border-dashed border-gradient-to-r from-cyan-500 to-blue-500 bg-transparent shadow-xl transform transition-all duration-500 hover:scale-105 hover:rotate-1",
     heavy:
-      "bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white shadow-2xl transform transition-all duration-700 hover:scale-110 hover:rotate-3 hover:shadow-3xl animate-ping",
+      "bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white shadow-2xl transform transition-all duration-700 hover:scale-110 hover:rotate-3  animate-ping",
   },
   size: {
     default: "h-16 px-8 py-4 text-lg font-bold",
@@ -31,7 +31,6 @@ const heavyButtonVariants = cva(
     "whitespace-nowrap",
     "rounded-3xl",
     "font-extrabold",
-    "text-shadow",
     "transition-all",
     "duration-700",
     "ease-in-out",
