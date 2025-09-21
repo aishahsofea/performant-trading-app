@@ -53,7 +53,7 @@ const generateMockTradingData = (rows: number = 3000): TradingPosition[] => {
 
     data.push({
       id: `pos-${i}`,
-      symbol,
+      symbol: symbol || '',
       side,
       size,
       entryPrice,
